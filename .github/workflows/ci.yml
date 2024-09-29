@@ -1,0 +1,60 @@
+name: ci
+
+on: [push]
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "20.10.0"
+
+jobs:
+  ci-lambda-app:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./lambda-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://npm.pkg.github.com"
+          cache: "yarn"
+          cache-dependency-path: "lambda-app/yarn.lock"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint the code
+        run: yarn run lint
+
+      - name: Compile the code
+        run: yarn run compile
+
+  ci-deployment:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./deployer
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://npm.pkg.github.com"
+          cache: "yarn"
+          cache-dependency-path: "deployment/yarn.lock"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint the code
+        run: yarn run lint
+
+      - name: Compile the code
+        run: yarn run compile

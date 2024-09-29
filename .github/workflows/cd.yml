@@ -1,0 +1,142 @@
+name: cd
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - 'main'
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "20.10.0"
+  REGEX_PATTERN: "arn:aws:cloudformation:[a-zA-Z0-9\\-]+:[0-9]+:changeSet/[a-zA-Z0-9\\-]+/[a-fA-F0-9\\-]+"
+  BUILD_ID: ${{ github.run_number }}
+
+jobs:
+  build-LambdaApp:
+    name: Build LambdaApp
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'yarn'
+          cache-dependency-path: 'lambda-app/yarn.lock'
+
+      - name: Install dependencies
+        working-directory: lambda-app
+        run: yarn install --frozen-lockfile --arch=arm64
+
+      - name: Build the app
+        working-directory: lambda-app
+        run: yarn run compile
+
+      - name: Move the build
+        run: mv lambda-app/out/build LambdaApp
+
+      - name: Clean up the build
+        run: rm LambdaApp/start-local.js
+
+      - name: Set up the environment
+        run: mv lambda-app/deployment/.env.lambda LambdaApp/.env
+
+      - name: Set up the starter
+        run: mv lambda-app/deployment/lambda-starter.js LambdaApp/lambda-starter.js
+
+      - name: Compress the build
+        run: tar -czf LambdaApp.tar LambdaApp
+
+      - name: Save the build
+        uses: actions/upload-artifact@v4
+        with:
+          name: LambdaApp.tar
+          path: LambdaApp.tar
+          retention-days: 1
+
+  build-NodeModules:
+    name: Build NodeModules
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'yarn'
+          cache-dependency-path: 'lambda-app/yarn.lock'
+
+      - name: Install dependencies
+        working-directory: lambda-app
+        run: yarn install --frozen-lockfile --arch=arm64 --production
+
+      - name: Move the build
+        run: |
+          mkdir -p NodeModules/nodejs
+          mv lambda-app/node_modules NodeModules/nodejs/node_modules
+
+      - name: Compress the build
+        run: tar -czf NodeModules.tar NodeModules
+
+      - name: Save the build
+        uses: actions/upload-artifact@v4
+        with:
+          name: NodeModules.tar
+          path: NodeModules.tar
+          retention-days: 1
+
+  deploy:
+    name: Deploy
+    needs: [build-LambdaApp, build-NodeModules]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'yarn'
+          cache-dependency-path: 'lambda-app/yarn.lock'
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Get AWS account ID
+        run: echo "AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)" >> $GITHUB_ENV
+
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: deployment
+
+      - name: Uncompress builds
+        working-directory: deployment
+        run: for build in *.tar; do tar -xf "$build/$build"; done
+
+      - name: Install CDK
+        working-directory: deployment
+        run: yarn install --frozen-lockfile --production
+
+      - name: CDK Bootstrap
+        working-directory: deployment
+        run: yarn cdk bootstrap
+
+      - name: CDK Deploy
+        working-directory: deployment
+        run: yarn cdk deploy --require-approval never --tags project=${{ vars.AWS_PROJECT_TAG }}

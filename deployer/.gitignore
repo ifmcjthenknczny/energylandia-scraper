@@ -1,0 +1,10 @@
+**/.DS_Store
+node_modules
+out
+*.js
+!**/.eslintrc.js
+!jest.config.js
+*.d.ts
+.env.local
+.env
+/web
