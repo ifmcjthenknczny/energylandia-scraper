@@ -1,6 +1,6 @@
-import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses";
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
-import { AWS_REGION } from "./config";
+import { AWS_REGION } from "../../config";
 
 interface SendEmailParams {
   fromAddress?: string;
@@ -8,8 +8,6 @@ interface SendEmailParams {
   subject: string;
   body: string;
 }
-
-// TODO: move it to other lambda?
 
 export class Ses {
   private readonly sesClient: SESClient;

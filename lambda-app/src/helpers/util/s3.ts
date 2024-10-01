@@ -1,4 +1,4 @@
-import { AWS_CREDENTIALS_CONFIG, SECRETS_NAME } from "./config";
+import { AWS_CREDENTIALS_CONFIG, SECRETS_NAME } from "../../config";
 import {
   DeleteObjectsCommand,
   GetObjectCommand,

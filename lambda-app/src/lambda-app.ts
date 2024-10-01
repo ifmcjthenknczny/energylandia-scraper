@@ -1,5 +1,7 @@
-import { finalizeScriptContext, initializeScriptContext } from "./util/context";
-import { log, logError } from "./util/log";
+import { finalizeScriptContext, initializeScriptContext } from "./helpers/util/context";
+import { log, logError } from "./helpers/util/log";
+
+import { scrapeEnergylandiaWaitingTimes } from "./helpers/scraper";
 
 export enum ActionType {
   PING = "PING",
@@ -21,6 +23,9 @@ export async function lambda(config: AppConfig) {
   switch (config.action) {
     case ActionType.PING:
       log("PONG");
+      break;
+    case ActionType.SCRAPE_WAITING_TIMES:
+      await scrapeEnergylandiaWaitingTimes(context)
       break;
     default:
       logError(`Unknown action: action=${config.action}.`);

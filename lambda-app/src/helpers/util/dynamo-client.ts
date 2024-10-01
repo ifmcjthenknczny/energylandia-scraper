@@ -1,16 +1,16 @@
 import {
-  DynamoDBClient,
-  ScanCommand,
-  ScanCommandInput,
-} from "@aws-sdk/client-dynamodb";
-import {
   DeleteCommand,
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
 } from "@aws-sdk/lib-dynamodb";
+import {
+  DynamoDBClient,
+  ScanCommand,
+  ScanCommandInput,
+} from "@aws-sdk/client-dynamodb";
 
-import { AWS_CREDENTIALS_CONFIG } from "./config";
+import { AWS_CREDENTIALS_CONFIG } from "../../config";
 
 function unwrap(item: Record<string, any>): Record<string, string> {
   const entries = Object.keys(item).map((key) => {

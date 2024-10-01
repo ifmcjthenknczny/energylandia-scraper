@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "npx eslint . --fix",
     "compile": "npx tsc",
-    "start": "deno out/build/start-local.js",
-    "build": "yarn run fix && yarn run compile",
+    "start": "node out/build/start-local.js",
+    "build": "yarn run compile",
     "buildAndStart": "yarn run build && yarn start | tee log.txt"
   },
   "author": "",
@@ -21,7 +21,7 @@
     "aws-sdk": "^2.1682.0",
     "axios": "^1.6.0",
     "dayjs": "^1.11.13",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
     "mongodb": "^6.9.0",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
