@@ -1,4 +1,4 @@
-import {AWS_CREDENTIALS_CONFIG, SITE_SECRETS_NAME} from './config';
+import {AWS_CREDENTIALS_CONFIG, SECRETS_NAME} from './config';
 import {DeleteObjectsCommand, GetObjectCommand, S3Client} from '@aws-sdk/client-s3';
 
 import {SecretsManagerClient} from '@aws-sdk/client-secrets-manager';
@@ -12,7 +12,7 @@ export async function uploadFile(location: string, content: Buffer) {
     const secretManagerClient = new SecretsManagerClient(AWS_CREDENTIALS_CONFIG);
 
     const secrets = await getSecretsFromAws(
-        SITE_SECRETS_NAME,
+        SECRETS_NAME,
         secretManagerClient
     );
 
