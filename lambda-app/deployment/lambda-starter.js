@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable */
+
 const app = require('./lambda-app');
 
 function getOtherEventAction(event) {

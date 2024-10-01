@@ -25,7 +25,7 @@
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "allowJs": true
+    "allowJs": false
   },
   "exclude": [
     "node_modules",
