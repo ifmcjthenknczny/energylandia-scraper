@@ -45,7 +45,10 @@ jobs:
         run: rm LambdaApp/start-local.js
 
       - name: Set up the environment
-        run: mv lambda-app/deployment/.env.lambda LambdaApp/.env
+        run: echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI" > LambdaApp/.env
+        env:
+          AWS_STACK_NAME: ${{ vars.AWS_STACK_NAME }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
       - name: Set up the starter
         run: mv lambda-app/deployment/lambda-starter.js LambdaApp/lambda-starter.js
