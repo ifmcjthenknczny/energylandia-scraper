@@ -1,4 +1,4 @@
-import {Duration, RemovalPolicy, Size, Stack, StackProps, aws_certificatemanager as acm, aws_cognito as cognito, aws_ec2 as ec2, aws_ecr as ecr, aws_ecs as ecs, aws_elasticloadbalancingv2 as elbv2, aws_events as events, aws_iam as iam, aws_lambda as lambda, aws_logs as logs, aws_route53 as r53, aws_route53_targets as r53targets, aws_rds as rds, aws_scheduler as scheduler, aws_secretsmanager as secretManager} from 'aws-cdk-lib';
+import {Duration, RemovalPolicy, Size, Stack, StackProps, aws_ec2 as ec2, aws_events as events, aws_iam as iam, aws_lambda as lambda, aws_logs as logs, aws_scheduler as scheduler} from 'aws-cdk-lib';
 
 import { Construct } from 'constructs';
 
@@ -8,18 +8,8 @@ const NODE_MODULES_RESOURCE_NAME = 'NodeModules';
 const RESOURCE_ID = '*';
 const RUNTIME = lambda.Runtime.NODEJS_20_X;
 
-type NextjsSiteProps = {
-    secretArn: string;
-    domainName: string;
-    certificateArn: string;
-    ecrUrl: string;
-    buildId: string;
-    secretArnDb: string;
-    secretArnWarehouse: string;
-}
-
 class Site extends Stack {
-    constructor(scope: Construct, name: string, stackProps: StackProps, props: NextjsSiteProps) {
+    constructor(scope: Construct, name: string, stackProps: StackProps) {
         super(scope, name, stackProps);
 
         // VPC

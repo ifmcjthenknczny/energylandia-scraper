@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: "18.10.0"
+  NODE_VERSION: "20.10.0"
   REGEX_PATTERN: "arn:aws:cloudformation:[a-zA-Z0-9\\-]+:[0-9]+:changeSet/[a-zA-Z0-9\\-]+/[a-fA-F0-9\\-]+"
   BUILD_ID: ${{ github.run_number }}
 
@@ -28,7 +28,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
-          cache-dependency-path: 'data-connector/yarn.lock'
+          cache-dependency-path: 'lambda-app/yarn.lock'
 
       - name: Install dependencies
         working-directory: lambda-app
@@ -73,7 +73,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
-          cache-dependency-path: 'data-connector/yarn.lock'
+          cache-dependency-path: 'lambda-app/yarn.lock'
 
       - name: Install dependencies
         working-directory: lambda-app
@@ -108,7 +108,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
-          cache-dependency-path: 'data-connector/yarn.lock'
+          cache-dependency-path: 'lambda-app/yarn.lock'
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
@@ -123,20 +123,20 @@ jobs:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v4
         with:
-          path: deployment
+          path: deployer
 
       - name: Uncompress builds
-        working-directory: deployment
+        working-directory: deployer
         run: for build in *.tar; do tar -xf "$build/$build"; done
 
       - name: Install CDK
-        working-directory: deployment
+        working-directory: deployer
         run: yarn install --frozen-lockfile --production
 
       - name: CDK Bootstrap
-        working-directory: deployment
+        working-directory: deployer
         run: yarn cdk bootstrap
 
       - name: CDK Deploy
-        working-directory: deployment
+        working-directory: deployer
         run: yarn cdk deploy --require-approval never --tags project=${{ vars.AWS_PROJECT_TAG }}

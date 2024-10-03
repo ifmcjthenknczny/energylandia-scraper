@@ -11,6 +11,7 @@ env:
 jobs:
   ci-lambda-app:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     defaults:
       run:
         working-directory: ./lambda-app
@@ -23,7 +24,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
-          cache-dependency-path: 'data-connector/yarn.lock'
+          cache-dependency-path: 'lambda-app/yarn.lock'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -36,6 +37,7 @@ jobs:
 
   ci-deployment:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     defaults:
       run:
         working-directory: ./deployer
@@ -48,7 +50,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
-          cache-dependency-path: 'data-connector/yarn.lock'
+          cache-dependency-path: 'lambda-app/yarn.lock'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
