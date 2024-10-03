@@ -6,6 +6,7 @@ import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import dotenv from "dotenv";
 import { getSecretsFromAws } from "./secrets";
 import { log } from "./log";
+import mongoose from "mongoose";
 import { waitingTimeCollection } from './mongo';
 
 dotenv.config();
@@ -26,20 +27,23 @@ export async function initializeScriptContext(
 
   const now = new Date();
 
+  const collection = await waitingTimeCollection(uri)
+
   console.log(uri)
 
   log("Script context initialized.");
   return {
     executionId,
     now,
-    collection: await waitingTimeCollection(uri)
+    collection
   };
 }
 
 export async function finalizeScriptContext(context: ScriptContext) {
   log(`Finalizing script context: executionId=${context.executionId}.`);
 
-  // Add finizaling logic here
+  await mongoose.connection.close()
 
   log("Script context finalized.");
+  process.exit(0);
 }

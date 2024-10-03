@@ -17,13 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          deno-version: ${{ env.DENO_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
-          cache: true
-          cache-dependency-path: 'lambda-app/deno.lock'
+          cache: 'yarn'
+          cache-dependency-path: 'data-connector/yarn.lock'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -42,13 +42,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          deno-version: ${{ env.DENO_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
-          cache: true
-          cache-dependency-path: 'lambda-app/deno.lock'
+          cache: 'yarn'
+          cache-dependency-path: 'data-connector/yarn.lock'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile

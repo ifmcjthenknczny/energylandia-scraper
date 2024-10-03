@@ -1,11 +1,20 @@
 import { COLLECTION_NAME, DATABASE_NAME } from '../../config';
 
 import { AttractionWaitingTime } from '../../model/attractionWaitingTime.model';
-import { MongoClient } from 'mongodb'
+import mongoose from 'mongoose';
+
+mongoose.set('strictQuery', true);
 
 export const waitingTimeCollection = async (uri: string) => {
-    const client = new MongoClient(uri);
-    await client.connect();
+    console.log(uri);
+    
+    await mongoose.connect(uri, {
+        dbName: DATABASE_NAME,
+        serverSelectionTimeoutMS: 5000,
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true,
+    });
+    console.log('Connected!')
 
-    return client.db(DATABASE_NAME).collection<AttractionWaitingTime>(COLLECTION_NAME)
-};
+    return mongoose.connection.db!.collection<AttractionWaitingTime>(COLLECTION_NAME);
+}

@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  DENO_VERSION: "1.46.3"
+  NODE_VERSION: "18.10.0"
   REGEX_PATTERN: "arn:aws:cloudformation:[a-zA-Z0-9\\-]+:[0-9]+:changeSet/[a-zA-Z0-9\\-]+/[a-fA-F0-9\\-]+"
   BUILD_ID: ${{ github.run_number }}
 
@@ -22,13 +22,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          deno-version: ${{ env.DENO_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
-          cache: true
-          cache-dependency-path: 'lambda-app/deno.lock'
+          cache: 'yarn'
+          cache-dependency-path: 'data-connector/yarn.lock'
 
       - name: Install dependencies
         working-directory: lambda-app
@@ -67,13 +67,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          deno-version: ${{ env.DENO_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
-          cache: true
-          cache-dependency-path: 'lambda-app/deno.lock'
+          cache: 'yarn'
+          cache-dependency-path: 'data-connector/yarn.lock'
 
       - name: Install dependencies
         working-directory: lambda-app
@@ -102,13 +102,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          deno-version: ${{ env.DENO_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
-          cache: true
-          cache-dependency-path: 'lambda-app/deno.lock'
+          cache: 'yarn'
+          cache-dependency-path: 'data-connector/yarn.lock'
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
