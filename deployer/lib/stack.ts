@@ -45,7 +45,7 @@ class Site extends Stack {
             architecture: ARCHITECTURE,
             code: lambda.Code.fromAsset(LAMBDA_APP_RESOURCE_NAME),
             description: `Stack ${this.stackName} Function ${LAMBDA_APP_RESOURCE_NAME}`,
-            ephemeralStorageSize: Size.mebibytes(256),
+            ephemeralStorageSize: Size.mebibytes(512),
             handler: 'lambda-starter.handler',
             layers: [nodeModules],
             memorySize: 128,
