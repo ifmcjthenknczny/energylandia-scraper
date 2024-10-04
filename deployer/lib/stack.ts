@@ -1,4 +1,4 @@
-import {Duration, RemovalPolicy, Size, Stack, StackProps, aws_ec2 as ec2, aws_events as events, aws_iam as iam, aws_lambda as lambda, aws_logs as logs, aws_scheduler as scheduler} from 'aws-cdk-lib';
+import {Duration, RemovalPolicy, Size, Stack, StackProps, aws_events as events, aws_iam as iam, aws_lambda as lambda, aws_logs as logs, aws_scheduler as scheduler} from 'aws-cdk-lib';
 
 import { Construct } from 'constructs';
 
@@ -11,28 +11,6 @@ const RUNTIME = lambda.Runtime.NODEJS_20_X;
 class Site extends Stack {
     constructor(scope: Construct, name: string, stackProps: StackProps) {
         super(scope, name, stackProps);
-
-        // VPC
-        const vpc = new ec2.Vpc(this, 'VPC', {
-            natGateways: 1,
-            subnetConfiguration: [
-                {
-                    cidrMask: 24,
-                    name: 'Private',
-                    subnetType: ec2.SubnetType.PRIVATE_ISOLATED
-                },
-                {
-                    cidrMask: 24,
-                    name: 'PrivateWithEgress',
-                    subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
-                },
-                {
-                    cidrMask: 24,
-                    name: 'Public',
-                    subnetType: ec2.SubnetType.PUBLIC
-                }
-            ]
-        });
 
         // LAMBDA
         const nodeModules = new lambda.LayerVersion(this, NODE_MODULES_RESOURCE_NAME, {
@@ -52,7 +30,6 @@ class Site extends Stack {
             runtime: RUNTIME,
             timeout: Duration.seconds(30),
             tracing: lambda.Tracing.ACTIVE,
-            vpc,
             retryAttempts: 0,
             initialPolicy: [
                 new iam.PolicyStatement({
