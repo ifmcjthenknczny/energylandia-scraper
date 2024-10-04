@@ -1,13 +1,15 @@
 import { Hour, toDay } from "./util/date";
 
 import { AttractionWaitingTime } from "../model/attractionWaitingTime.model";
-import { DataEntry } from "./scraper";
+import { OpeningHours } from "../model/openingHours.model";
+import { ScrapedOpeningHours } from "../scrapers/openingHoursScraper";
+import { WaitingTimeDataEntry } from "../scrapers/waitingTimesScraper";
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs'
 
 dayjs.extend(customParseFormat)
 
-export function dataEntryToWaitingTime (dataEntry: DataEntry, now: Date): AttractionWaitingTime {
+export function dataEntryToWaitingTime (dataEntry: WaitingTimeDataEntry, now: Date): AttractionWaitingTime {
     const [name, waitingTime, status, lastUpdateString] = dataEntry;
     const [lastUpdateHour, lastUpdateDate] = lastUpdateString.trim().split(' ')
     const dataUpdate = dayjs(lastUpdateDate.replace('(', '').replace(')', '').trim(), 'DD.MM.YYYY')
@@ -24,4 +26,19 @@ export function dataEntryToWaitingTime (dataEntry: DataEntry, now: Date): Attrac
         dayOfWeek,
         scrapedAt: now
     } 
+}
+
+export function responseToOpeningHours (response: ScrapedOpeningHours, now: Date): OpeningHours {
+    const day = toDay(now)
+    const dayOpeningHours = response[day]
+    const isOpen = dayOpeningHours.status === 'otwarte'
+    return {
+        date: day,
+        isOpen,
+        ...(isOpen && {
+            seasonName: dayOpeningHours.title,
+            openingHour: dayOpeningHours.time_od,
+            closingHour: dayOpeningHours.time_do }),
+        scrapedAt: now,
+    }
 }

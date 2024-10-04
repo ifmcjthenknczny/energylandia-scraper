@@ -45,14 +45,15 @@ class Site extends Stack {
             architecture: ARCHITECTURE,
             code: lambda.Code.fromAsset(LAMBDA_APP_RESOURCE_NAME),
             description: `Stack ${this.stackName} Function ${LAMBDA_APP_RESOURCE_NAME}`,
-            ephemeralStorageSize: Size.mebibytes(512),
+            ephemeralStorageSize: Size.mebibytes(256),
             handler: 'lambda-starter.handler',
             layers: [nodeModules],
             memorySize: 128,
             runtime: RUNTIME,
-            timeout: Duration.seconds(120),
+            timeout: Duration.seconds(30),
             tracing: lambda.Tracing.ACTIVE,
             vpc,
+            retryAttempts: 0,
             initialPolicy: [
                 new iam.PolicyStatement({
                     actions: ['secretsmanager:GetSecretValue'],
@@ -64,7 +65,7 @@ class Site extends Stack {
 
         new logs.LogGroup(this, 'LogGroup', {
             logGroupName: `/aws/lambda/${lambdaApp.functionName}`,
-            retention: logs.RetentionDays.TWO_WEEKS
+            retention: logs.RetentionDays.ONE_DAY
         });
 
         // SCHEDULERS
@@ -97,14 +98,25 @@ class Site extends Stack {
                 mode: 'OFF'
             },
             scheduleExpressionTimezone: 'Europe/Warsaw',
-            // scheduleExpression: events.Schedule.cron({
-            //     minute: '0/5',
-            //     hour: '10-20',
-            // }).expressionString + ',? *,*',
-            scheduleExpression: events.Schedule.cron({minute: '0', hour: '12'}).expressionString,
+            scheduleExpression: 'cron(*/15 9-23 ? * * *)',
             target: {
                 arn: lambdaApp.functionArn,
                 input: JSON.stringify({action: 'SCRAPE_WAITING_TIMES'}),
+                roleArn: schedulerRole.roleArn
+            }
+        });
+
+        
+        new scheduler.CfnSchedule(this, 'SCRAPE_OPENING_HOURS', {
+            flexibleTimeWindow: {
+                mode: 'FLEXIBLE',
+                maximumWindowInMinutes: 45
+            },
+            scheduleExpressionTimezone: 'Europe/Warsaw',
+            scheduleExpression: events.Schedule.cron({minute: '0', hour: '8'}).expressionString,
+            target: {
+                arn: lambdaApp.functionArn,
+                input: JSON.stringify({action: 'SCRAPE_OPENING_HOURS'}),
                 roleArn: schedulerRole.roleArn
             }
         });

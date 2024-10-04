@@ -1,20 +1,18 @@
-import { AWS_CREDENTIALS_CONFIG } from "../../config";
-import { AttractionWaitingTime } from "../../model/attractionWaitingTime.model";
-import { Collection } from "mongodb";
-import { SECRETS_NAME } from "../../config";
+import { AWS_CREDENTIALS_CONFIG } from "./config";
+import { SECRETS_NAME } from "./config";
 import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import dotenv from "dotenv";
-import { getSecretsFromAws } from "./secrets";
-import { log } from "./log";
+import { getSecretsFromAws } from "./helpers/util/secrets";
+import { log } from "./helpers/util/log";
+import { mongo } from './client/mongo';
 import mongoose from "mongoose";
-import { waitingTimeCollection } from './mongo';
 
 dotenv.config();
 
 export type ScriptContext = {
   executionId: string;
   now: Date;
-  collection: Collection<AttractionWaitingTime>
+  db: mongoose.mongo.Db
 };
 
 export async function initializeScriptContext(
@@ -27,15 +25,13 @@ export async function initializeScriptContext(
 
   const now = new Date();
 
-  const collection = await waitingTimeCollection(uri)
-
-  console.log(uri)
+  const db = await mongo(uri)
 
   log("Script context initialized.");
   return {
     executionId,
     now,
-    collection
+    db
   };
 }
 
@@ -45,5 +41,5 @@ export async function finalizeScriptContext(context: ScriptContext) {
   await mongoose.connection.close()
 
   log("Script context finalized.");
-  process.exit(0);
+  // process.exit(0);
 }

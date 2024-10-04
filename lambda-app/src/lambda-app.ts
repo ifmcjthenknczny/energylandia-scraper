@@ -1,7 +1,8 @@
-import { finalizeScriptContext, initializeScriptContext } from "./helpers/util/context";
+import { finalizeScriptContext, initializeScriptContext } from "./context";
 import { log, logError } from "./helpers/util/log";
 
-import { scrapeEnergylandiaWaitingTimes } from "./helpers/scraper";
+import { scrapeEnergylandiaOpeningHours } from "./scrapers/openingHoursScraper";
+import { scrapeEnergylandiaWaitingTimes } from "./scrapers/waitingTimesScraper";
 
 export enum ActionType {
   PING = "PING",
@@ -26,6 +27,9 @@ export async function lambda(config: AppConfig) {
       break;
     case ActionType.SCRAPE_WAITING_TIMES:
       await scrapeEnergylandiaWaitingTimes(context)
+      break;
+    case ActionType.SCRAPE_OPENING_HOURS:
+      await scrapeEnergylandiaOpeningHours(context)
       break;
     default:
       logError(`Unknown action: action=${config.action}.`);

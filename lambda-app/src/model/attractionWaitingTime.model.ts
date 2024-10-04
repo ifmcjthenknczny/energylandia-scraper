@@ -8,8 +8,6 @@ export interface AttractionWaitingTime {
     attractionName: string;
     isInactive?: boolean;
     dayOfWeek: number;
-    // openingHour: Hour;
-    // closingHour: Hour;
     scrapedAt: Date;
   }
   
@@ -43,15 +41,6 @@ export const AttractionWaitingTimeSchema: Schema<AttractionWaitingTime> = new Sc
         required: true,
         default: Date.now,
     },
-    // Uncomment the following if needed:
-    // openingHour: {
-    //   type: String,
-    //   required: true,
-    // },
-    // closingHour: {
-    //   type: String,
-    //   required: true,
-    // },
 });
 
 export const AttractionWaitingTimeModel = mongoose.model<AttractionWaitingTime>('AttractionWaitingTime', AttractionWaitingTimeSchema);
