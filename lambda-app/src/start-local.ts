@@ -1,7 +1,7 @@
 import { ActionType, lambda } from "./lambda-app";
 
 const config = {
-  action: ActionType.SCRAPE_WAITING_TIMES,
+  action: ActionType.MIGRATION,
   rawEvent: null,
   executionId: "local",
   runningLocal: true,

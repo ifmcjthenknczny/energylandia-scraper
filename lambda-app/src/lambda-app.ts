@@ -1,6 +1,7 @@
 import { finalizeScriptContext, initializeScriptContext } from "./context";
 import { log, logError } from "./helpers/util/log";
 
+import migration20241005resolveNaNsToZeros from "./migrations/migration20241005resolveNaNsToZeros";
 import { scrapeEnergylandiaOpeningHours } from "./scrapers/openingHoursScraper";
 import { scrapeEnergylandiaWaitingTimes } from "./scrapers/waitingTimesScraper";
 
@@ -8,6 +9,7 @@ export enum ActionType {
   PING = "PING",
   SCRAPE_WAITING_TIMES = "SCRAPE_WAITING_TIMES",
   SCRAPE_OPENING_HOURS = "SCRAPE_OPENING_HOURS",
+  MIGRATION = 'MIGRATION'
 }
 
 interface AppConfig {
@@ -30,6 +32,9 @@ export async function lambda(config: AppConfig) {
       break;
     case ActionType.SCRAPE_OPENING_HOURS:
       await scrapeEnergylandiaOpeningHours(context)
+      break;
+    case ActionType.MIGRATION:
+      await migration20241005resolveNaNsToZeros(context)
       break;
     default:
       logError(`Unknown action: action=${config.action}.`);

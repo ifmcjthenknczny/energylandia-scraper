@@ -1,12 +1,13 @@
 import { WAITING_TIME_REQUEST_BODY, WAITING_TIME_URL } from '../config';
 import { dataEntryToWaitingTime, mapNaNsToZeros } from '../helpers/mapper';
-import { getOpeningAndClosingHour, insertWaitingTimes } from '../client/mongo';
 import { log, logWarn } from '../helpers/util/log';
 import { toDay, toHour } from '../helpers/util/date';
 
 import { ScriptContext } from '../context';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { getOpeningAndClosingHour } from '../client/openingHours';
+import { insertWaitingTimes } from '../client/attractionWaitingTime';
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 
