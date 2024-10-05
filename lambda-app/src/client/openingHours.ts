@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 const OPENING_HOURS_COLLECTION_NAME = 'EnergylandiaOpeningHours'
 
-const openingHoursCollection = async (db: mongoose.mongo.Db) => {
+export const openingHoursCollection = async (db: mongoose.mongo.Db) => {
     return db.collection<OpeningHours>(OPENING_HOURS_COLLECTION_NAME);
 }
 

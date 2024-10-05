@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "lint": "npx eslint . --fix",
+    "lint": "npx eslint \"**/*.ts\" --fix",
     "compile": "npx tsc",
     "start": "node out/build/start-local.js",
     "build": "yarn run compile",

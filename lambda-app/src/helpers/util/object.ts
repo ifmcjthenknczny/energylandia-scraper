@@ -27,3 +27,15 @@ export function pick<T extends { [key: string]: any }, K extends keyof T>(
     {} as Pick<T, K>,
   );
 }
+
+export function removeUndefined<T extends Record<string, any | undefined>>(obj: T): Required<T> {
+  return Object.keys(obj).reduce(
+    (newObj, key) => {
+      if (obj[key] === undefined || obj[key] === null) {
+        return newObj;
+      }
+      return { ...newObj, [key]: obj[key] };
+    },
+    {} as any,
+  );
+}

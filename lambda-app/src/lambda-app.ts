@@ -1,7 +1,8 @@
 import { finalizeScriptContext, initializeScriptContext } from "./context";
 import { log, logError } from "./helpers/util/log";
 
-import migration20241005resolveNaNsToZeros from "./migrations/migration20241005resolveNaNsToZeros";
+import { migration } from "./helpers/migration";
+import migration20241005createIndexesAndMigration from "./migrations/migration20241005createIndexes";
 import { scrapeEnergylandiaOpeningHours } from "./scrapers/openingHoursScraper";
 import { scrapeEnergylandiaWaitingTimes } from "./scrapers/waitingTimesScraper";
 
@@ -34,7 +35,9 @@ export async function lambda(config: AppConfig) {
       await scrapeEnergylandiaOpeningHours(context)
       break;
     case ActionType.MIGRATION:
-      await migration20241005resolveNaNsToZeros(context)
+      // eslint-disable-next-line no-case-declarations
+      const migrationName = 'migration20241005createIndexesAndMigration'
+      await migration(context, migrationName, migration20241005createIndexesAndMigration)
       break;
     default:
       logError(`Unknown action: action=${config.action}.`);
