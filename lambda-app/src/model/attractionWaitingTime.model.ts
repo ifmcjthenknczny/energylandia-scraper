@@ -43,4 +43,10 @@ export const AttractionWaitingTimeSchema: Schema<AttractionWaitingTime> = new Sc
     },
 });
 
+AttractionWaitingTimeSchema.index({ date: 1, time: 1 });
+AttractionWaitingTimeSchema.index({ attractionName: 1 });
+AttractionWaitingTimeSchema.index({ scrapedAt: 1 });
+AttractionWaitingTimeSchema.index({ date: 1, attractionName: 1, time: 1 });
+AttractionWaitingTimeSchema.index({ dayOfWeek: 1 });
+
 export const AttractionWaitingTimeModel = mongoose.model<AttractionWaitingTime>('AttractionWaitingTime', AttractionWaitingTimeSchema);

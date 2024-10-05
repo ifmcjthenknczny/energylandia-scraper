@@ -39,4 +39,9 @@ export const OpeningHoursSchema: Schema<OpeningHours> = new Schema({
     },
 });
 
+OpeningHoursSchema.index({ date: 1 });
+OpeningHoursSchema.index({ date: 1, isOpen: 1 });
+OpeningHoursSchema.index({ seasonName: 1 });
+OpeningHoursSchema.index({ scrapedAt: 1 });
+
 export const OpeningHoursModel = mongoose.model<OpeningHours>('OpeningHours', OpeningHoursSchema);
