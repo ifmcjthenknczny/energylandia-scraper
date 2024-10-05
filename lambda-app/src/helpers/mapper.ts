@@ -42,3 +42,10 @@ export function responseToOpeningHours (response: ScrapedOpeningHours, now: Date
         scrapedAt: now,
     }
 }
+
+export function mapNaNsToZeros(waitingTime: AttractionWaitingTime): AttractionWaitingTime {
+    return {
+        ...waitingTime,
+        waitingTimeMinutes: waitingTime.waitingTimeMinutes || 0
+    }
+}

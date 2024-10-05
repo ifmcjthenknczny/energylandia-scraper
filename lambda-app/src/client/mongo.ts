@@ -14,7 +14,7 @@ export const mongo = async (uri: string) => {
         dbName: DATABASE_NAME,
         serverSelectionTimeoutMS: 5000,
     });
-    console.log('Connected!')
+    console.log('Connected to mongo!')
 
     return mongoose.connection.db!;
 }
@@ -37,7 +37,7 @@ export const getOpeningAndClosingHour = async (db: mongoose.mongo.Db, date: Day)
     return collection.findOne({ date });
 }
 
-export const insertOpeningHours = async (db: mongoose.mongo.Db, openingTime: OpeningHours) => {
+export const insertOpeningHours = async (db: mongoose.mongo.Db, openingHours: OpeningHours) => {
     const collection = await openingHourCollection(db);
-    return collection.insertOne(openingTime);
+    return collection.insertOne(openingHours);
 }

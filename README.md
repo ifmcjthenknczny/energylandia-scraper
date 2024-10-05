@@ -1,4 +1,4 @@
-# Lambda-App
+# energylandia-scraper
 
 **Version**: 1.0.0
 
@@ -20,9 +20,8 @@ Before running this project, ensure that you have:
 
 ## AWS Resources
 
-- **Lambda Functions**: The app includes Lambda functions for scraping Energylandia’s waiting times and opening hours. These functions are scheduled via AWS Scheduler with CRON expressions.
+- **Lambda Function**: The app includes Lambda functions for scraping Energylandia’s waiting times and opening hours. These functions are scheduled via AWS Scheduler with CRON expressions.
 - **CDK Resources**:
-  - VPC with private and public subnets.
   - Lambda layer for external dependencies (`node_modules`).
   - IAM roles and policies to control access to AWS services like Secrets Manager and Lambda invocations.
   - CloudWatch Log Group for Lambda execution logs.
@@ -33,9 +32,9 @@ Before running this project, ensure that you have:
 
 The Lambda function supports the following actions:
 
-- **PING**: Simple ping-pong for health checks.
-- **SCRAPE_WAITING_TIMES**: Scrapes and logs waiting times data.
-- **SCRAPE_OPENING_HOURS**: Scrapes and logs park opening hours.
+- **PING**: Simple ping log for health checks.
+- **SCRAPE_WAITING_TIMES**: Scrapes and insert into db waiting times data.
+- **SCRAPE_OPENING_HOURS**: Scrapes and insert into db park opening hours.
 
 ---
 
