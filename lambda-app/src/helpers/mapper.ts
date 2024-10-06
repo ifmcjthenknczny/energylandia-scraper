@@ -14,7 +14,7 @@ export function dataEntryToWaitingTime (dataEntry: WaitingTimeDataEntry, now: Da
     const [lastUpdateHour, lastUpdateDate] = lastUpdateString.trim().split(' ')
     const dataUpdate = dayjs(lastUpdateDate.replace('(', '').replace(')', '').trim(), 'DD.MM.YYYY')
 
-    const isInactive = !!status.trim()
+    const isInactive = !status.trim()
     const dayOfWeek = dataUpdate.day()
     
     return {
