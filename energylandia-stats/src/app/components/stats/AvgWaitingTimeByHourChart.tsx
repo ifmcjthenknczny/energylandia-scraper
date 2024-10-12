@@ -1,23 +1,45 @@
+"use client";
+
 import React, {useEffect, useState} from 'react'
-import { mapToSearchParamsObject, useFilter } from '../context/FilterContext';
 
 import { AvgTimeByHourResponse } from '@/app/types';
 import {Chart} from 'react-google-charts';
-import axios from 'axios';
+import { Hour } from '@/app/utils/date';
+import Loader from '../misc/Loader';
 
-const WaitingTimeChart = () => {
+type ChartData = Array<[string, ...(string | number)[]]>
+
+type Props = {
+  data?: AvgTimeByHourResponse
+}
+
+const WaitingTimeChart = ({data}: Props) => {
     const [selectedAttractions, setSelectedAttractions] = useState<string[]>([]);
-    const [data, setData] = useState<AvgTimeByHourResponse>()
-    const { filter } = useFilter();
+    const [chartData, setChartData] = useState<ChartData>([['Hour', ...selectedAttractions]]);
+
+    console.log(chartData)
 
     useEffect(() => {
-        const fetchAndPrepareData = async () => {
-          const query = new URLSearchParams(mapToSearchParamsObject(filter)).toString();
-            const response = await axios.get<AvgTimeByHourResponse>(`/api/stats/by-hour?${query}`);
-            setData(response.data);
-        };
-        fetchAndPrepareData()
-    }, [filter])
+      const handleDataChangeToChart = (data?: AvgTimeByHourResponse) => {
+        if (!data) {
+            return undefined
+        }
+        const newChartData: ChartData = [['Hour', ...selectedAttractions]]
+
+      const hours = Object.keys(data[selectedAttractions[0] || ''] || {});
+  
+      hours.forEach((hour) => {
+        const row: ChartData[number] = [hour];
+        selectedAttractions.forEach((attraction) => {
+          row.push(data[attraction][hour as Hour] || 0);
+        });
+        newChartData.push(row);
+      });
+
+      setChartData(newChartData);
+    };
+    handleDataChangeToChart(data)
+    }, [data, selectedAttractions.length, selectedAttractions])
   
     const handleAttractionChange = (attraction: string) => {
       setSelectedAttractions((prev) => 
@@ -26,28 +48,7 @@ const WaitingTimeChart = () => {
           : [...prev, attraction]
       );
     };
-  
-    const prepareChartData = () => {
-        if (!data) {
-            return
-        }
-      const chartData: Array<[string, ...string[]]> = [['Hour', ...selectedAttractions]];
-  
-      const hours = Object.keys(data[selectedAttractions[0] || ''] || {});
-  
-      hours.forEach((hour) => {
-        const row: [string, ...number[]] = [hour];
-        selectedAttractions.forEach((attraction) => {
-          row.push(data[attraction][hour] || 0);
-        });
-        chartData.push(row);
-      });
-  
-      return chartData;
-    };
-  
-    const chartData = prepareChartData();
-  
+
     return (
       <div className='pb-6'>
         <h1 className="text-xl my-4 text-center">Waiting Time by Attraction</h1>
@@ -71,7 +72,7 @@ const WaitingTimeChart = () => {
             height={'400px'}
             className='pr-2'
             chartType="LineChart"
-            loader={<div>Loading Chart</div>}
+            loader={<Loader />}
             data={chartData}
             options={{
               hAxis: {
@@ -94,5 +95,5 @@ const WaitingTimeChart = () => {
       </div>
     );
   };
-  
+
   export default WaitingTimeChart;

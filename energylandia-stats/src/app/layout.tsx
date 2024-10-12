@@ -1,6 +1,5 @@
 import "./globals.css";
 
-import { FilterProvider } from "./components/context/FilterContext";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
@@ -26,7 +25,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <FilterProvider>
     <html lang="pl">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -34,6 +32,5 @@ export default function RootLayout({
         {children}
       </body>
     </html>
-    </FilterProvider>
   );
 }
