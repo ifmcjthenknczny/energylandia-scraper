@@ -1,24 +1,14 @@
+import { AvgTimeByHourResponse, AvgTimeResponse } from '../types';
+import { Day, Hour } from '../utils/date';
+
+import { Filter } from '../types';
 import dotenv from 'dotenv'
 import mongoose from 'mongoose';
 
 dotenv.config()
 
-type Day = `${number}-${number}-${number}`
-type Hour = `${number}:${number}`
-
-export type Filter = {
-    dayFrom?: Day
-    dayTo?: Day
-    hourFrom?: Hour
-    hourTo?: Hour
-    dayOfWeek?: number
-}
-
 const DESC = -1
 const ASC = 1
-
-type AvgTimeResponse = Record<string, number>
-type AvgTimeByHourResponse = Record<string, Record<Hour, number>>
 
 export interface AttractionWaitingTime {
     date: Day;
@@ -50,7 +40,7 @@ export const mongoDb = await mongoConnect()
 const WAITING_TIME_COLLECTION_NAME = 'EnergylandiaWaitingTime'
 export const waitingTimeCollection = mongoDb.collection<AttractionWaitingTime>(WAITING_TIME_COLLECTION_NAME);
 
-export const getAvgWaitingTimeByAttraction = async (filter?: Filter): Promise<AvgTimeResponse> => {
+function buildFilter(filter?: Filter) {
     const dayFilter = filter?.dayFrom || filter?.dayTo
     ? {
         date: {
@@ -73,12 +63,22 @@ export const getAvgWaitingTimeByAttraction = async (filter?: Filter): Promise<Av
     ? { dayOfWeek: filter.dayOfWeek }
     : {};
 
-    const result = await waitingTimeCollection.aggregate([
+    return {
+        ...dayFilter,
+        ...hourFilter,
+        ...dayOfWeekFilter,
+    }
+}
+
+export const getAvgWaitingTimeByAttraction = async (filter?: Filter): Promise<AvgTimeResponse> => {
+    const matchFilter = buildFilter(filter)
+
+        const result = await waitingTimeCollection.aggregate([
         {
             $match: {
-                ...dayFilter,
-                ...hourFilter,
-                ...dayOfWeekFilter
+                ...matchFilter,
+                isInactive: false,
+                waitingTimeMinutes: { $gte: 0 }
             }
           },
         {
@@ -103,24 +103,14 @@ export const getAvgWaitingTimeByAttraction = async (filter?: Filter): Promise<Av
 }
 
 export const getAvgWaitingTimeByAttractionAndHour = async (filter?: Omit<Filter, 'hourFrom' | 'hourTo'>): Promise<AvgTimeByHourResponse> => {    
-    const dayFilter = filter?.dayFrom || filter?.dayTo
-    ? {
-        date: {
-          ...(filter?.dayFrom && { $gte: filter.dayFrom }),
-          ...(filter?.dayTo && { $lte: filter.dayTo })
-        }
-      }
-    : {};
-
-  const dayOfWeekFilter = filter?.dayOfWeek !== undefined
-    ? { dayOfWeek: filter.dayOfWeek }
-    : {};
+    const matchFilter = buildFilter(filter)
 
     const results = await waitingTimeCollection.aggregate([
         {
             $match: {
-                ...dayFilter,
-                ...dayOfWeekFilter
+                ...matchFilter,
+                isInactive: false,
+                waitingTimeMinutes: { $gte: 0 }
             }
         },
         {
@@ -165,7 +155,7 @@ export const getAvgWaitingTimeByAttractionAndHour = async (filter?: Omit<Filter,
                     attractionName: "$attractionName",
                     timeSlot: "$timeSlot"
                 },
-                avgWaitingTime: { $avg: "$waitingTimeMinutes" }
+                avgWaitingTime: { $avg: "$waitingTimeMinutes" },
             }
         },
         {
@@ -183,6 +173,7 @@ export const getAvgWaitingTimeByAttractionAndHour = async (filter?: Omit<Filter,
             $project: {
                 _id: 0,
                 attractionName: "$_id",
+                avgTimesByHour: { $arrayToObject: "$avgTimesByHour" }
             }
         },
         {
@@ -198,3 +189,119 @@ export const getAvgWaitingTimeByAttractionAndHour = async (filter?: Omit<Filter,
 
     return finalResult as AvgTimeByHourResponse;
 };
+
+export async function getOverallAvgWaitingTimeByHour(filter?: Filter) {
+    const matchFilter = buildFilter(filter)
+    const results = await waitingTimeCollection.aggregate([
+        {
+            $match: {
+                ...matchFilter,
+                isInactive: false,
+                waitingTimeMinutes: { $gte: 0 }
+            }
+        },
+        {
+            $project: {
+                waitingTimeMinutes: 1,
+                hour: { $arrayElemAt: [{ $split: ["$time", ":"] }, 0] },
+                minute: { $arrayElemAt: [{ $split: ["$time", ":"] }, 1] }
+            }
+        },
+        {
+            $project: {
+                waitingTimeMinutes: 1,
+                timeSlot: {
+                    $concat: [
+                        "$hour",
+                        ":",
+                        {
+                            $cond: [
+                                { $lt: [{ $toInt: "$minute" }, 15] }, "00",
+                                {
+                                    $cond: [
+                                        { $lt: [{ $toInt: "$minute" }, 30] }, "15",
+                                        {
+                                            $cond: [
+                                                { $lt: [{ $toInt: "$minute" }, 45] }, "30",
+                                                "45"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            $group: {
+                _id: "$timeSlot",
+                avgWaitingTime: { $avg: "$waitingTimeMinutes" }
+                // avgWaitingTime: { $sum: "$waitingTimeMinutes" }
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                timeSlot: "$_id",
+                avgWaitingTime: 1
+            }
+        },
+        {
+            $sort: { timeSlot: 1 }
+        }
+    ]).toArray();
+
+    const avgOverallWaitingTime = results.reduce((acc, { timeSlot, avgWaitingTime }) => {
+        acc[timeSlot] = avgWaitingTime;
+        return acc;
+    }, {} as Record<string, number>)
+
+    return avgOverallWaitingTime
+}
+
+export async function getAvailabilityByAttraction(filter?: Filter) {
+    const matchFilter = buildFilter(filter)
+    const results = await waitingTimeCollection.aggregate([
+        {
+            $match: matchFilter
+        },
+        {
+            $group: {
+                _id: "$attractionName",
+                inactiveCount: { $sum: { $cond: [{ $eq: ["$isInactive", true] }, 1, 0] } },
+                totalCount: { $sum: 1 }
+            }
+        },
+        {
+            $project: {
+                attractionName: "$_id",
+                reliability: {
+                    $divide: [
+                        { $subtract: ["$totalCount", "$inactiveCount"] },
+                        "$totalCount"
+                    ]
+                }
+            }
+        },
+        {
+            $sort: { reliability: 1 }
+        },
+        {
+            $project: {
+                _id: 0,
+                attractionName: 1,
+                reliability: 1
+            }
+        }
+    ]).toArray();
+
+    const availabilityRecord = results.reduce<Record<string, number>>((acc, record) => {
+        acc[record.attractionName] = record.reliability;
+        return acc;
+    }, {});
+    
+
+    return availabilityRecord;
+}

@@ -1,6 +1,6 @@
 import { dayOfWeekSchema, daySchema } from "@/app/utils/schema";
 
-import { Filter } from "@/app/client/mongo";
+import { Filter } from "@/app/types";
 import { NextResponse } from "next/server";
 import { getAvgWaitingTimeByAttractionAndHour } from "@/app/client/mongo";
 import { getQueryParams } from "../../../../../helpers/query";

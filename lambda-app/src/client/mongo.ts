@@ -13,4 +13,3 @@ export const mongo = async (uri: string) => {
 
     return mongoose.connection.db!;
 }
-
