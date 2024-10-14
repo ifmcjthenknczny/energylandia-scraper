@@ -21,7 +21,6 @@ export function mapQueryToFilter(query?: ReadonlyURLSearchParams): Partial<Filte
     });
   }
   
-
 function DataWrapper() {
     const query = useSearchParams()
     const [dataByHour, setDataByHour] = useState<AvgTimeByHourResponse>()
