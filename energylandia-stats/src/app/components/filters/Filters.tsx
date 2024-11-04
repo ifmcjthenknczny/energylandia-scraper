@@ -4,53 +4,53 @@ import React, { useEffect, useState } from 'react';
 
 import DayFilters from './DayFilters';
 import DayOfWeekFilter from './DayOfWeekFilter';
-import TimeFilters from './TimeFilters';
 import { useSearchParams } from 'next/navigation';
 
-export const FIRST_DAY_OF_DATA = '2023-04-01';
+// import TimeFilters from './TimeFilters';
 
-const Filters: React.FC = () => {
+export const FIRST_DAY_OF_DATA = '2024-10-05';
+
+const Filters = () => {
   const searchParams = useSearchParams();
   const [dayFrom, setDayFrom] = useState<Date | null>(null);
   const [dayTo, setDayTo] = useState<Date | null>(null);
   const [dayOfWeek, setDayOfWeek] = useState<number | null>(null);
-  const [hourFrom, setHourFrom] = useState<string | null>(null);
-  const [hourTo, setHourTo] = useState<string | null>(null);
+  // const [hourFrom, setHourFrom] = useState<string | null>(null);
+  // const [hourTo, setHourTo] = useState<string | null>(null);
 
   useEffect(() => {
     const dayFromParam = searchParams.get('dayFrom');
     const dayToParam = searchParams.get('dayTo');
     const dayOfWeekParam = searchParams.get('dayOfWeek');
-    const hourFromParam = searchParams.get('hourFrom');
-    const hourToParam = searchParams.get('hourTo');
+    // const hourFromParam = searchParams.get('hourFrom');
+    // const hourToParam = searchParams.get('hourTo');
 
     setDayFrom(dayFromParam ? new Date(dayFromParam) : null);
     setDayTo(dayToParam ? new Date(dayToParam) : null);
     setDayOfWeek(dayOfWeekParam ? parseInt(dayOfWeekParam, 10) : null);
-    setHourFrom(hourFromParam);
-    setHourTo(hourToParam);
+    // setHourFrom(hourFromParam);
+    // setHourTo(hourToParam);
   }, [searchParams]);
 
   return (
-    <div className="mb-4">
-      <h2 className="text-lg font-semibold mb-2">Filters</h2>
-      <div className="flex flex-col space-y-4">
+    <div className="mb-4 w-full">
+      <div className="w-full flex flex-row justify-evenly">
+      <DayOfWeekFilter
+          dayOfWeek={dayOfWeek}
+          onDayOfWeekChange={setDayOfWeek}
+        />
         <DayFilters
           dayFrom={dayFrom}
           dayTo={dayTo}
           onDayFromChange={setDayFrom}
           onDayToChange={setDayTo}
         />
-        <DayOfWeekFilter
-          dayOfWeek={dayOfWeek}
-          onDayOfWeekChange={setDayOfWeek}
-        />
-        <TimeFilters
+        {/* <TimeFilters
           hourFrom={hourFrom}
           hourTo={hourTo}
           onHourFromChange={setHourFrom}
           onHourToChange={setHourTo}
-        />
+        /> */}
       </div>
     </div>
   );

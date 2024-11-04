@@ -3,7 +3,7 @@ import { Day, Hour } from '../helpers/util/date';
 import { OPENING_HOURS_URL } from '../config';
 import { ScriptContext } from '../context';
 import axios from 'axios';
-import { insertOpeningHours } from './../client/openingHours';
+import { insertOpeningHours } from '../client/openingHours';
 import { log } from '../helpers/util/log';
 import { responseToOpeningHours } from '../helpers/mapper';
 

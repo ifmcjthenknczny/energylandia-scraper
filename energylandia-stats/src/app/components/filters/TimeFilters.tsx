@@ -6,21 +6,22 @@ import 'react-clock/dist/Clock.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import React from 'react';
+import RemoveFilterButton from './RemoveFilterButton';
 import TimePicker from 'react-time-picker';
 
-interface HourFiltersProps {
+interface Props {
   hourFrom: string | null;
   hourTo: string | null;
   onHourFromChange: (hour: string | null) => void;
   onHourToChange: (hour: string | null) => void;
 }
 
-const TimeFilters: React.FC<HourFiltersProps> = ({
+const TimeFilters = ({
   hourFrom,
   hourTo,
   onHourFromChange,
   onHourToChange,
-}) => {
+}: Props) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -58,6 +59,7 @@ const TimeFilters: React.FC<HourFiltersProps> = ({
           clearIcon={null}
           className="mt-1 block w-full"
           disableClock={true}
+          maxTime={"23:59"}
         />
       </div>
       <div>
@@ -70,8 +72,10 @@ const TimeFilters: React.FC<HourFiltersProps> = ({
           clearIcon={null}
           className="mt-1 block w-full"
           disableClock={true}
+          maxTime={"23:59"}
         />
       </div>
+      <RemoveFilterButton paramsToRemove={['hourFrom', 'hourTo']} />
     </div>
   );
 };

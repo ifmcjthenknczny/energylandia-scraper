@@ -4,31 +4,41 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import React from 'react';
 
-interface DayOfWeekFilterProps {
+interface Props {
   dayOfWeek: number | null;
   onDayOfWeekChange: (dayOfWeek: number | null) => void;
 }
 
 const daysOfWeek = [
-  { value: 0, label: 'Sunday' },
   { value: 1, label: 'Monday' },
   { value: 2, label: 'Tuesday' },
   { value: 3, label: 'Wednesday' },
   { value: 4, label: 'Thursday' },
   { value: 5, label: 'Friday' },
   { value: 6, label: 'Saturday' },
+  { value: 0, label: 'Sunday' },
 ];
 
-const DayOfWeekFilter: React.FC<DayOfWeekFilterProps> = ({
+type OptionProps = {
+  value?: number;
+  label: string;
+}
+
+const Option = ({ value, label }: OptionProps) => (
+  <option className='text-xs text-gray-500 bg-gray-900' value={value || ''}>{label}</option>
+)
+
+const DayOfWeekFilter = ({
   dayOfWeek,
   onDayOfWeekChange,
-}) => {
+}: Props) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     const newDayOfWeek = value === '' ? null : parseInt(value, 10);
+
     onDayOfWeekChange(newDayOfWeek);
     updateURL(newDayOfWeek);
   };
@@ -41,8 +51,11 @@ const DayOfWeekFilter: React.FC<DayOfWeekFilterProps> = ({
       current.delete('dayOfWeek');
     }
     const search = current.toString();
-    const query = search ? `?${search}` : '';
-    router.push(`${query}`);
+    if (!search) {
+      router.push('/')
+      return
+    }
+    router.push(`?${search}`);
   };
 
   return (
@@ -52,15 +65,14 @@ const DayOfWeekFilter: React.FC<DayOfWeekFilterProps> = ({
       </label>
       <select
         id="dayOfWeek"
-        value={dayOfWeek === null ? '' : dayOfWeek}
+        value={dayOfWeek || ''}
         onChange={handleChange}
-        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-gray-900 p-2"
       >
-        <option value="">All days</option>
+        <Option label='All days' />
+        
         {daysOfWeek.map((day) => (
-          <option key={day.value} value={day.value}>
-            {day.label}
-          </option>
+          <Option key={day.value} value={day.value} label={day.label} />
         ))}
       </select>
     </div>
