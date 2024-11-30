@@ -6,7 +6,7 @@ const ARCHITECTURE = lambda.Architecture.ARM_64;
 const LAMBDA_APP_RESOURCE_NAME = 'LambdaApp';
 const NODE_MODULES_RESOURCE_NAME = 'NodeModules';
 const RESOURCE_ID = '*';
-const RUNTIME = lambda.Runtime.NODEJS_20_X;
+const RUNTIME = lambda.Runtime.NODEJS_22_X;
 
 class Site extends Stack {
     constructor(scope: Construct, name: string, stackProps: StackProps) {

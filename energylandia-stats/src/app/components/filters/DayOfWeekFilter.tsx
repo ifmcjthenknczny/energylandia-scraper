@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import React from 'react';
+import { isFalsyExceptZero } from '@/app/utils/bool';
 
 interface Props {
   dayOfWeek: number | null;
@@ -25,7 +26,7 @@ type OptionProps = {
 }
 
 const Option = ({ value, label }: OptionProps) => (
-  <option className='text-xs text-gray-500 bg-gray-900' value={value || ''}>{label}</option>
+  <option className='text-xs text-gray-500 bg-gray-900' value={isFalsyExceptZero(value) ? '' : value}>{label}</option>
 )
 
 const DayOfWeekFilter = ({
@@ -37,7 +38,7 @@ const DayOfWeekFilter = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
-    const newDayOfWeek = value === '' ? null : parseInt(value, 10);
+    const newDayOfWeek = isFalsyExceptZero(value) ? null : parseInt(value, 10);
 
     onDayOfWeekChange(newDayOfWeek);
     updateURL(newDayOfWeek);
@@ -65,7 +66,7 @@ const DayOfWeekFilter = ({
       </label>
       <select
         id="dayOfWeek"
-        value={dayOfWeek || ''}
+        value={isFalsyExceptZero(dayOfWeek) ? '' : dayOfWeek as number}
         onChange={handleChange}
         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-gray-900 p-2"
       >

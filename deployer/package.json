@@ -12,8 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@t3-oss/env-core": "^0.7.1",
-    "aws-cdk": "^2.115.0",
-    "aws-cdk-lib": "^2.115.0",
+    "aws-cdk": "^2.171.1",
+    "aws-cdk-lib": "^2.171.1",
     "constructs": "^10.3.0",
     "dotenv": "^16.3.1",
     "ts-node": "^10.9.2",
@@ -35,5 +35,8 @@
     "prettier": "^3.3.3",
     "typescript": "^5.0.4",
     "typescript-eslint": "^8.8.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

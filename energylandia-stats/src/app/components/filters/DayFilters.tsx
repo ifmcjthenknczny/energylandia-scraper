@@ -44,7 +44,6 @@ const DayFilters= ({
       if (!from || !to) {
         return;
       }
-      console.log(from, to)
       current.set('dayFrom', toDay(dayjs(from).tz('Europe/Warsaw')));
       current.set('dayTo',  toDay(dayjs(to).tz('Europe/Warsaw')));
     } else if (!date) {

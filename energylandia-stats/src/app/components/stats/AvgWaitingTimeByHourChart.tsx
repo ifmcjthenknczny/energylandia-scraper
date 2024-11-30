@@ -26,9 +26,10 @@ const WaitingTimeChart = ({data}: Props) => {
         if (!data) {
             return undefined
         }
+        
         const newChartData: ChartData = [['Hour', ...selectedAttractions]]
 
-      const hours = Object.keys(data?.[selectedAttractions[0]] || {});
+      const hours = Object.keys(data?.[selectedAttractions[0]] || {})
   
       hours.forEach((hour) => {
         const row: ChartData[number] = [hour];
