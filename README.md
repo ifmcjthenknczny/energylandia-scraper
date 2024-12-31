@@ -84,6 +84,7 @@ ISC License.
 
 ---
 
-## Authors
+## Contact
 
-ifmcjthenknczny
+For questions or feedback, please reach out via GitHub.
+[ifmcjthenknczny](https://github.com/ifmcjthenknczny)
