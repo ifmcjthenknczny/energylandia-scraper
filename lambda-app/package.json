@@ -4,11 +4,12 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "lint": "npx eslint \"**/*.ts\" --fix",
+    "fix": "npx eslint \"**/*.ts\" --fix",
+    "lint": "npx eslint \"**/*.ts\"",
     "compile": "npx tsc",
     "start": "node out/build/start-local.js",
-    "build": "yarn run compile",
-    "buildAndStart": "yarn run build && yarn start | tee log.txt"
+    "build": "yarn compile",
+    "buildAndStart": "yarn build && yarn start"
   },
   "author": "",
   "license": "ISC",

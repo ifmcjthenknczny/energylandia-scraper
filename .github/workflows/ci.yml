@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -26,14 +26,14 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'lambda-app/yarn.lock'
 
-      - name: Install dependencies
+      - name: Install deps
         run: yarn install --frozen-lockfile
 
-      - name: Lint the code
-        run: yarn run lint
+      - name: Lint code
+        run: yarn lint
 
-      - name: Compile the code
-        run: yarn run compile
+      - name: Build code
+        run: yarn build
 
   ci-deployment:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -52,11 +52,11 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'lambda-app/yarn.lock'
 
-      - name: Install dependencies
+      - name: Install deps
         run: yarn install --frozen-lockfile
 
-      - name: Lint the code
-        run: yarn run lint
+      - name: Lint code
+        run: yarn lint
 
-      - name: Compile the code
-        run: yarn run compile
+      - name: Build code
+        run: yarn build

@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "npx eslint \"**/*.ts\" --fix",
     "compile": "npx tsc",
-    "cdk": "npx cdk"
+    "cdk": "npx cdk",
+    "build": "yarn compile"
   },
   "author": "",
   "license": "ISC",
