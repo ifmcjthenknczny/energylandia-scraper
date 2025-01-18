@@ -1,14 +1,25 @@
-import { insertFailedMigration, insertSuccessMigration, isMigrationSuccessfullyProcessed } from "../client/migration";
+import {
+    insertFailedMigration,
+    insertSuccessMigration,
+    isMigrationSuccessfullyProcessed,
+} from '../client/migration'
 
-import { ScriptContext } from "../context";
-import { log } from "console";
-import { logError } from "./util/log";
+import { ScriptContext } from '../context'
+import { log } from 'console'
+import { logError } from './util/log'
 
 type MigrationFunction = (context: ScriptContext) => Promise<string | void>
 
-export async function migration(context: ScriptContext, name: string, func: MigrationFunction) {
+export async function migration(
+    context: ScriptContext,
+    name: string,
+    func: MigrationFunction,
+) {
     log(`STARTED MIGRATION OF ${name}`)
-    const isAlreadyProcessed = await isMigrationSuccessfullyProcessed(context.db, name)
+    const isAlreadyProcessed = await isMigrationSuccessfullyProcessed(
+        context.db,
+        name,
+    )
     if (isAlreadyProcessed) {
         logError(`MIGRATION OF NAME ${name} WAS ALREADY PROCESSED. CANCELLING`)
         return
@@ -20,6 +31,6 @@ export async function migration(context: ScriptContext, name: string, func: Migr
         logError(`MIGRATION OF NAME ${name} FAILED WITH MESSAGE ${err.message}`)
         await insertFailedMigration(context.db, name, err.message)
     }
-    
+
     log(`FINISHED MIGRATION OF ${name}`)
 }

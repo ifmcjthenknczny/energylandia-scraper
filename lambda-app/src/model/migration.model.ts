@@ -1,12 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose'
 
 export interface Migration {
-    name: string;
-    message?: string;
+    name: string
+    message?: string
     isSuccess?: boolean
-    processedAt?: Date;
-  }
-  
+    processedAt?: Date
+}
 
 export const MigrationSchema: Schema<Migration> = new Schema({
     name: {
@@ -25,8 +24,11 @@ export const MigrationSchema: Schema<Migration> = new Schema({
         type: Date,
         default: Date.now,
     },
-});
+})
 
-MigrationSchema.index({ name: 1, isSuccess: 1, processedAt: 1 });
+MigrationSchema.index({ name: 1, isSuccess: 1, processedAt: 1 })
 
-export const MigrationModel = mongoose.model<Migration>('Migration', MigrationSchema);
+export const MigrationModel = mongoose.model<Migration>(
+    'Migration',
+    MigrationSchema,
+)

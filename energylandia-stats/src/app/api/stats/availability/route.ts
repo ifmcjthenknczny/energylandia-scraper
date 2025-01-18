@@ -1,19 +1,21 @@
-import { dayOfWeekSchema, daySchema, hourSchema } from "@/app/utils/schema";
+import { dayOfWeekSchema, daySchema, hourSchema } from '@/app/utils/schema'
 
-import { Filter } from "@/app/types";
-import { NextResponse } from "next/server";
-import { getAvailabilityByAttraction } from "@/app/client/mongo";
-import { getQueryParams } from "../../../../../helpers/query";
-import { validate } from "@/app/utils/validate";
-import { z } from "zod";
+import { Filter } from '@/app/types'
+import { NextResponse } from 'next/server'
+import { getAvailabilityByAttraction } from '@/app/client/mongo'
+import { getQueryParams } from '../../../../../helpers/query'
+import { validate } from '@/app/utils/validate'
+import { z } from 'zod'
 
-const schema = z.object({
-    dayFrom: daySchema.optional(),
-    dayTo: daySchema.optional(),
-    hourFrom: hourSchema.optional(),
-    hourTo: hourSchema.optional(),
-    dayOfWeek: dayOfWeekSchema.optional()
-}).optional()
+const schema = z
+    .object({
+        dayFrom: daySchema.optional(),
+        dayTo: daySchema.optional(),
+        hourFrom: hourSchema.optional(),
+        hourTo: hourSchema.optional(),
+        dayOfWeek: dayOfWeekSchema.optional(),
+    })
+    .optional()
 
 export async function GET(req: Request) {
     const query = getQueryParams(req)

@@ -1,6 +1,10 @@
-.react-calendar, .react-calendar__navigation__arrow, .react-calendar__navigation__label, .react-calendar__navigation, .react-calendar__tile {
-  background-color: #505050;
-  font-size: 10px !important;
+.react-calendar,
+.react-calendar__navigation__arrow,
+.react-calendar__navigation__label,
+.react-calendar__navigation,
+.react-calendar__tile {
+    background-color: #505050;
+    font-size: 10px !important;
 }
 
 .react-calendar__navigation__arrow {

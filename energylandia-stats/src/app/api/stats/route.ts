@@ -1,19 +1,21 @@
-import { dayOfWeekSchema, daySchema, hourSchema } from "@/app/utils/schema";
+import { dayOfWeekSchema, daySchema, hourSchema } from '@/app/utils/schema'
 
-import { Filter } from "@/app/types";
-import { NextResponse } from "next/server";
-import { getAvgWaitingTimeByAttraction } from "@/app/client/mongo";
-import { getQueryParams } from "../../../../helpers/query";
-import { validate } from "@/app/utils/validate";
-import { z } from "zod";
+import { Filter } from '@/app/types'
+import { NextResponse } from 'next/server'
+import { getAvgWaitingTimeByAttraction } from '@/app/client/mongo'
+import { getQueryParams } from '../../../../helpers/query'
+import { validate } from '@/app/utils/validate'
+import { z } from 'zod'
 
-const schema = z.object({
-    dayFrom: daySchema.optional(),
-    dayTo: daySchema.optional(),
-    hourFrom: hourSchema.optional(),
-    hourTo: hourSchema.optional(),
-    dayOfWeek: dayOfWeekSchema.optional()
-}).optional()
+const schema = z
+    .object({
+        dayFrom: daySchema.optional(),
+        dayTo: daySchema.optional(),
+        hourFrom: hourSchema.optional(),
+        hourTo: hourSchema.optional(),
+        dayOfWeek: dayOfWeekSchema.optional(),
+    })
+    .optional()
 
 export async function GET(req: Request) {
     try {
@@ -21,8 +23,8 @@ export async function GET(req: Request) {
         const filters = validate<Filter | undefined>(query, schema)
         const stats = await getAvgWaitingTimeByAttraction(filters)
         return NextResponse.json(stats)
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     } catch (e: any) {
-        return NextResponse.json({error: e.message}, { status: 400 })
+        return NextResponse.json({ error: e.message }, { status: 400 })
     }
 }

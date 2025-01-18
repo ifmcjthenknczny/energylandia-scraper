@@ -1,15 +1,15 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-mongoose.set('strictQuery', true);
+mongoose.set('strictQuery', true)
 
-const DATABASE_NAME = 'Energylandia';
+const DATABASE_NAME = 'Energylandia'
 
 export const mongo = async (uri: string) => {
     await mongoose.connect(uri, {
         dbName: DATABASE_NAME,
         serverSelectionTimeoutMS: 5000,
-    });
+    })
     console.log('Connected to mongo!')
 
-    return mongoose.connection.db!;
+    return mongoose.connection.db!
 }

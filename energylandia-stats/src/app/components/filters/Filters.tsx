@@ -1,62 +1,62 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
-import DayFilters from './DayFilters';
-import DayOfWeekFilter from './DayOfWeekFilter';
-import { useSearchParams } from 'next/navigation';
+import DayFilters from './DayFilters'
+import DayOfWeekFilter from './DayOfWeekFilter'
+import { useSearchParams } from 'next/navigation'
 
 // import TimeFilters from './TimeFilters';
 
-export const FIRST_DAY_OF_DATA = '2024-10-05';
+export const FIRST_DAY_OF_DATA = '2024-10-05'
 
 const Filters = () => {
-  const searchParams = useSearchParams();
-  const [dayFrom, setDayFrom] = useState<Date | null>(null);
-  const [dayTo, setDayTo] = useState<Date | null>(null);
-  const [dayOfWeek, setDayOfWeek] = useState<number | null>(null);
-  // const [hourFrom, setHourFrom] = useState<string | null>(null);
-  // const [hourTo, setHourTo] = useState<string | null>(null);
+    const searchParams = useSearchParams()
+    const [dayFrom, setDayFrom] = useState<Date | null>(null)
+    const [dayTo, setDayTo] = useState<Date | null>(null)
+    const [dayOfWeek, setDayOfWeek] = useState<number | null>(null)
+    // const [hourFrom, setHourFrom] = useState<string | null>(null);
+    // const [hourTo, setHourTo] = useState<string | null>(null);
 
-  useEffect(() => {
-    const dayFromParam = searchParams.get('dayFrom');
-    const dayToParam = searchParams.get('dayTo');
-    const dayOfWeekParam = searchParams.get('dayOfWeek');
-    // const hourFromParam = searchParams.get('hourFrom');
-    // const hourToParam = searchParams.get('hourTo');
+    useEffect(() => {
+        const dayFromParam = searchParams.get('dayFrom')
+        const dayToParam = searchParams.get('dayTo')
+        const dayOfWeekParam = searchParams.get('dayOfWeek')
+        // const hourFromParam = searchParams.get('hourFrom');
+        // const hourToParam = searchParams.get('hourTo');
 
-    setDayFrom(dayFromParam ? new Date(dayFromParam) : null);
-    setDayTo(dayToParam ? new Date(dayToParam) : null);
-    setDayOfWeek(dayOfWeekParam ? parseInt(dayOfWeekParam, 10) : null);
-    // setHourFrom(hourFromParam);
-    // setHourTo(hourToParam);
-  }, [searchParams]);
+        setDayFrom(dayFromParam ? new Date(dayFromParam) : null)
+        setDayTo(dayToParam ? new Date(dayToParam) : null)
+        setDayOfWeek(dayOfWeekParam ? parseInt(dayOfWeekParam, 10) : null)
+        // setHourFrom(hourFromParam);
+        // setHourTo(hourToParam);
+    }, [searchParams])
 
-  return (
-    <div className="mb-4 w-full">
-      <div className="w-full flex flex-row justify-evenly">
-      <DayOfWeekFilter
-          dayOfWeek={dayOfWeek}
-          onDayOfWeekChange={setDayOfWeek}
-        />
-        <DayFilters
-          dayFrom={dayFrom}
-          dayTo={dayTo}
-          onDayFromChange={setDayFrom}
-          onDayToChange={setDayTo}
-        />
-        {/* <TimeFilters
+    return (
+        <div className="mb-4 w-full">
+            <div className="w-full flex flex-row justify-evenly">
+                <DayOfWeekFilter
+                    dayOfWeek={dayOfWeek}
+                    onDayOfWeekChange={setDayOfWeek}
+                />
+                <DayFilters
+                    dayFrom={dayFrom}
+                    dayTo={dayTo}
+                    onDayFromChange={setDayFrom}
+                    onDayToChange={setDayTo}
+                />
+                {/* <TimeFilters
           hourFrom={hourFrom}
           hourTo={hourTo}
           onHourFromChange={setHourFrom}
           onHourToChange={setHourTo}
         /> */}
-      </div>
-    </div>
-  );
-};
+            </div>
+        </div>
+    )
+}
 
-export default Filters;
+export default Filters
 // "use client";
 
 // import { Day, Hour, yesterday } from '@/app/utils/date';
@@ -65,7 +65,6 @@ export default Filters;
 
 // import { Filter } from '@/app/types';
 // import { removeUndefinedOrNull } from '@/app/utils/object';
-
 
 // const defaultFilter: Filter = {
 //   dayFrom: FIRST_DAY_OF_DATA,
@@ -105,7 +104,7 @@ export default Filters;
 //     const searchParamsObject = mapToSearchParamsObject(newFilter)
 //     router.push(new URLSearchParams(searchParamsObject).toString());
 //   }
-  
+
 //   useEffect(() => {
 //     const newFilter = mapQueryToFilter(query)
 //     setFilter(newFilter)
@@ -125,4 +124,3 @@ export default Filters;
 //   }
 //   return context;
 // };
-

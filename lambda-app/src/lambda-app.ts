@@ -1,47 +1,47 @@
-import { finalizeScriptContext, initializeScriptContext } from "./context";
-import { log, logError } from "./helpers/util/log";
+import { finalizeScriptContext, initializeScriptContext } from './context'
+import { log, logError } from './helpers/util/log'
 
-import { migration } from "./helpers/migration";
-import migration20241006isInactive from "./migrations/migration20241006isInactive";
-import { scrapeEnergylandiaOpeningHours } from "./scrapers/openingHoursScraper";
-import { scrapeEnergylandiaWaitingTimes } from "./scrapers/waitingTimesScraper";
+import { migration } from './helpers/migration'
+import migration20241006isInactive from './migrations/migration20241006isInactive'
+import { scrapeEnergylandiaOpeningHours } from './scrapers/openingHoursScraper'
+import { scrapeEnergylandiaWaitingTimes } from './scrapers/waitingTimesScraper'
 
 export enum ActionType {
-  PING = "PING",
-  SCRAPE_WAITING_TIMES = "SCRAPE_WAITING_TIMES",
-  SCRAPE_OPENING_HOURS = "SCRAPE_OPENING_HOURS",
-  MIGRATION = 'MIGRATION'
+    PING = 'PING',
+    SCRAPE_WAITING_TIMES = 'SCRAPE_WAITING_TIMES',
+    SCRAPE_OPENING_HOURS = 'SCRAPE_OPENING_HOURS',
+    MIGRATION = 'MIGRATION',
 }
 
 interface AppConfig {
-  action: ActionType;
-  executionId: string;
-  rawEvent: string | null;
-  runningLocal: boolean;
+    action: ActionType
+    executionId: string
+    rawEvent: string | null
+    runningLocal: boolean
 }
 
 export async function lambda(config: AppConfig) {
-  log(`Starting execution: config=${JSON.stringify(config)}.`);
-  const context = await initializeScriptContext(config.executionId);
+    log(`Starting execution: config=${JSON.stringify(config)}.`)
+    const context = await initializeScriptContext(config.executionId)
 
-  switch (config.action) {
-    case ActionType.PING:
-      log("PONG");
-      break;
-    case ActionType.SCRAPE_WAITING_TIMES:
-      await scrapeEnergylandiaWaitingTimes(context)
-      break;
-    case ActionType.SCRAPE_OPENING_HOURS:
-      await scrapeEnergylandiaOpeningHours(context)
-      break;
-    case ActionType.MIGRATION:
-      // eslint-disable-next-line no-case-declarations
-      const migrationName = 'migration20241006isInactive'
-      await migration(context, migrationName, migration20241006isInactive)
-      break;
-    default:
-      logError(`Unknown action: action=${config.action}.`);
-  }
+    switch (config.action) {
+        case ActionType.PING:
+            log('PONG')
+            break
+        case ActionType.SCRAPE_WAITING_TIMES:
+            await scrapeEnergylandiaWaitingTimes(context)
+            break
+        case ActionType.SCRAPE_OPENING_HOURS:
+            await scrapeEnergylandiaOpeningHours(context)
+            break
+        case ActionType.MIGRATION:
+            // eslint-disable-next-line no-case-declarations
+            const migrationName = 'migration20241006isInactive'
+            await migration(context, migrationName, migration20241006isInactive)
+            break
+        default:
+            logError(`Unknown action: action=${config.action}.`)
+    }
 
-  await finalizeScriptContext(context);
+    await finalizeScriptContext(context)
 }

@@ -1,7 +1,7 @@
-import 'dotenv/config';
+import 'dotenv/config'
 
-import {createEnv} from '@t3-oss/env-core';
-import {z} from 'zod';
+import { createEnv } from '@t3-oss/env-core'
+import { z } from 'zod'
 
 export const env = createEnv({
     /*
@@ -19,6 +19,6 @@ export const env = createEnv({
         AWS_ACCOUNT_ID: process.env.AWS_ACCOUNT_ID,
         AWS_REGION: process.env.AWS_REGION,
         AWS_STACK_NAME: process.env.AWS_STACK_NAME,
-        MONGO_URI: process.env.MONGO_URI
-    }
-});
+        MONGO_URI: process.env.MONGO_URI,
+    },
+})
