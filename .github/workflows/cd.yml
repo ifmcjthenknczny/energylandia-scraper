@@ -11,9 +11,7 @@ permissions:
 
 env:
   NODE_VERSION: "22.11.0"
-  REGEX_PATTERN: "arn:aws:cloudformation:[a-zA-Z0-9\\-]+:[0-9]+:changeSet/[a-zA-Z0-9\\-]+/[a-fA-F0-9\\-]+"
   BUILD_ID: ${{ github.run_number }}
-  MONGO_URI: ${{ secrets.MONGO_URI }}
   AWS_STACK_NAME: ${{ vars.AWS_STACK_NAME }}
 
 jobs:
@@ -32,33 +30,30 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'lambda-app/yarn.lock'
 
-      - name: Install dependencies
+      - name: Install deps
         working-directory: lambda-app
         run: yarn install --frozen-lockfile --arch=arm64
 
-      - name: Build the app
+      - name: Build app
         working-directory: lambda-app
         run: yarn run compile
 
-      - name: Move the build
-        run: mv lambda-app/out/build LambdaApp
+      - name: Move and clean build
+        run: mv lambda-app/out/build LambdaApp && rm LambdaApp/start-local.js
 
-      - name: Clean up the build
-        run: rm LambdaApp/start-local.js
-
-      - name: Set up the environment
+      - name: Setup environment variables
         run: echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI" > LambdaApp/.env
         env:
           AWS_STACK_NAME: ${{ vars.AWS_STACK_NAME }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
 
-      - name: Set up the starter
+      - name: Setup starter
         run: mv lambda-app/deployment/lambda-starter.js LambdaApp/lambda-starter.js
 
-      - name: Compress the build
+      - name: Compress build
         run: tar -czf LambdaApp.tar LambdaApp
 
-      - name: Save the build
+      - name: Save build
         uses: actions/upload-artifact@v4
         with:
           name: LambdaApp.tar
@@ -80,19 +75,19 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'lambda-app/yarn.lock'
 
-      - name: Install dependencies
+      - name: Install production deps
         working-directory: lambda-app
         run: yarn install --frozen-lockfile --arch=arm64 --production
 
-      - name: Move the build
+      - name: Move build
         run: |
           mkdir -p NodeModules/nodejs
           mv lambda-app/node_modules NodeModules/nodejs/node_modules
 
-      - name: Compress the build
+      - name: Compress build
         run: tar -czf NodeModules.tar NodeModules
 
-      - name: Save the build
+      - name: Save build
         uses: actions/upload-artifact@v4
         with:
           name: NodeModules.tar
@@ -134,7 +129,7 @@ jobs:
         working-directory: deployer
         run: for build in *.tar; do tar -xf "$build/$build"; done
 
-      - name: Install CDK
+      - name: Install production deps
         working-directory: deployer
         run: yarn install --frozen-lockfile --production
 
