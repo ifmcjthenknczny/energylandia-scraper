@@ -9,6 +9,7 @@ export const mongo = async (uri: string) => {
         dbName: DATABASE_NAME,
         serverSelectionTimeoutMS: 5000,
     })
+    // eslint-disable-next-line no-console
     console.log('Connected to mongo!')
 
     return mongoose.connection.db!

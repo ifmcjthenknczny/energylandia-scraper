@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 export function log(message: any) {
     console.log(JSON.stringify(message, null, 2))
 }

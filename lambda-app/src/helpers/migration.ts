@@ -29,7 +29,7 @@ export async function migration(
         await insertSuccessMigration(context.db, name, message || undefined)
     } catch (err: any) {
         logError(`MIGRATION OF NAME ${name} FAILED WITH MESSAGE ${err.message}`)
-        await insertFailedMigration(context.db, name, err.message)
+        await insertFailedMigration(context.db, name, err.message as string)
     }
 
     log(`FINISHED MIGRATION OF ${name}`)

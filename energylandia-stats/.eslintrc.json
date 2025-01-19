@@ -1,6 +1,6 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript"],
-  "ignorePatterns": ["dist/", ".eslintrc.js", "out/", "log.txt", ".env"],
+  "ignorePatterns": ["dist/", ".eslintrc.json", "out/", "log.txt", ".env"],
   "rules": {
     "@typescript-eslint/ban-types": "warn",
     "@typescript-eslint/no-unsafe-argument": "warn",

@@ -1,12 +1,12 @@
-import { z } from 'zod'
+import { ZodSchema, z } from 'zod'
 
 function safeValidateString<T>(
     data: string,
-    schema: any,
+    schema: ZodSchema<T>,
 ): { validatedValue?: T; error?: string } {
     const validatedData = schema.safeParse(data)
     if ('error' in validatedData) {
-        return { error: validatedData.error.errors[0].message }
+        return { error: validatedData.error!.errors[0].message }
     }
     return { validatedValue: validatedData.data }
 }

@@ -70,6 +70,7 @@ export async function deleteFile(locations: string[]) {
                 `Successfully deleted ${Deleted?.length ?? 0} objects from S3 bucket.`,
             )
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error(err)
         }
     } else if (process.env.TEMP_PATH) {

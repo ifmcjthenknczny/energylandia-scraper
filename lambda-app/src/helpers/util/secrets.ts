@@ -13,5 +13,5 @@ export async function getSecretsFromAws(
         }),
     )
 
-    return JSON.parse(response.SecretString!)
+    return JSON.parse(response?.SecretString || "{}")
 }
