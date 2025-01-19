@@ -24,6 +24,9 @@ export async function GET(req: Request) {
         const stats = await getAvgWaitingTimeByAttraction(filters)
         return NextResponse.json(stats)
     } catch (e: unknown) {
-        return NextResponse.json({ error: (e as Error).message }, { status: 400 })
+        return NextResponse.json(
+            { error: (e as Error).message },
+            { status: 400 },
+        )
     }
 }

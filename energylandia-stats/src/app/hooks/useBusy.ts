@@ -5,7 +5,9 @@ export default function useBusy(
 ): [boolean, <T extends (...args: unknown[]) => Promise<unknown>>(f: T) => T] {
     const [isBusy, setIsBusy] = useState(initialBusyState)
 
-    function busyWrapper<T extends (...args: unknown[]) => Promise<unknown>>(f: T): T {
+    function busyWrapper<T extends (...args: unknown[]) => Promise<unknown>>(
+        f: T,
+    ): T {
         return (async (...args: unknown[]) => {
             try {
                 setIsBusy(true)
