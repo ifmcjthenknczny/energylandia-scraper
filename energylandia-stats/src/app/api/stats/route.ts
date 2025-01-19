@@ -23,8 +23,7 @@ export async function GET(req: Request) {
         const filters = validate<Filter | undefined>(query, schema)
         const stats = await getAvgWaitingTimeByAttraction(filters)
         return NextResponse.json(stats)
-        // eslint-disable-next-line
-    } catch (e: any) {
-        return NextResponse.json({ error: e.message }, { status: 400 })
+    } catch (e: unknown) {
+        return NextResponse.json({ error: (e as Error).message }, { status: 400 })
     }
 }

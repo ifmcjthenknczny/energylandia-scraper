@@ -29,6 +29,7 @@ export const mongoConnect = async () => {
         dbName: DATABASE_NAME,
         serverSelectionTimeoutMS: 5000,
     })
+    // eslint-disable-next-line no-console
     console.log('Connected to mongo!')
 
     return mongoose.connection.db!
@@ -77,7 +78,7 @@ export const getAvgWaitingTimeByAttraction = async (
 ): Promise<AvgTimeResponse> => {
     const matchFilter = buildFilter(filter)
 
-    const result = await waitingTimeCollection
+    const result = (await waitingTimeCollection
         .aggregate([
             {
                 $match: {
@@ -103,14 +104,14 @@ export const getAvgWaitingTimeByAttraction = async (
                 $sort: { avgWaitingTime: DESC },
             },
         ])
-        .toArray()
+        .toArray()) as {attractionName: string, avgWaitingTime: number}[]
     const avgWaitingTime = Object.fromEntries(
         result.map(({ attractionName, avgWaitingTime }) => [
             attractionName,
             avgWaitingTime,
         ]),
     )
-    return avgWaitingTime as AvgTimeResponse
+    return avgWaitingTime
 }
 
 export const getAvgWaitingTimeByAttractionAndHour = async (
@@ -118,7 +119,7 @@ export const getAvgWaitingTimeByAttractionAndHour = async (
 ): Promise<AvgTimeByHourResponse> => {
     const matchFilter = buildFilter(filter)
 
-    const results = await waitingTimeCollection
+    const results = (await waitingTimeCollection
         .aggregate([
             {
                 $match: {
@@ -209,7 +210,7 @@ export const getAvgWaitingTimeByAttractionAndHour = async (
                 $sort: { attractionName: ASC },
             },
         ])
-        .toArray()
+        .toArray()) as {attractionName: string, avgTimesByHour: number}[]
 
     const finalResult: Record<string, Record<string, number>> = {}
     for (const result of results) {
@@ -219,12 +220,14 @@ export const getAvgWaitingTimeByAttractionAndHour = async (
         finalResult[result.attractionName] = Object.fromEntries(sortedHours)
     }
 
-    return finalResult as AvgTimeByHourResponse
+    return finalResult
 }
 
-export async function getOverallAvgWaitingTimeByHour(filter?: Filter) {
+type AvgOverallWaitingTime = Record<string, number>
+
+export async function getOverallAvgWaitingTimeByHour(filter?: Filter): Promise<AvgOverallWaitingTime> {
     const matchFilter = buildFilter(filter)
-    const results = await waitingTimeCollection
+    const results = (await waitingTimeCollection
         .aggregate([
             {
                 $match: {
@@ -286,7 +289,6 @@ export async function getOverallAvgWaitingTimeByHour(filter?: Filter) {
                 $group: {
                     _id: '$timeSlot',
                     avgWaitingTime: { $avg: '$waitingTimeMinutes' },
-                    // avgWaitingTime: { $sum: "$waitingTimeMinutes" }
                 },
             },
             {
@@ -300,22 +302,24 @@ export async function getOverallAvgWaitingTimeByHour(filter?: Filter) {
                 $sort: { timeSlot: 1 },
             },
         ])
-        .toArray()
+        .toArray()) as { timeSlot: string, avgWaitingTime: number }[]
 
     const avgOverallWaitingTime = results.reduce(
         (acc, { timeSlot, avgWaitingTime }) => {
             acc[timeSlot] = avgWaitingTime
             return acc
         },
-        {} as Record<string, number>,
+        {} as AvgOverallWaitingTime,
     )
 
     return avgOverallWaitingTime
 }
 
-export async function getAvailabilityByAttraction(filter?: Filter) {
+type AttractionAvailability = Record<string, number>
+
+export async function getAvailabilityByAttraction(filter?: Filter): Promise<AttractionAvailability> {
     const matchFilter = buildFilter(filter)
-    const results = await waitingTimeCollection
+    const results = (await waitingTimeCollection
         .aggregate([
             {
                 $match: matchFilter,
@@ -351,14 +355,14 @@ export async function getAvailabilityByAttraction(filter?: Filter) {
                 },
             },
         ])
-        .toArray()
+        .toArray()) as {attractionName: string, reliability: number}[]
 
-    const availabilityRecord = results.reduce<Record<string, number>>(
+    const availabilityRecord = results.reduce(
         (acc, record) => {
             acc[record.attractionName] = record.reliability
             return acc
         },
-        {},
+        {} as AttractionAvailability,
     )
 
     return availabilityRecord

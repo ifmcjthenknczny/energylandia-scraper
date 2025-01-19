@@ -56,7 +56,6 @@ const WaitingTimeChart = ({ data }: Props) => {
             },
         )
         handleDataChangeToChart(data)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, selectedAttractions.length, selectedAttractions])
 
     const handleAttractionChange = (attraction: string) => {

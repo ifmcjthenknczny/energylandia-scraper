@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { useSortBy, useTable } from 'react-table'
 
 import { AvgTimeResponse } from '@/app/types'
 
 interface Props {
-    dataByAttraction: AvgTimeResponse
+    dataByAttraction?: AvgTimeResponse
 }
 
 function formatWaitingTime(waitingTimeMinutes: number) {
@@ -58,9 +58,9 @@ const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
             {
                 columns,
                 data,
-                initialState: {
-                    sortBy: [{ id: 'avgWaitingTimeMinutes', desc: true }],
-                },
+                // initialState: {
+                //     sortBy: [{ id: 'avgWaitingTimeMinutes', desc: true }],
+                // },
             },
             useSortBy,
         )
