@@ -9,7 +9,7 @@ env:
   NODE_VERSION: "22.11.0"
 
 jobs:
-  ci-lambda-app:
+  ci-lambda:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
@@ -35,7 +35,7 @@ jobs:
       - name: Build code
         run: yarn build
 
-  ci-deployment:
+  ci-deployer:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
@@ -50,7 +50,33 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
-          cache-dependency-path: 'lambda-app/yarn.lock'
+          cache-dependency-path: 'deployer/yarn.lock'
+
+      - name: Install deps
+        run: yarn install --frozen-lockfile
+
+      - name: Lint code
+        run: yarn lint
+
+      - name: Build code
+        run: yarn build
+
+  ci-front:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./energylandia-stats
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'yarn'
+          cache-dependency-path: 'energylandia-stats/yarn.lock'
 
       - name: Install deps
         run: yarn install --frozen-lockfile
