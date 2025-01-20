@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useSortBy, useTable } from 'react-table'
 
 import { AvgTimeResponse } from '@/app/types'
@@ -11,7 +11,7 @@ interface Props {
 
 function formatWaitingTime(waitingTimeMinutes: number) {
     if (waitingTimeMinutes < 1) {
-        return '<1 min'
+        return '<1min'
     }
     const hours = Math.floor(waitingTimeMinutes / 60)
     const minutes = Math.floor(waitingTimeMinutes % 60)
@@ -76,19 +76,10 @@ const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map((column) => (
                                 <th
-                                    {...column.getHeaderProps(
-                                        column.getSortByToggleProps(),
-                                    )}
+                                    {...column.getHeaderProps()}
                                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                                 >
-                                    {column.render('Header')}
-                                    <span>
-                                        {column.isSorted
-                                            ? column.isSortedDesc
-                                                ? ' 🔽'
-                                                : ' 🔼'
-                                            : ''}
-                                    </span>
+                                    {column.render('Header') as React.ReactNode}
                                 </th>
                             ))}
                         </tr>
@@ -107,7 +98,7 @@ const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
                                         {...cell.getCellProps()}
                                         className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300"
                                     >
-                                        {cell.render('Cell')}
+                                        {cell.render('Cell') as React.ReactNode}
                                     </td>
                                 ))}
                             </tr>

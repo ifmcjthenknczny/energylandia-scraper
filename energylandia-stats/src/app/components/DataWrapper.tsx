@@ -2,11 +2,10 @@
 
 import { AvgTimeByHourResponse, AvgTimeResponse } from '../types'
 import { Day, Hour } from '../utils/date'
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import AttractionWaitTimeTable from './stats/AttractionWaitTimeTable'
 import { Filter } from '../types'
-import Loader from './misc/Loader'
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import WaitingTimeChart from './stats/AvgWaitingTimeByHourChart'
 import axios from 'axios'
@@ -62,10 +61,4 @@ function DataWrapper() {
     )
 }
 
-export default function SuspensedDataWrapper() {
-    return (
-        <Suspense fallback={<Loader />}>
-            <DataWrapper />
-        </Suspense>
-    )
-}
+export default DataWrapper
