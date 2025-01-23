@@ -29,6 +29,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
+          cache-dependency-path: 'lambda-scraper/yarn.lock'
 
       - name: Install deps
         working-directory: lambda-scraper
@@ -67,6 +68,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
+          cache-dependency-path: 'lambda-scraper/yarn.lock'
 
       - name: Install production deps
         working-directory: lambda-scraper

@@ -7,7 +7,6 @@ permissions:
 
 env:
   NODE_VERSION: "22.11.0"
-  NODE_ENV: "ci"
 
 jobs:
   ci-lambda:
@@ -25,6 +24,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
+          cache-dependency-path: 'lambda-scraper/yarn.lock'
 
       - name: Install deps
         run: yarn install --frozen-lockfile
@@ -50,6 +50,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
+          cache-dependency-path: 'deployer/yarn.lock'
 
       - name: Install deps
         run: yarn install --frozen-lockfile
