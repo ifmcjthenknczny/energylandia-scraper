@@ -7,7 +7,7 @@ module.exports = {
   },
   plugins: ["@typescript-eslint"],
   extends: ["plugin:@next/next/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
-  ignorePatterns: ["dist/", ".eslintrc.json", "out/", "log.txt", ".env"],
+  ignorePatterns: ["dist/", ".eslintrc.js", "out/", "log.txt", ".env"],
   rules: {
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-unsafe-argument": "warn",

@@ -1,14 +1,14 @@
-{
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
+module.exports = {
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
     "project": "./tsconfig.json",
     "tsconfigRootDir": "./",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
-  "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
-  "ignorePatterns": ["**/*.js", "dist/", ".eslintrc.json", "out/", "log.txt", ".env"],
-  "rules": {
+  plugins: ["@typescript-eslint"],
+  extends: ["plugin:@typescript-eslint/recommended", "prettier"],
+  ignorePatterns: ["**/*.js", "dist/", ".eslintrc.js", "out/", "log.txt", ".env"],
+  rules: {
     "@typescript-eslint/ban-types": "warn",
     "@typescript-eslint/no-unsafe-argument": "warn",
     "@typescript-eslint/no-unsafe-call": "warn",
