@@ -20,7 +20,7 @@ dayjs.extend(utc)
 type ValuePiece = Date | null
 type Value = ValuePiece | [ValuePiece, ValuePiece]
 
-interface Props {
+type Props = {
     dayFrom: Date | null
     dayTo: Date | null
     onDayFromChange: (date: Date | null) => void

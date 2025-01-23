@@ -5,7 +5,7 @@ import { useSortBy, useTable } from 'react-table'
 
 import { AvgTimeResponse } from '@/app/types'
 
-interface Props {
+type Props = {
     dataByAttraction?: AvgTimeResponse
 }
 

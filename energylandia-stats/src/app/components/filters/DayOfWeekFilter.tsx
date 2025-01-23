@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { isFalsyExceptZero } from '@/app/utils/bool'
 
-interface Props {
+type Props = {
     dayOfWeek: number | null
     onDayOfWeekChange: (dayOfWeek: number | null) => void
 }

@@ -9,7 +9,7 @@ import React from 'react'
 import RemoveFilterButton from './RemoveFilterButton'
 import TimePicker from 'react-time-picker'
 
-interface Props {
+type Props = {
     hourFrom: string | null
     hourTo: string | null
     onHourFromChange: (hour: string | null) => void

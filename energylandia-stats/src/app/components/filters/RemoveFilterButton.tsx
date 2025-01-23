@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import React from 'react'
 
-interface Props {
+type Props = {
     paramsToRemove: string[]
 }
 

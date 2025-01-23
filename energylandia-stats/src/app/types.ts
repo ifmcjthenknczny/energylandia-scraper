@@ -1,6 +1,6 @@
 import { Day, Hour } from './utils/date'
 
-export interface Filter {
+export type Filter = {
     dayFrom?: Day
     dayTo?: Day
     hourFrom?: Hour
