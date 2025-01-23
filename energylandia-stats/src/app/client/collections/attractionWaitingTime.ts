@@ -18,7 +18,7 @@ type AvgOverallWaitingTime = Record<string, number>
 type AttractionAvailability = Record<string, number>
 
 const WAITING_TIME_COLLECTION_NAME = 'EnergylandiaWaitingTime'
-export const waitingTimeCollection = mongoDb.collection<AttractionWaitingTime>(
+export const waitingTimeCollection = mongoDb!.collection<AttractionWaitingTime>(
     WAITING_TIME_COLLECTION_NAME,
 )
 

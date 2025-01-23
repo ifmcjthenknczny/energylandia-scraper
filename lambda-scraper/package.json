@@ -1,5 +1,5 @@
 {
-  "name": "lambda-app",
+  "name": "lambda-scraper",
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
@@ -11,7 +11,7 @@
     "build": "yarn compile",
     "buildAndStart": "yarn build && yarn start",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
-    "check": "yarn format && yarn fix && yarn build"
+    "checkAll": "yarn format && yarn fix && yarn build"
   },
   "author": "",
   "license": "ISC",

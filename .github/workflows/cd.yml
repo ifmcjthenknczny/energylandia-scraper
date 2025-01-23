@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - 'main'
+      - 'main'
 
 permissions:
   contents: read
@@ -15,10 +15,8 @@ env:
   AWS_STACK_NAME: ${{ vars.AWS_STACK_NAME }}
 
 jobs:
-  build-LambdaApp:
-    name: Build LambdaApp
+  setup-node:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
 
@@ -28,61 +26,60 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
           cache: 'yarn'
-          cache-dependency-path: 'lambda-app/yarn.lock'
+
+  build-LambdaScraper:
+    name: Build LambdaScraper
+    runs-on: ubuntu-latest
+    needs: setup-node
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Install deps
-        working-directory: lambda-app
+        working-directory: lambda-scraper
         run: yarn install --frozen-lockfile --arch=arm64
 
       - name: Build app
-        working-directory: lambda-app
+        working-directory: lambda-scraper
         run: yarn build
 
       - name: Move and clean build
-        run: mv lambda-app/out/build LambdaApp && rm LambdaApp/start-local.js
+        run: mv lambda-scraper/out/build LambdaScraper && rm LambdaScraper/start-local.js
 
       - name: Setup environment variables
-        run: echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI" > LambdaApp/.env
+        run: echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI" > LambdaScraper/.env
         env:
-          AWS_STACK_NAME: ${{ vars.AWS_STACK_NAME }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
 
       - name: Setup starter
-        run: mv lambda-app/deployment/lambda-starter.js LambdaApp/lambda-starter.js
+        run: mv lambda-scraper/deployment/lambda-starter.js LambdaScraper/lambda-starter.js
 
       - name: Compress build
-        run: tar -czf LambdaApp.tar LambdaApp
+        run: tar -czf LambdaScraper.tar LambdaScraper
 
       - name: Save build
         uses: actions/upload-artifact@v4
         with:
-          name: LambdaApp.tar
-          path: LambdaApp.tar
+          name: LambdaScraper.tar
+          path: LambdaScraper.tar
           retention-days: 1
 
   build-NodeModules:
     name: Build NodeModules
     runs-on: ubuntu-latest
+    needs: setup-node
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: 'https://npm.pkg.github.com'
-          cache: 'yarn'
-          cache-dependency-path: 'lambda-app/yarn.lock'
-
       - name: Install production deps
-        working-directory: lambda-app
+        working-directory: lambda-scraper
         run: yarn install --frozen-lockfile --arch=arm64 --production
 
       - name: Move build
         run: |
           mkdir -p NodeModules/nodejs
-          mv lambda-app/node_modules NodeModules/nodejs/node_modules
+          mv lambda-scraper/node_modules NodeModules/nodejs/node_modules
 
       - name: Compress build
         run: tar -czf NodeModules.tar NodeModules
@@ -96,19 +93,11 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [build-LambdaApp, build-NodeModules]
+    needs: [build-LambdaScraper, build-NodeModules]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: 'https://npm.pkg.github.com'
-          cache: 'yarn'
-          cache-dependency-path: 'lambda-app/yarn.lock'
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4

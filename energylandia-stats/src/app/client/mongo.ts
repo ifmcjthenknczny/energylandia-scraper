@@ -11,6 +11,11 @@ mongoose.set('strictQuery', true)
 const DATABASE_NAME = 'Energylandia'
 
 export const mongoConnect = async () => {
+    if (process.env.NODE_ENV === ('ci' as any)) {
+        // eslint-disable-next-line no-console
+        console.log('Skipping MongoDB connection in CI environment')
+        return null
+    }
     await mongoose.connect(process.env.MONGO_URI!, {
         dbName: DATABASE_NAME,
         serverSelectionTimeoutMS: 5000,
