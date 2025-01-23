@@ -1,3 +1,4 @@
+import { log } from '../helpers/util/log'
 import mongoose from 'mongoose'
 
 mongoose.set('strictQuery', true)
@@ -9,8 +10,7 @@ export const mongo = async (uri: string) => {
         dbName: DATABASE_NAME,
         serverSelectionTimeoutMS: 5000,
     })
-    // eslint-disable-next-line no-console
-    console.log('Connected to mongo!')
+    log('CONNECTED TO MONGO')
 
     return mongoose.connection.db!
 }

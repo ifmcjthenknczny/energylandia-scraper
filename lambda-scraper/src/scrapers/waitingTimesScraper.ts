@@ -1,7 +1,7 @@
 import { WAITING_TIME_REQUEST_BODY, WAITING_TIME_URL } from '../config'
 import { dataEntryToWaitingTime, mapNaNsToZeros } from '../helpers/mapper'
+import { hourNow, toDay, toHour } from '../helpers/util/date'
 import { log, logWarn } from '../helpers/util/log'
-import { toDay, toHour } from '../helpers/util/date'
 
 import { ScriptContext } from '../context'
 import axios from 'axios'
@@ -46,12 +46,13 @@ export async function scrapeEnergylandiaWaitingTimes(context: ScriptContext) {
         logWarn('NO SCRAPED WAITING TIME DATA TO INSERT')
     }
 
-    const allAttractionsInactive = mappedScrapedWaitingTimes.every(
-        (waitingTime) =>
-            waitingTime.isInactive && isNaN(waitingTime.waitingTimeMinutes),
-    )
+    const allAttractionsInactiveOrHasZeroWaitingTime =
+        mappedScrapedWaitingTimes.every(
+            (waitingTime) =>
+                waitingTime.isInactive || !waitingTime.waitingTimeMinutes,
+        )
 
-    if (allAttractionsInactive) {
+    if (allAttractionsInactiveOrHasZeroWaitingTime) {
         const openingHours = await getOpeningAndClosingHour(
             context.db,
             toDay(context.now),
@@ -62,14 +63,14 @@ export async function scrapeEnergylandiaWaitingTimes(context: ScriptContext) {
         }
         const closingHour = openingHours.closingHour
         const openingHour = openingHours.openingHour
-        const hourRightNow = toHour(dayjs(context.now).tz('Europe/Warsaw'))
+        const hourRightNow = toHour(hourNow(context.now))
 
         if (
             !openingHours.isOpen ||
             (openingHour && hourRightNow < openingHour) ||
             (closingHour && hourRightNow > closingHour)
         ) {
-            logWarn('PARK IS CLOSED')
+            logWarn('ENERGYLANDIA IS CLOSED')
             return
         }
 

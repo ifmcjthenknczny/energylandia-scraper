@@ -20,3 +20,7 @@ export function yesterday(relativeDay: dayjs.Dayjs = dayjs()) {
 export function toHour(date: DateLike): Hour {
     return dayjs(date).format('HH:mm') as Hour
 }
+
+export function hourNow(date?: Date) {
+    return dayjs(date).tz('Europe/Warsaw')
+}

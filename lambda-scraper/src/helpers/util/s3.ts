@@ -4,12 +4,12 @@ import {
     GetObjectCommand,
     S3Client,
 } from '@aws-sdk/client-s3'
+import { log, logError } from './log'
 
 import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
 import { Upload } from '@aws-sdk/lib-storage'
 import { promises as fs } from 'fs'
 import { getSecretsFromAws } from './secrets'
-import { log } from './log'
 import path from 'path'
 
 export async function uploadFile(location: string, content: Buffer) {
@@ -70,8 +70,7 @@ export async function deleteFile(locations: string[]) {
                 `Successfully deleted ${Deleted?.length ?? 0} objects from S3 bucket.`,
             )
         } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(err)
+            logError(err)
         }
     } else if (process.env.TEMP_PATH) {
         // Development use only

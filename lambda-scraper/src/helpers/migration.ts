@@ -8,14 +8,14 @@ import { ScriptContext } from '../context'
 import { log } from 'console'
 import { logError } from './util/log'
 
-type MigrationFunction = (context: ScriptContext) => Promise<string | void>
+type MigrationFunction = (context: ScriptContext) => Promise<string>
 
 export async function migration(
     context: ScriptContext,
-    name: string,
     func: MigrationFunction,
 ) {
-    log(`STARTED MIGRATION OF ${name}`)
+    const name = func.name
+    log(`STARTED MIGRATION ${name}`)
     const isAlreadyProcessed = await isMigrationSuccessfullyProcessed(
         context.db,
         name,

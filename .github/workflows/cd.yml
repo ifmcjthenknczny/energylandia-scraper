@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: "22.11.0"
+  NODE_VERSION: "22.1.0"
   BUILD_ID: ${{ github.run_number }}
   AWS_STACK_NAME: ${{ vars.AWS_STACK_NAME }}
   MONGO_URI: ${{ secrets.MONGO_URI }}
@@ -118,7 +118,7 @@ jobs:
 
       - name: Install production deps
         working-directory: deployer
-        run: yarn install --frozen-lockfile --production
+        run: yarn install --frozen-lockfile --production --ignore-engines
 
       - name: CDK Bootstrap
         working-directory: deployer
