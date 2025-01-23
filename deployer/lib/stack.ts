@@ -94,7 +94,8 @@ class Site extends Stack {
                 mode: 'OFF',
             },
             scheduleExpressionTimezone: 'Europe/Warsaw',
-            scheduleExpression: 'cron(*/15 9-23 ? * * *)',
+            scheduleExpression: events.Schedule.rate(Duration.minutes(15))
+                .expressionString,
             target: {
                 arn: lambdaApp.functionArn,
                 input: JSON.stringify({ action: 'SCRAPE_WAITING_TIMES' }),
@@ -108,7 +109,7 @@ class Site extends Stack {
                 maximumWindowInMinutes: 45,
             },
             scheduleExpressionTimezone: 'Europe/Warsaw',
-            scheduleExpression: events.Schedule.cron({ minute: '0', hour: '8' })
+            scheduleExpression: events.Schedule.cron({ minute: '0', hour: '4' })
                 .expressionString,
             target: {
                 arn: lambdaApp.functionArn,

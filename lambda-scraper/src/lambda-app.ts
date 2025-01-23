@@ -2,7 +2,7 @@ import { finalizeScriptContext, initializeScriptContext } from './context'
 import { log, logError } from './helpers/util/log'
 
 import { migration } from './helpers/migration'
-import migration20241006isInactive from './migrations/migration20241006isInactive'
+import migration20250123deleteEmptyRecords from './migrations/migration20250123deleteEmptyRecords'
 import { scrapeEnergylandiaOpeningHours } from './scrapers/openingHoursScraper'
 import { scrapeEnergylandiaWaitingTimes } from './scrapers/waitingTimesScraper'
 
@@ -35,9 +35,7 @@ export async function lambda(config: AppConfig) {
             await scrapeEnergylandiaOpeningHours(context)
             break
         case ActionType.MIGRATION:
-            // eslint-disable-next-line no-case-declarations
-            const migrationName = 'migration20241006isInactive'
-            await migration(context, migrationName, migration20241006isInactive)
+            await migration(context, migration20250123deleteEmptyRecords)
             break
         default:
             logError(`Unknown action: action=${config.action}.`)

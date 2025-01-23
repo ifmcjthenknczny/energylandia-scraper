@@ -1,5 +1,6 @@
 {
-    "name": "deployment",
+    "name": "deployer",
+    "type": "module",
     "version": "1.0.0",
     "description": "",
     "main": "bin/infrastructure.js",
