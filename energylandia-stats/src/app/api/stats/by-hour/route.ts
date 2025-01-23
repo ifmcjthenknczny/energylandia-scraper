@@ -2,7 +2,7 @@ import { dayOfWeekSchema, daySchema } from '@/app/utils/schema'
 
 import { Filter } from '@/app/types'
 import { NextResponse } from 'next/server'
-import { getAvgWaitingTimeByAttractionAndHour } from '@/app/client/collections/energylandiaWaitingTime'
+import { getAvgWaitingTimeByAttractionAndHour } from '@/app/client/collections/attractionWaitingTime'
 import { getQueryParams } from '../../../../../helpers/query'
 import { validate } from '@/app/utils/validate'
 import { z } from 'zod'

@@ -10,7 +10,8 @@
     "start": "node out/build/start-local.js",
     "build": "yarn compile",
     "buildAndStart": "yarn build && yarn start",
-    "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
+    "check": "yarn format && yarn fix && yarn build"
   },
   "author": "",
   "license": "ISC",
