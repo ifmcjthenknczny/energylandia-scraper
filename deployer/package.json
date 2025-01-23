@@ -5,18 +5,20 @@
     "description": "",
     "main": "bin/infrastructure.js",
     "scripts": {
-        "lint": "npx eslint \"**/*.ts\" --fix",
+        "lint": "npx eslint \"**/*.ts\"",
+        "fix": "yarn lint --fix",
         "compile": "npx tsc",
         "cdk": "npx cdk",
         "build": "yarn compile",
-        "format": "prettier --write \"**/*.{ts,tsx,json,css,md}\""
+        "format": "prettier --write \"**/*.{ts,tsx,json,css,md}\"",
+        "checkAll": "yarn format && yarn fix && yarn build"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@t3-oss/env-core": "^0.7.1",
-        "aws-cdk": "^2.171.1",
-        "aws-cdk-lib": "^2.171.1",
+        "aws-cdk": "^2.176.0",
+        "aws-cdk-lib": "^2.176.0",
         "constructs": "^10.3.0",
         "dotenv": "^16.3.1",
         "ts-node": "^10.9.2",
