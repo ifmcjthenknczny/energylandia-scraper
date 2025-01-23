@@ -1,4 +1,4 @@
-import { ASC, DESC, mongoDb } from '../mongo'
+import { ASC, DESC, mongo } from '../mongo'
 import { AvgTimeByHourResponse, AvgTimeResponse, Filter } from '@/app/types'
 import { Day, Hour } from '@/app/utils/date'
 
@@ -18,16 +18,18 @@ type AvgOverallWaitingTime = Record<string, number>
 type AttractionAvailability = Record<string, number>
 
 const WAITING_TIME_COLLECTION_NAME = 'EnergylandiaWaitingTime'
-export const waitingTimeCollection = mongoDb!.collection<AttractionWaitingTime>(
-    WAITING_TIME_COLLECTION_NAME,
-)
+export const waitingTimeCollection = async () => {
+    const db = await mongo()
+    return db!.collection<AttractionWaitingTime>(WAITING_TIME_COLLECTION_NAME)
+}
 
 export const getAvgWaitingTimeByAttraction = async (
     filter?: Filter,
 ): Promise<AvgTimeResponse> => {
+    const collection = await waitingTimeCollection()
     const matchFilter = buildFilter(filter)
 
-    const result = (await waitingTimeCollection
+    const result = (await collection
         .aggregate([
             {
                 $match: {
@@ -67,8 +69,9 @@ export const getAvgWaitingTimeByAttractionAndHour = async (
     filter?: Omit<Filter, 'hourFrom' | 'hourTo'>,
 ): Promise<AvgTimeByHourResponse> => {
     const matchFilter = buildFilter(filter)
+    const collection = await waitingTimeCollection()
 
-    const results = (await waitingTimeCollection
+    const results = (await collection
         .aggregate([
             {
                 $match: {
@@ -176,8 +179,9 @@ export async function getOverallAvgWaitingTimeByHour(
     filter?: Filter,
 ): Promise<AvgOverallWaitingTime> {
     const matchFilter = buildFilter(filter)
+    const collection = await waitingTimeCollection()
 
-    const results = (await waitingTimeCollection
+    const results = (await collection
         .aggregate([
             {
                 $match: {
@@ -269,7 +273,9 @@ export async function getAvailabilityByAttraction(
     filter?: Filter,
 ): Promise<AttractionAvailability> {
     const matchFilter = buildFilter(filter)
-    const results = (await waitingTimeCollection
+    const collection = await waitingTimeCollection()
+
+    const results = (await collection
         .aggregate([
             {
                 $match: matchFilter,
