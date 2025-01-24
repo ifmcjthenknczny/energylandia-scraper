@@ -10,12 +10,13 @@ type Props = {
 }
 
 function formatWaitingTime(waitingTimeMinutes: number) {
-    if (waitingTimeMinutes < 1) {
-        return '<1min'
-    }
     const hours = Math.floor(waitingTimeMinutes / 60)
     const minutes = Math.floor(waitingTimeMinutes % 60)
     const seconds = Math.floor((waitingTimeMinutes - hours * 60 - minutes) * 60)
+
+    if (waitingTimeMinutes < 1) {
+        return `0min ${seconds}s`
+    }
 
     if (!hours) {
         return `${minutes}min ${seconds}s`
