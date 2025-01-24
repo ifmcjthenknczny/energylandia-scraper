@@ -132,7 +132,7 @@ jobs:
 
       - name: Install CDK
         working-directory: deployer
-        run: yarn install --frozen-lockfile --production --ignore-engines
+        run: yarn install --frozen-lockfile --ignore-engines
 
       - name: Build CDK
         working-directory: deployer
