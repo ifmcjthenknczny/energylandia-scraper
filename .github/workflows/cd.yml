@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: "22.1.0"
+  NODE_VERSION: "22.11.0"
   BUILD_ID: ${{ github.run_number }}
   AWS_STACK_NAME: ${{ vars.AWS_STACK_NAME }}
   MONGO_URI: ${{ secrets.MONGO_URI }}
@@ -39,8 +39,14 @@ jobs:
         working-directory: lambda-scraper
         run: yarn build
 
-      - name: Move and clean build
-        run: mv lambda-scraper/out/build LambdaScraper && rm LambdaScraper/start-local.js
+      - name: Move build
+        run: mv lambda-scraper/out/build LambdaScraper
+
+      - name: Clean build
+        run: rm LambdaScraper/start-local.js
+
+      - name: Setup envs
+        run: echo echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI" > LambdaScraper/.env
 
       - name: Setup starter
         run: mv lambda-scraper/deployment/lambda-starter.js LambdaScraper/lambda-starter.js
@@ -97,6 +103,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'yarn'
+          cache-dependency-path: 'lambda-scraper/yarn.lock'
+
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -116,9 +130,13 @@ jobs:
         working-directory: deployer
         run: for build in *.tar; do tar -xf "$build/$build"; done
 
-      - name: Install production deps
+      - name: Install CDK
         working-directory: deployer
         run: yarn install --frozen-lockfile --production --ignore-engines
+
+      - name: Build CDK
+        working-directory: deployer
+        run: yarn build
 
       - name: CDK Bootstrap
         working-directory: deployer
