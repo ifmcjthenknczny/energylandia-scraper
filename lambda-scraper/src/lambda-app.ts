@@ -1,6 +1,7 @@
 import { finalizeScriptContext, initializeScriptContext } from './context'
 import { log, logError } from './helpers/util/log'
 
+import getUniqueDatesDifference from './actions/uniqueDatesInWaitingTimes'
 import { migration } from './helpers/migration'
 import migration20250123deleteEmptyRecords from './migrations/migration20250123deleteEmptyRecords'
 import { scrapeEnergylandiaOpeningHours } from './scrapers/openingHoursScraper'
@@ -11,6 +12,7 @@ export enum ActionType {
     SCRAPE_WAITING_TIMES = 'SCRAPE_WAITING_TIMES',
     SCRAPE_OPENING_HOURS = 'SCRAPE_OPENING_HOURS',
     MIGRATION = 'MIGRATION',
+    TEST = 'TEST',
 }
 
 interface AppConfig {
@@ -35,7 +37,11 @@ export async function lambda(config: AppConfig) {
             await scrapeEnergylandiaOpeningHours(context)
             break
         case ActionType.MIGRATION:
-            await migration(context, migration20250123deleteEmptyRecords)
+            const migrationFunction = migration20250123deleteEmptyRecords
+            await migration(context, migrationFunction)
+            break
+        case ActionType.TEST:
+            await getUniqueDatesDifference(context)
             break
         default:
             logError(`Unknown action: action=${config.action}.`)
