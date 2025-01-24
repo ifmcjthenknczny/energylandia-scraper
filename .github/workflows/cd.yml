@@ -40,25 +40,25 @@ jobs:
         run: yarn build
 
       - name: Move build
-        run: mv lambda-scraper/out/build LambdaScraper
+        run: mv lambda-scraper/out/build LambdaApp
 
       - name: Clean build
-        run: rm LambdaScraper/start-local.js
+        run: rm LambdaApp/start-local.js
 
       - name: Setup envs
-        run: echo echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI" > LambdaScraper/.env
+        run: echo echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI" > LambdaApp/.env
 
       - name: Setup starter
-        run: mv lambda-scraper/deployment/lambda-starter.js LambdaScraper/lambda-starter.js
+        run: mv lambda-scraper/deployment/lambda-starter.js LambdaApp/lambda-starter.js
 
       - name: Compress build
-        run: tar -czf LambdaScraper.tar LambdaScraper
+        run: tar -czf LambdaApp.tar LambdaApp
 
       - name: Save build
         uses: actions/upload-artifact@v4
         with:
-          name: LambdaScraper.tar
-          path: LambdaScraper.tar
+          name: LambdaApp.tar
+          path: LambdaApp.tar
           retention-days: 1
 
   build-NodeModules:
@@ -133,6 +133,10 @@ jobs:
       - name: Install CDK
         working-directory: deployer
         run: yarn install --frozen-lockfile --ignore-engines
+
+      - name: Build CDK
+        working-directory: deployer
+        run: yarn build
 
       - name: CDK Bootstrap
         working-directory: deployer
