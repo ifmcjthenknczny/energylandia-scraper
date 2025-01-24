@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
         "target": "ES2020",
-        "module": "commonjs",
+        "module": "nodenext",
         "lib": ["es2020", "dom"],
         "esModuleInterop": true,
-        "moduleResolution": "node",
+        "moduleResolution": "nodenext",
         "declaration": true,
         "strict": true,
         "noImplicitAny": true,
@@ -22,5 +22,8 @@
         "typeRoots": ["./node_modules/@types"],
         "allowJs": false
     },
-    "exclude": ["node_modules", "cdk.out"]
+    "exclude": ["node_modules", "cdk.out"],
+    "ts-node": {
+        "esm": true
+    }
 }

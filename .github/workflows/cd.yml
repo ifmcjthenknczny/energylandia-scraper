@@ -134,10 +134,6 @@ jobs:
         working-directory: deployer
         run: yarn install --frozen-lockfile --ignore-engines
 
-      - name: Build CDK
-        working-directory: deployer
-        run: yarn build
-
       - name: CDK Bootstrap
         working-directory: deployer
         run: yarn cdk bootstrap

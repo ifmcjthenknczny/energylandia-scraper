@@ -4,8 +4,8 @@ import 'source-map-support/register'
 
 import * as cdk from 'aws-cdk-lib'
 
-import Site from '../lib/stack'
-import { env } from '../lib/env'
+import Site from '../lib/stack.js'
+import { env } from '../lib/env.js'
 
 const app = new cdk.App()
 new Site(app, env.AWS_STACK_NAME, {
