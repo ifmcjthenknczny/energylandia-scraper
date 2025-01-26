@@ -27,7 +27,7 @@ function formatWaitingTime(waitingTimeMinutes: number) {
 
 const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
     const data = useMemo(() => {
-        if (!dataByAttraction) {
+        if (!dataByAttraction || !Object.keys(dataByAttraction).length) {
             return []
         }
         return Object.entries(dataByAttraction).map(
@@ -59,12 +59,17 @@ const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
             {
                 columns,
                 data,
-                // initialState: {
-                //     sortBy: [{ id: 'avgWaitingTimeMinutes', desc: true }],
-                // },
             },
             useSortBy,
         )
+
+    if (!data?.length) {
+        return (
+            <div className="w-full text-center h-full flex items-center justify-center">
+                No data for provided filters to show table :'(
+            </div>
+        )
+    }
 
     return (
         <div className="overflow-x-auto">

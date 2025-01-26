@@ -10,10 +10,14 @@ type Props = {
 
 export default function Logo({ className }: Props) {
     return (
-        <Image
-            className={classnames(className)}
-            src="https://energylandia.pl/wp-content/themes/plm/assets/img/logo-2024.png"
-            alt="Energylandia"
-        />
+        <div className="w-full flex justify-center">
+            <Image
+                className={classnames(className)}
+                src="/logo.png"
+                alt="Energylandia"
+                width={800}
+                height={100}
+            />
+        </div>
     )
 }

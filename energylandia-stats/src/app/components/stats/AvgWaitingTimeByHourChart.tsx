@@ -66,6 +66,18 @@ const WaitingTimeChart = ({ data }: Props) => {
         )
     }
 
+    if (isBusy) {
+        return <Loader />
+    }
+
+    if ((!data || !Object.keys(data).length) && !isBusy) {
+        return (
+            <div className="w-full text-center h-full flex items-center justify-center">
+                No data for provided filters to show chart :'(
+            </div>
+        )
+    }
+
     return (
         <div className="pb-6">
             <h1 className="text-xl my-4 text-center">
@@ -74,8 +86,8 @@ const WaitingTimeChart = ({ data }: Props) => {
             <div className="flex flex-row">
                 {!!data && Object.keys(data).length > 0 && (
                     <div className="flex flex-col gap-1 max-h-[400px] overflow-y-scroll text-xs mx-2 p-2 border border-2">
-                        {Object.keys(data).map((attractionName) => (
-                            <label key={attractionName}>
+                        {Object.keys(data).map((attractionName, index) => (
+                            <label key={index}>
                                 <input
                                     className="mr-1"
                                     type="checkbox"
@@ -119,12 +131,6 @@ const WaitingTimeChart = ({ data }: Props) => {
                         }}
                     />
                 )}
-                {!data ||
-                    (!Object.keys(data).length && !isBusy && (
-                        <div className="w-full text-center">
-                            No data for provided filters
-                        </div>
-                    ))}
                 {isBusy && <Loader />}
             </div>
         </div>
