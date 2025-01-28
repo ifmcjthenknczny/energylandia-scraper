@@ -1,7 +1,7 @@
 'use client'
 
 import 'react-calendar/dist/Calendar.css'
-import './DayFilters.css'
+import '../../../../styles/DayFilters.css'
 
 import React, { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -38,7 +38,9 @@ const DayFilters = ({
     const [value, onChange] = useState<Value>([dayFrom, dayTo])
 
     const updateURL = (date: Value | null) => {
-        const current = new URLSearchParams(Array.from(searchParams.entries()))
+        const current = new URLSearchParams(
+            Array.from(searchParams?.entries() || []),
+        )
         if (Array.isArray(date)) {
             const [from, to] = date
             if (!from || !to) {

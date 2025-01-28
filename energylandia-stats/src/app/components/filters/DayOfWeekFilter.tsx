@@ -49,7 +49,9 @@ const DayOfWeekFilter = ({ dayOfWeek, onDayOfWeekChange }: Props) => {
     }
 
     const updateURL = (dayOfWeek: number | null) => {
-        const current = new URLSearchParams(Array.from(searchParams.entries()))
+        const current = new URLSearchParams(
+            Array.from(searchParams?.entries() || []),
+        )
         if (dayOfWeek !== null) {
             current.set('dayOfWeek', dayOfWeek.toString())
         } else {

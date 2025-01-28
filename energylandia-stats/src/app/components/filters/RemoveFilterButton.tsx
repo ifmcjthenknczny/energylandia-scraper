@@ -15,7 +15,9 @@ const RemoveFilterButton = ({ paramsToRemove, onRemoveParams }: Props) => {
 
     const handleRemoveParam = () => {
         onRemoveParams()
-        const query = new URLSearchParams(Array.from(searchParams.entries()))
+        const query = new URLSearchParams(
+            Array.from(searchParams?.entries() || []),
+        )
 
         for (const param of paramsToRemove) {
             query.delete(param)

@@ -1,4 +1,4 @@
-import './globals.css'
+import '../../styles/globals.css'
 
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
@@ -25,7 +25,7 @@ export default function RootLayout({
     children: React.ReactNode
 }>) {
     return (
-        <html lang="pl">
+        <html lang="en">
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >

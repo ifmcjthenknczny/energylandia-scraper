@@ -5,6 +5,7 @@ import { useSortBy, useTable } from 'react-table'
 
 import { AvgTimeResponse } from '@/app/types'
 import { chunkify } from '@/app/helpers/array'
+import classNames from 'classnames'
 
 type Props = {
     dataByAttraction?: AvgTimeResponse
@@ -62,7 +63,7 @@ const SingleAttractionWaitTimeTable = ({ data }: SingleTableProps) => {
         )
 
     return (
-        <div className="overflow-x-auto w-full flex justify-center mt-8">
+        <div className="overflow-x-auto w-full flex justify-center">
             <table {...getTableProps()} className="divide-y divide-gray-700">
                 <thead className="bg-background-light">
                     {headerGroups.map((headerGroup) => (
@@ -86,10 +87,13 @@ const SingleAttractionWaitTimeTable = ({ data }: SingleTableProps) => {
                         prepareRow(row)
                         return (
                             <tr {...row.getRowProps()}>
-                                {row.cells.map((cell) => (
+                                {row.cells.map((cell, index) => (
                                     <td
                                         {...cell.getCellProps()}
-                                        className="px-5 py-2.5 whitespace-nowrap text-xs text-white"
+                                        className={classNames(
+                                            'px-5 py-2.5 whitespace-nowrap text-xs text-white',
+                                            index > 0 && 'text-right',
+                                        )}
                                     >
                                         {cell.render('Cell') as React.ReactNode}
                                     </td>
@@ -118,19 +122,11 @@ const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
 
     const dataChunks = useMemo(
         () => chunkify(data, Math.ceil(data.length / TABLE_COLUMNS_COUNT)),
-        [],
+        [data],
     )
 
-    if (!data?.length) {
-        return (
-            <div className="w-full text-center h-full flex items-center justify-center">
-                No data for provided filters to show table :'(
-            </div>
-        )
-    }
-
     return (
-        <div className="flex gap-3 flex-row">
+        <div className="flex gap-3 flex-row py-8">
             {dataChunks.map((chunk, index) => (
                 <SingleAttractionWaitTimeTable key={index} data={chunk} />
             ))}

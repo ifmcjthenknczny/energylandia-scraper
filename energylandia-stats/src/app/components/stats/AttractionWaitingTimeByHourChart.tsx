@@ -6,7 +6,6 @@ import { AvgTimeByHourResponse } from '@/app/types'
 import { Chart } from 'react-google-charts'
 import { Hour } from '@/app/utils/date'
 import Loader from '../misc/Loader'
-import useBusy from '@/app/hooks/useBusy'
 
 type ChartData = Array<[string, ...(string | number)[]]>
 
@@ -22,39 +21,36 @@ const DEFAULT_SELECTED_ATTRACTIONS = [
     'Zadra',
 ]
 
-const WaitingTimeChart = ({ data }: Props) => {
+const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
     const [selectedAttractions, setSelectedAttractions] = useState<string[]>(
         DEFAULT_SELECTED_ATTRACTIONS,
     )
     const [chartData, setChartData] = useState<ChartData>([
         ['Hour', ...selectedAttractions],
     ])
-    const [isBusy, busyWrapper] = useBusy()
 
     useEffect(() => {
-        const handleDataChangeToChart = busyWrapper(
-            async (data?: AvgTimeByHourResponse) => {
-                if (!data) {
-                    return undefined
-                }
+        const handleDataChangeToChart = async (
+            data?: AvgTimeByHourResponse,
+        ) => {
+            if (!data) {
+                return undefined
+            }
 
-                const newChartData: ChartData = [
-                    ['Hour', ...selectedAttractions],
-                ]
+            const newChartData: ChartData = [['Hour', ...selectedAttractions]]
 
-                const hours = Object.keys(data?.[selectedAttractions[0]] || {})
+            const hours = Object.keys(data?.[selectedAttractions[0]] || {})
 
-                hours.forEach((hour) => {
-                    const row: ChartData[number] = [hour]
-                    selectedAttractions.forEach((attraction) => {
-                        row.push(data[attraction]?.[hour as Hour] || 0)
-                    })
-                    newChartData.push(row)
+            hours.forEach((hour) => {
+                const row: ChartData[number] = [hour]
+                selectedAttractions.forEach((attraction) => {
+                    row.push(data[attraction]?.[hour as Hour] || 0)
                 })
+                newChartData.push(row)
+            })
 
-                setChartData(newChartData)
-            },
-        )
+            setChartData(newChartData)
+        }
         handleDataChangeToChart(data)
     }, [data, selectedAttractions.length, selectedAttractions])
 
@@ -66,14 +62,10 @@ const WaitingTimeChart = ({ data }: Props) => {
         )
     }
 
-    if (isBusy) {
-        return <Loader />
-    }
-
-    if ((!data || !Object.keys(data).length) && !isBusy) {
+    if (!data || !Object.keys(data).length) {
         return (
             <div className="w-full text-center h-full flex items-center justify-center">
-                No data for provided filters to show chart :'(
+                No data available for provided filters :'(
             </div>
         )
     }
@@ -167,4 +159,4 @@ const WaitingTimeChart = ({ data }: Props) => {
     )
 }
 
-export default WaitingTimeChart
+export default AttractionWaitingTimeByHourChart

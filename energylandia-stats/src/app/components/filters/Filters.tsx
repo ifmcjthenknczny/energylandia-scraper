@@ -19,9 +19,9 @@ const Filters = () => {
     // const [hourTo, setHourTo] = useState<string | null>(null);
 
     useEffect(() => {
-        const dayFromParam = searchParams.get('dayFrom')
-        const dayToParam = searchParams.get('dayTo')
-        const dayOfWeekParam = searchParams.get('dayOfWeek')
+        const dayFromParam = searchParams?.get('dayFrom')
+        const dayToParam = searchParams?.get('dayTo')
+        const dayOfWeekParam = searchParams?.get('dayOfWeek')
         // const hourFromParam = searchParams.get('hourFrom');
         // const hourToParam = searchParams.get('hourTo');
 
@@ -33,7 +33,7 @@ const Filters = () => {
     }, [searchParams])
 
     return (
-        <div className="mb-4 w-full">
+        <div className="mb-8 mt-4 w-full">
             <div className="w-full flex flex-row justify-evenly">
                 <DayOfWeekFilter
                     dayOfWeek={dayOfWeek}

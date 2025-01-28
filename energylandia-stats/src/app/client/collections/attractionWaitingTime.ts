@@ -72,96 +72,103 @@ export const getAvgWaitingTimeByAttractionAndHour = async (
     const collection = await waitingTimeCollection()
 
     const results = (await collection
-        .aggregate([
-            {
-                $match: {
-                    ...matchFilter,
-                    isInactive: false,
-                    waitingTimeMinutes: { $gte: 0 },
-                },
-            },
-            {
-                $project: {
-                    attractionName: 1,
-                    waitingTimeMinutes: 1,
-                    hour: { $arrayElemAt: [{ $split: ['$time', ':'] }, 0] },
-                    minute: { $arrayElemAt: [{ $split: ['$time', ':'] }, 1] },
-                },
-            },
-            {
-                $project: {
-                    attractionName: 1,
-                    waitingTimeMinutes: 1,
-                    timeSlot: {
-                        $concat: [
-                            '$hour',
-                            ':',
-                            {
-                                $cond: [
-                                    { $lt: [{ $toInt: '$minute' }, 15] },
-                                    '00',
-                                    {
-                                        $cond: [
-                                            {
-                                                $lt: [
-                                                    { $toInt: '$minute' },
-                                                    30,
-                                                ],
-                                            },
-                                            '15',
-                                            {
-                                                $cond: [
-                                                    {
-                                                        $lt: [
-                                                            {
-                                                                $toInt: '$minute',
-                                                            },
-                                                            45,
-                                                        ],
-                                                    },
-                                                    '30',
-                                                    '45',
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                ],
-                            },
-                        ],
+        .aggregate(
+            [
+                {
+                    $match: {
+                        ...matchFilter,
+                        isInactive: false,
+                        waitingTimeMinutes: { $gte: 0 },
                     },
                 },
-            },
-            {
-                $group: {
-                    _id: {
-                        attractionName: '$attractionName',
-                        timeSlot: '$timeSlot',
-                    },
-                    avgWaitingTime: { $avg: '$waitingTimeMinutes' },
-                },
-            },
-            {
-                $group: {
-                    _id: '$_id.attractionName',
-                    avgTimesByHour: {
-                        $push: {
-                            k: '$_id.timeSlot',
-                            v: '$avgWaitingTime',
+                {
+                    $project: {
+                        attractionName: 1,
+                        waitingTimeMinutes: 1,
+                        hour: { $arrayElemAt: [{ $split: ['$time', ':'] }, 0] },
+                        minute: {
+                            $arrayElemAt: [{ $split: ['$time', ':'] }, 1],
                         },
                     },
                 },
-            },
-            {
-                $project: {
-                    _id: 0,
-                    attractionName: '$_id',
-                    avgTimesByHour: { $arrayToObject: '$avgTimesByHour' },
+                {
+                    $project: {
+                        attractionName: 1,
+                        waitingTimeMinutes: 1,
+                        timeSlot: {
+                            $concat: [
+                                '$hour',
+                                ':',
+                                {
+                                    $cond: [
+                                        { $lt: [{ $toInt: '$minute' }, 15] },
+                                        '00',
+                                        {
+                                            $cond: [
+                                                {
+                                                    $lt: [
+                                                        { $toInt: '$minute' },
+                                                        30,
+                                                    ],
+                                                },
+                                                '15',
+                                                {
+                                                    $cond: [
+                                                        {
+                                                            $lt: [
+                                                                {
+                                                                    $toInt: '$minute',
+                                                                },
+                                                                45,
+                                                            ],
+                                                        },
+                                                        '30',
+                                                        '45',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    },
                 },
-            },
+                {
+                    $group: {
+                        _id: {
+                            attractionName: '$attractionName',
+                            timeSlot: '$timeSlot',
+                        },
+                        avgWaitingTime: { $avg: '$waitingTimeMinutes' },
+                    },
+                },
+                {
+                    $group: {
+                        _id: '$_id.attractionName',
+                        avgTimesByHour: {
+                            $push: {
+                                k: '$_id.timeSlot',
+                                v: '$avgWaitingTime',
+                            },
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        attractionName: '$_id',
+                        avgTimesByHour: { $arrayToObject: '$avgTimesByHour' },
+                    },
+                },
+                {
+                    $sort: { attractionName: ASC },
+                },
+            ],
             {
-                $sort: { attractionName: ASC },
+                collation: { locale: 'pl', strength: 1 },
             },
-        ])
+        )
         .toArray()) as { attractionName: string; avgTimesByHour: number }[]
 
     const finalResult: Record<string, Record<string, number>> = {}
