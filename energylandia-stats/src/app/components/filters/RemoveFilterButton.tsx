@@ -6,13 +6,15 @@ import React from 'react'
 
 type Props = {
     paramsToRemove: string[]
+    onRemoveParams: () => void
 }
 
-const RemoveFilterButton = ({ paramsToRemove }: Props) => {
+const RemoveFilterButton = ({ paramsToRemove, onRemoveParams }: Props) => {
     const router = useRouter()
     const searchParams = useSearchParams()
 
     const handleRemoveParam = () => {
+        onRemoveParams()
         const query = new URLSearchParams(Array.from(searchParams.entries()))
 
         for (const param of paramsToRemove) {

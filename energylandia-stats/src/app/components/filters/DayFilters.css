@@ -15,7 +15,7 @@
     background-color: #303030 !important;
 }
 
-.react-calendar__tile--active .react-calendar__tile--range {
+.react-calendar__tile--active {
     background-color: gold !important;
     color: black;
 }

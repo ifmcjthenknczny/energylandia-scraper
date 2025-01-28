@@ -70,11 +70,11 @@ const DayFilters = ({
             onDayFromChange(from)
             onDayToChange(to)
             updateURL([from, to])
-        } else {
-            onDayFromChange(value)
-            onDayToChange(value)
-            updateURL([value, new Date()])
+            return
         }
+        onDayFromChange(value)
+        onDayToChange(value)
+        updateURL([value, new Date()])
     }
 
     return (
@@ -88,7 +88,10 @@ const DayFilters = ({
                 minDate={new Date(FIRST_DAY_OF_DATA)}
                 maxDate={new Date()}
             />
-            <RemoveFilterButton paramsToRemove={['dayFrom', 'dayTo']} />
+            <RemoveFilterButton
+                paramsToRemove={['dayFrom', 'dayTo']}
+                onRemoveParams={() => handleChange(null)}
+            />
         </div>
     )
 }
