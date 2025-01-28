@@ -4,10 +4,20 @@ import React, { useMemo } from 'react'
 import { useSortBy, useTable } from 'react-table'
 
 import { AvgTimeResponse } from '@/app/types'
+import { chunkify } from '@/app/helpers/array'
 
 type Props = {
     dataByAttraction?: AvgTimeResponse
 }
+
+type SingleTableProps = {
+    data: {
+        attraction: string
+        avgWaitingTimeMinutes: number
+    }[]
+}
+
+const TABLE_COLUMNS_COUNT = 4
 
 function formatWaitingTime(waitingTimeMinutes: number) {
     const hours = Math.floor(waitingTimeMinutes / 60)
@@ -15,7 +25,7 @@ function formatWaitingTime(waitingTimeMinutes: number) {
     const seconds = Math.floor((waitingTimeMinutes - hours * 60 - minutes) * 60)
 
     if (waitingTimeMinutes < 1) {
-        return `0min ${seconds}s`
+        return `${seconds}s`
     }
 
     if (!hours) {
@@ -25,19 +35,7 @@ function formatWaitingTime(waitingTimeMinutes: number) {
     return `${hours}h ${minutes}min ${seconds}s`
 }
 
-const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
-    const data = useMemo(() => {
-        if (!dataByAttraction || !Object.keys(dataByAttraction).length) {
-            return []
-        }
-        return Object.entries(dataByAttraction).map(
-            ([attraction, avgWaitingTimeMinutes]) => ({
-                attraction,
-                avgWaitingTimeMinutes,
-            }),
-        )
-    }, [dataByAttraction])
-
+const SingleAttractionWaitTimeTable = ({ data }: SingleTableProps) => {
     const columns = useMemo(
         () => [
             {
@@ -63,27 +61,16 @@ const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
             useSortBy,
         )
 
-    if (!data?.length) {
-        return (
-            <div className="w-full text-center h-full flex items-center justify-center">
-                No data for provided filters to show table :'(
-            </div>
-        )
-    }
-
     return (
-        <div className="overflow-x-auto">
-            <table
-                {...getTableProps()}
-                className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
-            >
-                <thead className="bg-gray-50 dark:bg-gray-800">
+        <div className="overflow-x-auto w-full flex justify-center mt-8">
+            <table {...getTableProps()} className="divide-y divide-gray-700">
+                <thead className="bg-background-light">
                     {headerGroups.map((headerGroup) => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map((column) => (
                                 <th
                                     {...column.getHeaderProps()}
-                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
                                 >
                                     {column.render('Header') as React.ReactNode}
                                 </th>
@@ -93,7 +80,7 @@ const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
                 </thead>
                 <tbody
                     {...getTableBodyProps()}
-                    className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700"
+                    className="divide-y bg-background divide-gray-700"
                 >
                     {rows.map((row) => {
                         prepareRow(row)
@@ -102,7 +89,7 @@ const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
                                 {row.cells.map((cell) => (
                                     <td
                                         {...cell.getCellProps()}
-                                        className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300"
+                                        className="px-5 py-2.5 whitespace-nowrap text-xs text-white"
                                     >
                                         {cell.render('Cell') as React.ReactNode}
                                     </td>
@@ -112,6 +99,41 @@ const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
                     })}
                 </tbody>
             </table>
+        </div>
+    )
+}
+
+const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
+    const data = useMemo(() => {
+        if (!dataByAttraction || !Object.keys(dataByAttraction).length) {
+            return []
+        }
+        return Object.entries(dataByAttraction).map(
+            ([attraction, avgWaitingTimeMinutes]) => ({
+                attraction,
+                avgWaitingTimeMinutes,
+            }),
+        )
+    }, [dataByAttraction])
+
+    const dataChunks = useMemo(
+        () => chunkify(data, Math.ceil(data.length / TABLE_COLUMNS_COUNT)),
+        [],
+    )
+
+    if (!data?.length) {
+        return (
+            <div className="w-full text-center h-full flex items-center justify-center">
+                No data for provided filters to show table :'(
+            </div>
+        )
+    }
+
+    return (
+        <div className="flex gap-3 flex-row">
+            {dataChunks.map((chunk, index) => (
+                <SingleAttractionWaitTimeTable key={index} data={chunk} />
+            ))}
         </div>
     )
 }

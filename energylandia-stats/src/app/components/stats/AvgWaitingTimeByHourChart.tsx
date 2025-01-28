@@ -115,10 +115,32 @@ const WaitingTimeChart = ({ data }: Props) => {
                             hAxis: {
                                 title: 'Hour',
                                 minValue: 0,
+                                textStyle: {
+                                    color: '#ffffff',
+                                },
+                                titleTextStyle: {
+                                    color: '#ffffff',
+                                },
                             },
                             vAxis: {
                                 title: 'Waiting Time (minutes)',
                                 minValue: 0,
+                                baseline: 0,
+                                viewWindow: {
+                                    min: 0,
+                                },
+                                textStyle: {
+                                    color: '#ffffff',
+                                },
+                                titleTextStyle: {
+                                    color: '#ffffff',
+                                },
+                                gridlines: {
+                                    color: '#2f2f2f',
+                                },
+                                minorGridlines: {
+                                    count: 0,
+                                },
                             },
                             series: selectedAttractions.reduce(
                                 (acc, name, index) => {
@@ -127,11 +149,19 @@ const WaitingTimeChart = ({ data }: Props) => {
                                 },
                                 {} as Record<number, { curveType: string }>,
                             ),
-                            legend: { position: 'right' },
+                            legend: {
+                                position: 'right',
+                                textStyle: {
+                                    color: '#ffffff',
+                                },
+                            },
+                            backgroundColor: '#0a0a0a',
+                            chartArea: {
+                                backgroundColor: '#0a0a0a',
+                            },
                         }}
                     />
                 )}
-                {isBusy && <Loader />}
             </div>
         </div>
     )
