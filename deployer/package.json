@@ -12,8 +12,8 @@
         "format": "prettier --write \"**/*.{ts,tsx,json,css,md}\"",
         "checkAll": "yarn format && yarn fix && yarn build"
     },
-    "author": "",
-    "license": "ISC",
+    "author": "Maciej Konieczny",
+    "license": "CC-BY-NC-4.0",
     "dependencies": {
         "@t3-oss/env-core": "^0.7.1",
         "aws-cdk": "^2.176.0",

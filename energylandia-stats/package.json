@@ -1,7 +1,9 @@
 {
   "name": "energylandia-stats",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "author": "Maciej Konieczny",
+  "license": "CC-BY-NC-4.0",
   "scripts": {
     "fix": "next lint --fix",
     "dev": "next dev",

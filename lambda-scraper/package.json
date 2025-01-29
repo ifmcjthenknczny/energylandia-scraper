@@ -11,10 +11,11 @@
     "build": "yarn compile",
     "buildAndStart": "yarn build && yarn start",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
-    "checkAll": "yarn format && yarn fix && yarn build"
+    "test": "npx jest",
+    "checkAll": "yarn format && yarn fix && yarn build && yarn test"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Maciej Konieczny",
+  "license": "CC-BY-NC-4.0",
   "dependencies": {
     "aws-sdk": "^2.1682.0",
     "axios": "^1.6.0",
@@ -29,6 +30,7 @@
     "@aws-sdk/credential-providers": "^3.329.0",
     "@eslint/js": "^8",
     "@types/aws-sdk": "^2.7.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
@@ -39,7 +41,9 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "globals": "^15.10.0",
+    "jest": "^29.7.0",
     "prettier": "^3.4.2",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.0.4",
     "typescript-eslint": "^8.8.0"
   },

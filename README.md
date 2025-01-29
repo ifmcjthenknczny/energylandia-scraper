@@ -131,16 +131,16 @@ Migrations are implemented in a simplified manner. The migration function to be 
 
 ## Roadmap
 
-- Insert `MONGO_URI` secret directly into Lambda envs
 - Frontend looks upgrade and more stats
 - More filters in frontend/API
-- Make it more error-proof (a lot of stuff is dependent on external API)
+- Make lambda-scraper more error-proof (a lot of stuff is dependent on external API)
+- Insert `MONGO_URI` secret directly into Lambda envs
 - Upgdade to Next 15
 - Monorepo
 
 ## Project Motivation
 
-This project was created to "cheat the system" and statistically optimize my next visit to Energylandia. I’ve only been there once, and I felt like I spent too much time waiting in lines and moving inefficiently between attractions. Next time, I hope to change that by making data-driven decisions for a better experience.
+This project was created to "cheat the system" and statistically optimize my next visit to Energylandia. I’ve only been there once, and I felt like I spent too much time waiting in lines and moving inefficiently between attractions. Next time, I hope to change that and plan my visit by making data-driven decisions for a better experience.
 
 ## License
 
