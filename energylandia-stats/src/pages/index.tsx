@@ -1,4 +1,4 @@
-import '../../styles/globals.css'
+import '../styles/globals.css'
 
 import { AvgTimeByHourResponse, AvgTimeResponse, Filter } from '../types'
 import { Day, Hour } from '../utils/date'

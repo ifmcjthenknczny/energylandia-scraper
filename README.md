@@ -4,7 +4,7 @@
 
 This project is a serverless AWS Lambda application designed for scraping data (Energylandia Zator waiting times and opening hours) from API sources, storing them in MongoDB and showing the statistics on frontend.
 
-The application uses AWS CDK to provision resources such as Lambda, Scheduler and CloudWatch Logs, as it is deployed to AWS using Node.js and TypeScript, while Next.js part of application is deployed to github-pages. Deployment is implemented by pushing to `main` branch, using CI/CD with Github Actions.
+The application uses AWS CDK to provision resources such as Lambda, Scheduler and CloudWatch Logs, as it is deployed to AWS using Node.js and TypeScript, while Next.js part of application is deployed to Vercel. Deployment is implemented by pushing to `main` branch, using CI/CD with Github Actions.
 
 Project started and stores data from October 5th, 2024.
 
@@ -31,7 +31,7 @@ Project started and stores data from October 5th, 2024.
 
 The project is divided into three main directories:
 1. *deployer* - Infrastructure and deployment stack (CDK) for the project, including all AWS stuff - services, schedulers etc.
-2. *energylandia-stats* - Fullstack (frontend and API) application that presents the calculated queue times by attraction with the option to select data filters. It is deployed on github-pages.
+2. *energylandia-stats* - Fullstack (frontend and API) application that presents the calculated queue times by attraction with the option to select data filters. It is deployed on Vercel.
 3. *lambda-scraper* - A backend service responsible for periodical fetching data concering opening times and queue time to attractions from API sources. Deployed as AWS Lambda.
 
 ## Main Technologies Used

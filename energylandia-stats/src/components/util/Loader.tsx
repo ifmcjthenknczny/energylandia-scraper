@@ -1,4 +1,4 @@
-import '../../../../styles/Loader.css'
+import '../../styles/Loader.css'
 
 import React from 'react'
 import classNames from 'classnames'

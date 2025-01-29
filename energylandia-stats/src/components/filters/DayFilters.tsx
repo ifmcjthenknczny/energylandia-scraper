@@ -1,7 +1,7 @@
 'use client'
 
 import 'react-calendar/dist/Calendar.css'
-import '../../../../styles/DayFilters.css'
+import '../../styles/DayFilters.css'
 
 import React, { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
