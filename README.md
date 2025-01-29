@@ -13,6 +13,8 @@ The application uses AWS CDK to provision resources such as Lambda, Scheduler an
 
 Project started and stores data from October 5th, 2024.
 
+![Here there was supposed to be the screenshot of the application](screenshot.png)
+
 ## Table of contents
 
 - [Project Structure](#project-structure)
