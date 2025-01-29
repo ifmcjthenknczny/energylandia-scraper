@@ -33,6 +33,7 @@ export function mapQueryToFilter(query: URLSearchParams): Partial<Filter> {
 export const getServerSideProps: GetServerSideProps<Props> = async (
     context,
 ) => {
+    const baseUrl = process.env.NODE_ENV === 'production' ? 'https://energylandia-scraper.vercel.app' : 'http://localhost:3000'
     const query = new URLSearchParams(
         Object.entries(context.query).map(([key, value]) =>
             [key, Array.isArray(value) ? value[0] : value].filter(Boolean),
@@ -42,7 +43,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     const fetchQuery = new URLSearchParams(
         mapToSearchParamsObject(filter),
     ).toString()
-    const baseUrl = process.env.__NEXT_PRIVATE_ORIGIN
 
     try {
         const dataByHour = (

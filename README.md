@@ -1,6 +1,7 @@
-# energylandia-scraper
+# Energylandia waiting time scraper
 
-[What is Energylandia Zator?](https://energylandia.pl/en/)
+[Deployed site](energylandia-scraper.vercel.app)
+[What is Energylandia Zator?](https://energylandia.pl/en)
 
 This project is a serverless AWS Lambda application designed for scraping data (Energylandia Zator waiting times and opening hours) from API sources, storing them in MongoDB and showing the statistics on frontend.
 
