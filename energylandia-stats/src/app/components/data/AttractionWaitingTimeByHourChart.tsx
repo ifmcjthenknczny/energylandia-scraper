@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { AvgTimeByHourResponse } from '@/app/types'
 import { Chart } from 'react-google-charts'
 import { Hour } from '@/app/utils/date'
-import Loader from '../misc/Loader'
+import Loader from '../util/Loader'
 
 type ChartData = Array<[string, ...(string | number)[]]>
 
