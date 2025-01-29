@@ -1,16 +1,16 @@
 import '../../styles/globals.css'
 
-import { AvgTimeByHourResponse, AvgTimeResponse, Filter } from '../app/types'
-import { Day, Hour } from '../app/utils/date'
+import { AvgTimeByHourResponse, AvgTimeResponse, Filter } from '../types'
+import { Day, Hour } from '../utils/date'
 
-import DataWrapper from '../app/components/DataWrapper'
-import Filters from '../app/components/filters/Filters'
+import DataWrapper from '../components/DataWrapper'
+import Filters from '../components/filters/Filters'
 import { GetServerSideProps } from 'next'
-import Logo from '../app/components/util/Logo'
+import Logo from '../components/util/Logo'
 import React from 'react'
 import axios from 'axios'
-import { mapToSearchParamsObject } from '../app/components/filters/helpers'
-import { removeUndefinedOrNull } from '../app/utils/object'
+import { mapToSearchParamsObject } from '../components/filters/helpers'
+import { removeUndefinedOrNull } from '../utils/object'
 
 export type Props = {
     dataByHour?: AvgTimeByHourResponse

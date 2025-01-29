@@ -2,9 +2,9 @@
 
 import React, { useMemo } from 'react'
 
-import { AvgTimeResponse } from '@/app/types'
+import { AvgTimeResponse } from '@/types'
 import Table from '../util/Table'
-import { chunkify } from '@/app/helpers/array'
+import { chunkify } from '@/utils/array'
 
 type Props = {
     dataByAttraction?: AvgTimeResponse

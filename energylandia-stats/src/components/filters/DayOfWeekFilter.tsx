@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import React from 'react'
-import { isFalsyExceptZero } from '@/app/utils/bool'
+import { isFalsyExceptZero } from '@/utils/bool'
 
 type Props = {
     dayOfWeek: number | null

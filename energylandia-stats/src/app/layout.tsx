@@ -16,7 +16,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
     title: 'Energylandia Stats',
-    description: 'Insights for waiting lines in Energylandia Zator',
+    description: 'Insights for waiting lines time in Energylandia Zator',
 }
 
 export default function RootLayout({

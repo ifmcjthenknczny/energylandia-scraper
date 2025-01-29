@@ -11,7 +11,7 @@ import { FIRST_DAY_OF_DATA } from './Filters'
 import RemoveFilterButton from './RemoveFilterButton'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
-import { toDay } from '@/app/utils/date'
+import { toDay } from '@/utils/date'
 import utc from 'dayjs/plugin/utc'
 
 dayjs.extend(timezone)

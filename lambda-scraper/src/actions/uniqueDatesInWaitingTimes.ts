@@ -1,4 +1,4 @@
-import { Day } from 'aws-sdk/clients/inspector2'
+import { Day } from '../helpers/util/date'
 import { ScriptContext } from '../context'
 import { log } from '../helpers/util/log'
 import { openingHoursCollection } from './../client/openingHours'

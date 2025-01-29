@@ -1,5 +1,5 @@
-import { Filter } from '@/app/types'
-import { isFalsyExceptZero } from '@/app/utils/bool'
+import { Filter } from '@/types'
+import { isFalsyExceptZero } from '@/utils/bool'
 
 export function mapToSearchParamsObject({
     dayOfWeek,

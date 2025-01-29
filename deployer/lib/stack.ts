@@ -106,7 +106,7 @@ class Site extends Stack {
         new scheduler.CfnSchedule(this, 'SCRAPE_OPENING_HOURS', {
             flexibleTimeWindow: {
                 mode: 'FLEXIBLE',
-                maximumWindowInMinutes: 45,
+                maximumWindowInMinutes: 30,
             },
             scheduleExpressionTimezone: 'Europe/Warsaw',
             scheduleExpression: events.Schedule.cron({ minute: '0', hour: '4' })

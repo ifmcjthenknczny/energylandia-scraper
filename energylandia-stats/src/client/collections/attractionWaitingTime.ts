@@ -1,6 +1,6 @@
 import { ASC, DESC, mongo } from '../mongo'
-import { AvgTimeByHourResponse, AvgTimeResponse, Filter } from '@/app/types'
-import { Day, Hour } from '@/app/utils/date'
+import { AvgTimeByHourResponse, AvgTimeResponse, Filter } from '@/types'
+import { Day, Hour } from '@/utils/date'
 
 import { buildFilter } from '../filter'
 

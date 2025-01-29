@@ -25,6 +25,7 @@ interface AppConfig {
 export async function lambda(config: AppConfig) {
     log(`Starting execution: config=${JSON.stringify(config)}.`)
     const context = await initializeScriptContext(config.executionId)
+    const migrationFunction = migration20250123deleteEmptyRecords
 
     switch (config.action) {
         case ActionType.PING:
@@ -37,7 +38,6 @@ export async function lambda(config: AppConfig) {
             await scrapeEnergylandiaOpeningHours(context)
             break
         case ActionType.MIGRATION:
-            const migrationFunction = migration20250123deleteEmptyRecords
             await migration(context, migrationFunction)
             break
         case ActionType.TEST:
