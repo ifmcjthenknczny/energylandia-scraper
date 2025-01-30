@@ -6,7 +6,6 @@ import { AvgTimeByHourResponse } from '@/types'
 import { Chart } from 'react-google-charts'
 import { Hour } from '@/utils/date'
 import Loader from '../util/Loader'
-import useScreenWidth from '@/hooks/useScreenWidth'
 
 type ChartData = Array<[string, ...(string | number)[]]>
 
@@ -25,11 +24,10 @@ const DEFAULT_SELECTED_ATTRACTIONS = [
 const MOBILE_BREAKPOINT_PX = 768
 
 const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
-    const screenWidth = useScreenWidth()
-
     const [selectedAttractions, setSelectedAttractions] = useState<string[]>(
         DEFAULT_SELECTED_ATTRACTIONS,
     )
+    const [screenWidth, setScreenWidth] = useState<number>(0)
     const [chartData, setChartData] = useState<ChartData>([
         ['Hour', ...selectedAttractions],
     ])
@@ -58,6 +56,13 @@ const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
         }
         handleDataChangeToChart(data)
     }, [data, selectedAttractions.length, selectedAttractions])
+
+    useEffect(() => {
+        if (typeof window === undefined) {
+            return
+        }
+        setScreenWidth(window.innerWidth)
+    }, [])
 
     const handleAttractionChange = (attraction: string) => {
         setSelectedAttractions((prev) =>

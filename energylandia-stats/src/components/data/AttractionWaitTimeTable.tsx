@@ -1,11 +1,10 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { AvgTimeResponse } from '@/types'
 import Table from '../util/Table'
 import { chunkify } from '@/utils/array'
-import useScreenWidth from '@/hooks/useScreenWidth'
 
 type Props = {
     data?: AvgTimeResponse
@@ -46,9 +45,19 @@ const SingleAttractionWaitTimeTable = ({ data }: SingleTableProps) => {
 }
 
 const AttractionWaitTimeTable = ({ data }: Props) => {
-    const screenWidth = useScreenWidth()
+    const [screenWidth, setScreenWidth] = useState<number>(0)
 
-    const tableColumnsCount = Math.floor(screenWidth / ONE_TABLE_WIDTH_PX)
+    useEffect(() => {
+        if (typeof window === undefined) {
+            return
+        }
+        setScreenWidth(window.innerWidth)
+    }, [])
+
+    const tableColumnsCount = useMemo(
+        () => Math.floor(screenWidth / ONE_TABLE_WIDTH_PX),
+        [screenWidth],
+    )
 
     const dataArray = useMemo(() => {
         if (!data || !Object.keys(data).length) {
@@ -68,7 +77,7 @@ const AttractionWaitTimeTable = ({ data }: Props) => {
                 dataArray,
                 Math.ceil(dataArray.length / tableColumnsCount),
             ),
-        [dataArray],
+        [dataArray, tableColumnsCount],
     )
 
     return (
