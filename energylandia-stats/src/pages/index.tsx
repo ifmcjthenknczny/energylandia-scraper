@@ -8,6 +8,7 @@ import Filters from '../components/filters/Filters'
 import { GetServerSideProps } from 'next'
 import Logo from '../components/util/Logo'
 import React from 'react'
+import { Suspense } from 'react'
 import axios from 'axios'
 import { mapToSearchParamsObject } from '../components/filters/helpers'
 import { removeUndefinedOrNull } from '../utils/object'
@@ -76,7 +77,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 
 const Home = ({ dataByHour, dataByAttraction, errorMessage }: Props) => {
     return (
-        <>
+        <Suspense>
             <Logo className="py-8 px-20" />
             <Filters />
             <DataWrapper
@@ -84,7 +85,7 @@ const Home = ({ dataByHour, dataByAttraction, errorMessage }: Props) => {
                 dataByAttraction={dataByAttraction}
                 errorMessage={errorMessage}
             />
-        </>
+        </Suspense>
     )
 }
 

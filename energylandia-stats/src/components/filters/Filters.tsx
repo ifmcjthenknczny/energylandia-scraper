@@ -34,7 +34,7 @@ const Filters = () => {
 
     return (
         <div className="mb-8 mt-4 w-full">
-            <div className="w-full flex flex-row justify-evenly">
+            <div className="w-full flex flex-col gap-3 items-center md:flex-row md:justify-evenly md:items-start">
                 <DayOfWeekFilter
                     dayOfWeek={dayOfWeek}
                     onDayOfWeekChange={setDayOfWeek}

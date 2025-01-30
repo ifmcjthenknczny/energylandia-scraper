@@ -15,7 +15,10 @@ export default function Table({ header, data }: Props) {
                         {header.map((headerColumn, index) => (
                             <th
                                 key={index}
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
+                                className={classNames(
+                                    'px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider',
+                                    index === header.length - 1 && 'text-right',
+                                )}
                             >
                                 {headerColumn}
                             </th>
@@ -30,7 +33,8 @@ export default function Table({ header, data }: Props) {
                                     key={cellIndex}
                                     className={classNames(
                                         'px-5 py-2.5 whitespace-nowrap text-xs text-white',
-                                        cellIndex > 0 && 'text-right',
+                                        cellIndex === row.length - 1 &&
+                                            'text-right',
                                     )}
                                 >
                                     {cell}

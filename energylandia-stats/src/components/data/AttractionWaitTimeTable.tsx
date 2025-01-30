@@ -5,9 +5,10 @@ import React, { useMemo } from 'react'
 import { AvgTimeResponse } from '@/types'
 import Table from '../util/Table'
 import { chunkify } from '@/utils/array'
+import useScreenWidth from '@/hooks/useScreenWidth'
 
 type Props = {
-    dataByAttraction?: AvgTimeResponse
+    data?: AvgTimeResponse
 }
 
 type SingleTableProps = {
@@ -17,7 +18,7 @@ type SingleTableProps = {
     }[]
 }
 
-const TABLE_COLUMNS_COUNT = 4
+const ONE_TABLE_WIDTH_PX = 480
 
 function formatWaitingTime(waitingTimeMinutes: number) {
     const hours = Math.floor(waitingTimeMinutes / 60)
@@ -44,22 +45,30 @@ const SingleAttractionWaitTimeTable = ({ data }: SingleTableProps) => {
     )
 }
 
-const AttractionWaitTimeTable = ({ dataByAttraction }: Props) => {
-    const data = useMemo(() => {
-        if (!dataByAttraction || !Object.keys(dataByAttraction).length) {
+const AttractionWaitTimeTable = ({ data }: Props) => {
+    const screenWidth = useScreenWidth()
+
+    const tableColumnsCount = Math.floor(screenWidth / ONE_TABLE_WIDTH_PX)
+
+    const dataArray = useMemo(() => {
+        if (!data || !Object.keys(data).length) {
             return []
         }
-        return Object.entries(dataByAttraction).map(
+        return Object.entries(data).map(
             ([attraction, avgWaitingTimeMinutes]) => ({
                 attraction,
                 avgWaitingTime: formatWaitingTime(avgWaitingTimeMinutes),
             }),
         )
-    }, [dataByAttraction])
+    }, [data])
 
     const dataChunks = useMemo(
-        () => chunkify(data, Math.ceil(data.length / TABLE_COLUMNS_COUNT)),
-        [data],
+        () =>
+            chunkify(
+                dataArray,
+                Math.ceil(dataArray.length / tableColumnsCount),
+            ),
+        [dataArray],
     )
 
     return (

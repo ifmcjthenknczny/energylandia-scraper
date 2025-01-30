@@ -25,7 +25,7 @@ function DataWrapper({ dataByHour, dataByAttraction, errorMessage }: Props) {
     return (
         <div>
             <AttractionWaitingTimeByHourChart data={dataByHour} />
-            <AttractionWaitTimeTable dataByAttraction={dataByAttraction} />
+            <AttractionWaitTimeTable data={dataByAttraction} />
         </div>
     )
 }

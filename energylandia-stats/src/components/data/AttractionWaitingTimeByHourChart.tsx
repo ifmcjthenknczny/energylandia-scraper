@@ -6,6 +6,7 @@ import { AvgTimeByHourResponse } from '@/types'
 import { Chart } from 'react-google-charts'
 import { Hour } from '@/utils/date'
 import Loader from '../util/Loader'
+import useScreenWidth from '@/hooks/useScreenWidth'
 
 type ChartData = Array<[string, ...(string | number)[]]>
 
@@ -21,7 +22,11 @@ const DEFAULT_SELECTED_ATTRACTIONS = [
     'Zadra',
 ]
 
+const MOBILE_BREAKPOINT_PX = 768
+
 const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
+    const screenWidth = useScreenWidth()
+
     const [selectedAttractions, setSelectedAttractions] = useState<string[]>(
         DEFAULT_SELECTED_ATTRACTIONS,
     )
@@ -142,7 +147,10 @@ const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
                                 {} as Record<number, { curveType: string }>,
                             ),
                             legend: {
-                                position: 'right',
+                                position:
+                                    screenWidth < MOBILE_BREAKPOINT_PX
+                                        ? 'bottom'
+                                        : 'right',
                                 textStyle: {
                                     color: '#ffffff',
                                 },
