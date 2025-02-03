@@ -134,7 +134,6 @@ Migrations are implemented in a simplified manner. The migration function to be 
 - Frontend looks upgrade and more stats
 - More filters in frontend/API
 - Make lambda-scraper more error-proof (a lot of stuff is dependent on external API)
-- Insert `MONGO_URI` secret directly into Lambda envs
 - Upgdade to Next 15
 - Monorepo
 
