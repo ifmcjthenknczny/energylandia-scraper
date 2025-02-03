@@ -44,24 +44,17 @@ class Site extends Stack {
             layers: [nodeModules],
             memorySize: 128,
             runtime: RUNTIME,
-            timeout: Duration.seconds(30),
+            timeout: Duration.seconds(60),
             tracing: lambda.Tracing.ACTIVE,
-            retryAttempts: 0,
-            initialPolicy: [
-                new iam.PolicyStatement({
-                    actions: ['secretsmanager:GetSecretValue'],
-                    effect: iam.Effect.ALLOW,
-                    resources: ['*'],
-                }),
-            ],
+            retryAttempts: 2,
             environment: {
-                MONGO_URI: env.MONGO_URI
+                MONGO_URI: env.MONGO_URI,
             },
         })
 
         new logs.LogGroup(this, 'LogGroup', {
             logGroupName: `/aws/lambda/${lambdaApp.functionName}`,
-            retention: logs.RetentionDays.ONE_DAY,
+            retention: logs.RetentionDays.TWO_WEEKS,
         })
 
         // SCHEDULERS
