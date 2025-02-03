@@ -11,3 +11,7 @@ export function logError(message: any) {
 export function logWarn(message: any) {
     console.warn(`WARN ${JSON.stringify(message, null, 2)}`)
 }
+
+export function logDebug(message: any) {
+    console.debug(`DEBUG ${JSON.stringify(message, null, 2)}`)
+}

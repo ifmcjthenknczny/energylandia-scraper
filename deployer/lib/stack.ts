@@ -12,6 +12,7 @@ import {
 } from 'aws-cdk-lib'
 
 import { Construct } from 'constructs'
+import { env } from './env'
 
 const ARCHITECTURE = lambda.Architecture.ARM_64
 const LAMBDA_APP_RESOURCE_NAME = 'LambdaApp'
@@ -53,6 +54,9 @@ class Site extends Stack {
                     resources: ['*'],
                 }),
             ],
+            environment: {
+                MONGO_URI: env.MONGO_URI
+            },
         })
 
         new logs.LogGroup(this, 'LogGroup', {
