@@ -2,10 +2,10 @@ import { Day, Hour } from '../helpers/util/date'
 
 import { ScriptContext } from '../context'
 import axios from 'axios'
-import { insertOpeningHours } from '../client/openingHours'
 import { log } from '../helpers/util/log'
 import { responseToOpeningHours } from '../helpers/mapper'
 import { scrapeEnergylandiaOpeningHours } from '../scrapers/openingHoursScraper'
+import { upsertOpeningHours } from '../client/openingHours'
 
 jest.mock('axios')
 jest.mock('../client/openingHours')
@@ -13,8 +13,8 @@ jest.mock('../helpers/util/log')
 jest.mock('../helpers/mapper')
 
 const mockedAxios = axios as jest.Mocked<typeof axios>
-const mockedInsertOpeningHours = insertOpeningHours as jest.MockedFunction<
-    typeof insertOpeningHours
+const mockedInsertOpeningHours = upsertOpeningHours as jest.MockedFunction<
+    typeof upsertOpeningHours
 >
 const mockedLog = log as jest.MockedFunction<typeof log>
 const mockedResponseToOpeningHours =

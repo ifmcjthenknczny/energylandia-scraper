@@ -6,10 +6,23 @@ export const waitingTimeCollection = (db: mongoose.mongo.Db) => {
     return db.collection<AttractionWaitingTime>(WAITING_TIME_COLLECTION_NAME)
 }
 
-export const insertWaitingTimes = async (
+export const upsertWaitingTimes = async (
     db: mongoose.mongo.Db,
     waitingTimes: AttractionWaitingTime[],
 ) => {
     const collection = waitingTimeCollection(db)
-    return collection.insertMany(waitingTimes)
+    const bulkOps = waitingTimes.map((waitingTime) => ({
+        updateOne: {
+            filter: {
+                date: waitingTime.date,
+                time: waitingTime.time,
+                attractionName: waitingTime.attractionName,
+            },
+            update: {
+                $set: waitingTime,
+            },
+            upsert: true,
+        },
+    }))
+    return collection.bulkWrite(bulkOps)
 }

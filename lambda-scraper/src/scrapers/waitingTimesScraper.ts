@@ -7,8 +7,8 @@ import { ScriptContext } from '../context'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { getOpeningAndClosingHour } from '../client/openingHours'
-import { insertWaitingTimes } from '../client/attractionWaitingTime'
 import timezone from 'dayjs/plugin/timezone'
+import { upsertWaitingTimes } from '../client/attractionWaitingTime'
 import utc from 'dayjs/plugin/utc'
 
 dayjs.extend(timezone)
@@ -42,8 +42,10 @@ export async function scrapeEnergylandiaWaitingTimes(context: ScriptContext) {
     )
     log('MAPPED WAITING TIME DATA!')
 
-    if (!mappedScrapedWaitingTimes) {
-        logWarn('NO SCRAPED WAITING TIME DATA TO INSERT')
+    if (!mappedScrapedWaitingTimes?.length) {
+        logWarn(
+            'NO SCRAPED WAITING TIME DATA TO INSERT. HAVE NOT INSERTED ANY DATA',
+        )
     }
 
     const allAttractionsInactiveOrHasZeroWaitingTime =
@@ -58,7 +60,7 @@ export async function scrapeEnergylandiaWaitingTimes(context: ScriptContext) {
             toDay(context.now),
         )
         if (!openingHours) {
-            logWarn('NO OPENING HOURS FOUND')
+            logWarn('NO OPENING HOURS FOUND. HAVE NOT INSERTED ANY DATA')
             return
         }
         const closingHour = openingHours.closingHour
@@ -70,7 +72,7 @@ export async function scrapeEnergylandiaWaitingTimes(context: ScriptContext) {
             (openingHour && hourRightNow < openingHour) ||
             (closingHour && hourRightNow > closingHour)
         ) {
-            logWarn('ENERGYLANDIA IS CLOSED')
+            logWarn('ENERGYLANDIA IS CLOSED. HAVE NOT INSERTED ANY DATA')
             return
         }
 
@@ -80,6 +82,6 @@ export async function scrapeEnergylandiaWaitingTimes(context: ScriptContext) {
 
     const mappedWaitingTimes = mappedScrapedWaitingTimes.map(mapNaNsToZeros)
 
-    await insertWaitingTimes(context.db, mappedWaitingTimes)
+    await upsertWaitingTimes(context.db, mappedWaitingTimes)
     log('INSERTED ATTRACTION WAITING TIME DATA INTO DB')
 }

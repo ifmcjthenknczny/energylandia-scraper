@@ -6,10 +6,10 @@ import { ScriptContext } from '../context'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { getOpeningAndClosingHour } from '../client/openingHours'
-import { insertWaitingTimes } from '../client/attractionWaitingTime'
 import mongoose from 'mongoose'
 import { scrapeEnergylandiaWaitingTimes } from '../scrapers/waitingTimesScraper'
 import timezone from 'dayjs/plugin/timezone'
+import { upsertWaitingTimes } from '../client/attractionWaitingTime'
 import utc from 'dayjs/plugin/utc'
 
 dayjs.extend(timezone)
@@ -22,8 +22,8 @@ jest.mock('../client/openingHours')
 jest.mock('../helpers/mapper')
 
 const mockedAxios = axios as jest.Mocked<typeof axios>
-const mockedInsertWaitingTimes = insertWaitingTimes as jest.MockedFunction<
-    typeof insertWaitingTimes
+const mockedInsertWaitingTimes = upsertWaitingTimes as jest.MockedFunction<
+    typeof upsertWaitingTimes
 >
 const mockedLog = log as jest.MockedFunction<typeof log>
 const mockedLogWarn = logWarn as jest.MockedFunction<typeof logWarn>
@@ -148,7 +148,9 @@ describe('scrapeEnergylandiaWaitingTimes', () => {
 
         await scrapeEnergylandiaWaitingTimes(context)
 
-        expect(mockedLogWarn).toHaveBeenCalledWith('ENERGYLANDIA IS CLOSED')
+        expect(mockedLogWarn).toHaveBeenCalledWith(
+            'ENERGYLANDIA IS CLOSED. HAVE NOT INSERTED ANY DATA',
+        )
         expect(mockedInsertWaitingTimes).not.toHaveBeenCalled()
     })
 
@@ -160,7 +162,9 @@ describe('scrapeEnergylandiaWaitingTimes', () => {
 
         await scrapeEnergylandiaWaitingTimes(context)
 
-        expect(mockedLogWarn).toHaveBeenCalledWith('NO OPENING HOURS FOUND')
+        expect(mockedLogWarn).toHaveBeenCalledWith(
+            'NO OPENING HOURS FOUND. HAVE NOT INSERTED ANY DATA',
+        )
         expect(mockedInsertWaitingTimes).not.toHaveBeenCalled()
     })
 

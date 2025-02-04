@@ -3,9 +3,9 @@ import { Day, Hour } from '../helpers/util/date'
 import { OPENING_HOURS_URL } from '../config'
 import { ScriptContext } from '../context'
 import axios from 'axios'
-import { insertOpeningHours } from '../client/openingHours'
 import { log } from '../helpers/util/log'
 import { responseToOpeningHours } from '../helpers/mapper'
+import { upsertOpeningHours } from '../client/openingHours'
 
 type Color = `#${string}`
 
@@ -40,6 +40,6 @@ export async function scrapeEnergylandiaOpeningHours(context: ScriptContext) {
     )
     log('MAPPED OPENING HOUR DATA!')
 
-    await insertOpeningHours(context.db, mappedOpeningHour)
+    await upsertOpeningHours(context.db, mappedOpeningHour)
     log('INSERTED OPENING HOUR DATA INTO DB')
 }

@@ -16,10 +16,14 @@ export const getOpeningAndClosingHour = async (
     return collection.findOne({ date })
 }
 
-export const insertOpeningHours = async (
+export const upsertOpeningHours = async (
     db: mongoose.mongo.Db,
     openingHours: OpeningHours,
 ) => {
     const collection = openingHoursCollection(db)
-    return collection.insertOne(openingHours)
+    return collection.updateOne(
+        { date: openingHours.date },
+        { $set: openingHours },
+        { upsert: true },
+    )
 }
