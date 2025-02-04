@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import { AvgTimeByHourResponse, AvgTimeResponse, Filter } from '../types'
 import { Day, Hour } from '../utils/date'
 
-import DataWrapper from '../components/DataWrapper'
+import DataWrapper from '../components/data/DataWrapper'
 import Filters from '../components/filters/Filters'
 import { GetServerSideProps } from 'next'
 import Logo from '../components/util/Logo'

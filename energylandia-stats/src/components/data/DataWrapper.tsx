@@ -1,7 +1,7 @@
 'use client'
 
-import AttractionWaitTimeTable from './data/AttractionWaitTimeTable'
-import AttractionWaitingTimeByHourChart from './data/AttractionWaitingTimeByHourChart'
+import AttractionWaitTimeTable from './AttractionWaitTimeTable'
+import AttractionWaitingTimeByHourChart from './AttractionWaitingTimeByHourChart'
 import { Props } from '@/pages'
 import React from 'react'
 
