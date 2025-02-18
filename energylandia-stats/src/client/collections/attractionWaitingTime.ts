@@ -23,7 +23,7 @@ export const waitingTimeCollection = async () => {
     return db!.collection<AttractionWaitingTime>(WAITING_TIME_COLLECTION_NAME)
 }
 
-export const getAvgWaitingTimeByAttraction = async (
+export const findAvgWaitingTimeByAttraction = async (
     filter?: Filter,
 ): Promise<AvgTimeResponse> => {
     const collection = await waitingTimeCollection()
@@ -65,7 +65,7 @@ export const getAvgWaitingTimeByAttraction = async (
     return avgWaitingTime
 }
 
-export const getAvgWaitingTimeByAttractionAndHour = async (
+export const findAvgWaitingTimeByAttractionAndHour = async (
     filter?: Omit<Filter, 'hourFrom' | 'hourTo'>,
 ): Promise<AvgTimeByHourResponse> => {
     const matchFilter = buildFilter(filter)
@@ -182,7 +182,7 @@ export const getAvgWaitingTimeByAttractionAndHour = async (
     return finalResult
 }
 
-export async function getOverallAvgWaitingTimeByHour(
+export async function findOverallAvgWaitingTimeByHour(
     filter?: Filter,
 ): Promise<AvgOverallWaitingTime> {
     const matchFilter = buildFilter(filter)
@@ -276,7 +276,7 @@ export async function getOverallAvgWaitingTimeByHour(
     return avgOverallWaitingTime
 }
 
-export async function getAvailabilityByAttraction(
+export async function findAvailabilityByAttraction(
     filter?: Filter,
 ): Promise<AttractionAvailability> {
     const matchFilter = buildFilter(filter)

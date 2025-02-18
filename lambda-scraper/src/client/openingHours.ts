@@ -8,7 +8,7 @@ export const openingHoursCollection = (db: mongoose.mongo.Db) => {
     return db.collection<OpeningHours>(OPENING_HOURS_COLLECTION_NAME)
 }
 
-export const getOpeningAndClosingHour = async (
+export const findOpeningAndClosingHour = async (
     db: mongoose.mongo.Db,
     date: Day,
 ) => {

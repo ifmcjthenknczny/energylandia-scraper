@@ -5,7 +5,7 @@ import { log, logWarn } from '../helpers/util/log'
 import { ScriptContext } from '../context'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { getOpeningAndClosingHour } from '../client/openingHours'
+import { findOpeningAndClosingHour } from '../client/openingHours'
 import mongoose from 'mongoose'
 import { scrapeEnergylandiaWaitingTimes } from '../scrapers/waitingTimesScraper'
 import timezone from 'dayjs/plugin/timezone'
@@ -28,8 +28,8 @@ const mockedInsertWaitingTimes = upsertWaitingTimes as jest.MockedFunction<
 const mockedLog = log as jest.MockedFunction<typeof log>
 const mockedLogWarn = logWarn as jest.MockedFunction<typeof logWarn>
 const mockedGetOpeningAndClosingHour =
-    getOpeningAndClosingHour as jest.MockedFunction<
-        typeof getOpeningAndClosingHour
+    findOpeningAndClosingHour as jest.MockedFunction<
+        typeof findOpeningAndClosingHour
     >
 const mockedDataEntryToWaitingTime =
     dataEntryToWaitingTime as jest.MockedFunction<typeof dataEntryToWaitingTime>

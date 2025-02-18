@@ -137,6 +137,7 @@ Migrations are implemented in a simplified manner. The migration function to be 
 - Upgdade to Next 15
 - Monorepo
 - Staging environment
+- Fix CI/CD warnings
 
 ## Project Motivation
 

@@ -6,7 +6,7 @@ import { log, logWarn } from '../helpers/util/log'
 import { ScriptContext } from '../context'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { getOpeningAndClosingHour } from '../client/openingHours'
+import { findOpeningAndClosingHour } from '../client/openingHours'
 import timezone from 'dayjs/plugin/timezone'
 import { upsertWaitingTimes } from '../client/attractionWaitingTime'
 import utc from 'dayjs/plugin/utc'
@@ -55,7 +55,7 @@ export async function scrapeEnergylandiaWaitingTimes(context: ScriptContext) {
         )
 
     if (allAttractionsInactiveOrHasZeroWaitingTime) {
-        const openingHours = await getOpeningAndClosingHour(
+        const openingHours = await findOpeningAndClosingHour(
             context.db,
             toDay(context.now),
         )

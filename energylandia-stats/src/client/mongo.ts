@@ -8,15 +8,21 @@ export const ASC = 1
 
 mongoose.set('strictQuery', true)
 
+let cachedDb: mongoose.mongo.Db | undefined = undefined
+
 export const mongo = async () => {
+    if (cachedDb) {
+        return cachedDb
+    }
     try {
         await mongoose.connect(process.env.MONGO_URI!, {
             dbName: process.env.DATABASE_NAME,
             serverSelectionTimeoutMS: 5000,
         })
-        return mongoose.connection.db!
+        cachedDb = mongoose.connection.db
+        return cachedDb
     } catch (err: any) {
         // eslint-disable-next-line no-console
-        console.error(`Problem with connecting with mongo: ${err}`)
+        console.error(`Problem connecting with mongo: ${err}`)
     }
 }
