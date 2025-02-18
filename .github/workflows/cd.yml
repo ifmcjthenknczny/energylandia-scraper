@@ -13,7 +13,8 @@ env:
   NODE_VERSION: "22.11.0"
   BUILD_ID: ${{ github.run_number }}
   AWS_STACK_NAME: ${{ vars.AWS_STACK_NAME }}
-  MONGO_URI: ${{ secrets.MONGO_URI }}
+  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+  MONGO_URI: ${{ secrets.MONGO_URI }},
 
 jobs:
   build-LambdaScraper:
@@ -46,7 +47,7 @@ jobs:
         run: rm LambdaApp/start-local.js
 
       - name: Setup envs
-        run: echo echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI" > LambdaApp/.env
+        run: echo echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI\nDATABASE_NAME=$DATABASE_NAME" > LambdaApp/.env
 
       - name: Setup starter
         run: mv lambda-scraper/deployment/lambda-starter.js LambdaApp/lambda-starter.js

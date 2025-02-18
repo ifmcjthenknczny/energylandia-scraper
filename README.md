@@ -98,8 +98,8 @@ To maintain same code styling and quality, every main directory has ```yarn chec
 
 ### Environmental variables
 
-For both `lambda-scraper` and `energylandia-stats` only one environmental variable is needed to be filled, which is `MONGO_URI`. Here is a schema of how to fill it:
-```MONGO_URI=mongodb+srv://[username:password@]host[/[defaultauthdb][?options]]```
+For both `lambda-scraper` and `energylandia-stats` two environmental variable are needed to be filled, which are `DATABASE_NAME` and `MONGO_URI` (which schema of how to fill is:
+```MONGO_URI=mongodb+srv://[username:password@]host[/[databaseName][?options]]```).
 
 ## AWS Resources
 
@@ -136,6 +136,7 @@ Migrations are implemented in a simplified manner. The migration function to be 
 - Make lambda-scraper more error-proof (a lot of stuff is dependent on external API)
 - Upgdade to Next 15
 - Monorepo
+- Staging environment
 
 ## Project Motivation
 

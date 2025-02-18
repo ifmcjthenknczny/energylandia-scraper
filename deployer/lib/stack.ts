@@ -48,6 +48,7 @@ class Site extends Stack {
             tracing: lambda.Tracing.ACTIVE,
             retryAttempts: 2,
             environment: {
+                DATABASE_NAME: env.DATABASE_NAME,
                 MONGO_URI: env.MONGO_URI,
             },
         })

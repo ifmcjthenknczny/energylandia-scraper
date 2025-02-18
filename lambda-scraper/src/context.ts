@@ -18,7 +18,7 @@ export async function initializeScriptContext(
 
     const now = new Date()
 
-    const db = await mongo(process.env.MONGO_URI!)
+    const db = await mongo()
 
     log('Script context initialized.')
     return {
