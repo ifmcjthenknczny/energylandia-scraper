@@ -14,7 +14,7 @@ env:
   BUILD_ID: ${{ github.run_number }}
   AWS_STACK_NAME: ${{ vars.AWS_STACK_NAME }}
   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-  MONGO_URI: ${{ secrets.MONGO_URI }},
+  MONGO_URI: ${{ secrets.MONGO_URI }}
 
 jobs:
   build-LambdaScraper:
@@ -47,7 +47,13 @@ jobs:
         run: rm LambdaApp/start-local.js
 
       - name: Setup envs
-        run: echo echo "AWS_STACK_NAME=$AWS_STACK_NAME\nMONGO_URI=$MONGO_URI\nDATABASE_NAME=$DATABASE_NAME" > LambdaApp/.env
+        run: |
+          env_vars=("AWS_STACK_NAME" "MONGO_URI" "DATABASE_NAME")
+
+          for var in "${env_vars[@]}"; do
+            echo "::add-mask::${!var}"
+            echo "$var=${!var}" >> LambdaApp/.env
+          done
 
       - name: Setup starter
         run: mv lambda-scraper/deployment/lambda-starter.js LambdaApp/lambda-starter.js
