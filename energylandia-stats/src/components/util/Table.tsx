@@ -4,11 +4,12 @@ import classNames from 'classnames'
 type Props = {
     header: React.ReactNode[]
     data: React.ReactNode[][]
+    className?: string
 }
 
-export default function Table({ header, data }: Props) {
+export default function Table({ header, data, className }: Props) {
     return (
-        <div className="overflow-x-auto w-full flex justify-center">
+        <div className={classNames("overflow-x-auto w-full flex justify-center", className)}>
             <table className="divide-y divide-gray-700">
                 <thead className="bg-background-light">
                     <tr>

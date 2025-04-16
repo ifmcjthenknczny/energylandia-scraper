@@ -1,6 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+    font-family: 'OPTIEdgarBold-Extended';
+    src: url('/OPTIEdgarBold-Extended.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
 
 :root {
     --background: #ffffff;
@@ -17,10 +25,11 @@
 body {
     color: var(--foreground);
     background: var(--background);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Noto Sans", sans-serif;
     height: 100%;
     min-height: 100vh;
     padding: 16px;
+    overflow-x: hidden;
 }
 
 @layer utilities {

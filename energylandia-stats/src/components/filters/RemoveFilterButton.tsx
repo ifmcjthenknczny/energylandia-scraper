@@ -3,18 +3,23 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import React from 'react'
+import classNames from 'classnames'
 
 type Props = {
     paramsToRemove: string[]
-    onRemoveParams: () => void
+    onRemoveParams?: () => void
+    className?: string
 }
 
-const RemoveFilterButton = ({ paramsToRemove, onRemoveParams }: Props) => {
+const RemoveFilterButton = ({ paramsToRemove, onRemoveParams, className }: Props) => {
     const router = useRouter()
     const searchParams = useSearchParams()
 
     const handleRemoveParam = () => {
-        onRemoveParams()
+        if (searchParams?.size === 0) {
+            return
+        }
+        onRemoveParams?.()
         const query = new URLSearchParams(
             Array.from(searchParams?.entries() || []),
         )
@@ -33,7 +38,7 @@ const RemoveFilterButton = ({ paramsToRemove, onRemoveParams }: Props) => {
     return (
         <button
             onClick={handleRemoveParam}
-            className="bg-red-600 hover:bg-red-700 text-gray-200 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+            className={classNames("bg-red-600 hover:bg-red-700 text-gray-200 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 w-min", className)}
             aria-label="Remove filter"
         >
             <div className="flex items-center justify-center w-full h-full">

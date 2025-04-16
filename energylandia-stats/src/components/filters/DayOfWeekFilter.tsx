@@ -25,9 +25,9 @@ type OptionProps = {
     label: string
 }
 
-const Option = ({ value, label }: OptionProps) => (
+const WeekdayOption = ({ value, label }: OptionProps) => (
     <option
-        className="text-xs text-gray-500 bg-gray-900"
+        className="text-xs text-white bg-gray-dark cursor-pointer"
         value={isFalsyExceptZero(value) ? '' : value}
     >
         {label}
@@ -69,9 +69,9 @@ const DayOfWeekFilter = ({ dayOfWeek, onDayOfWeekChange }: Props) => {
         <div className="flex flex-col space-y-2">
             <label
                 htmlFor="dayOfWeek"
-                className="text-sm font-medium text-gray-700"
+                className="text-sm font-medium text-gray-300"
             >
-                Day of Week
+                Weekday
             </label>
             <select
                 id="dayOfWeek"
@@ -79,12 +79,12 @@ const DayOfWeekFilter = ({ dayOfWeek, onDayOfWeekChange }: Props) => {
                     isFalsyExceptZero(dayOfWeek) ? '' : (dayOfWeek as number)
                 }
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-gray-900 p-2"
+                className="mt-1 block w-full rounded-md shadow-sm bg-gray-light border border-white p-2"
             >
-                <Option label="All weekdays" />
+                <WeekdayOption label="All weekdays" />
 
                 {daysOfWeek.map((day) => (
-                    <Option
+                    <WeekdayOption
                         key={day.value}
                         value={day.value}
                         label={day.label}

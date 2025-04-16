@@ -82,12 +82,9 @@ const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
 
     return (
         <div className="pb-6">
-            <h1 className="text-xl my-4 text-center">
-                Waiting Time by Attraction
-            </h1>
-            <div className="flex flex-row">
+            <div className="flex md:flex-row flex-col">
                 {!!data && Object.keys(data).length > 0 && (
-                    <div className="flex flex-col gap-1 max-h-[400px] overflow-y-scroll text-xs mx-2 p-2 border border-2">
+                    <div className="md:flex md:flex-col grid grid-cols-2 gap-1 max-h-[200px] md:max-h-[400px] max-h-auto overflow-y-scroll text-xs mx-2 p-2 border border-2">
                         {Object.keys(data).map((attractionName, index) => (
                             <label key={index}>
                                 <input
@@ -107,9 +104,9 @@ const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
                 )}
                 {selectedAttractions.length > 0 && (
                     <Chart
-                        width={'100%'}
+                        width={screenWidth < MOBILE_BREAKPOINT_PX ? '105%' : '100%'}
                         height={'400px'}
-                        className="pr-2"
+                        className="md:pr-2"
                         chartType="LineChart"
                         loader={<Loader />}
                         data={chartData}

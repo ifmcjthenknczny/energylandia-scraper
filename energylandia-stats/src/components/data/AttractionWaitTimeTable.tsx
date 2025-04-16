@@ -40,6 +40,7 @@ const SingleAttractionWaitTimeTable = ({ data }: SingleTableProps) => {
         <Table
             header={['Attraction name', 'Average waiting time']}
             data={data.map((dataRow) => Object.values(dataRow))}
+            className='pb-8 md:pb-12'
         />
     )
 }

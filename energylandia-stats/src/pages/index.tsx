@@ -78,7 +78,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 const Home = ({ dataByHour, dataByAttraction, errorMessage }: Props) => {
     return (
         <Suspense>
-            <Logo className="py-8 px-20" />
+            <Logo className="py-4 md:py-8 px-2 md:px-20" />
             <Filters />
             <DataWrapper
                 dataByHour={dataByHour}
