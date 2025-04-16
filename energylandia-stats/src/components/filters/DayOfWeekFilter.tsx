@@ -2,14 +2,9 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import { Filter } from '@/types'
+import { FilterSubcomponentProps } from './Filters'
 import React from 'react'
 import { isFalsyExceptZero } from '@/utils/bool'
-
-type Props = {
-    filters: Filter
-    handleFiltersChange: (diff: Filter) => void
-}
 
 const daysOfWeek = [
     { value: 1, label: 'Monday' },
@@ -35,7 +30,10 @@ const WeekdayOption = ({ value, label }: OptionProps) => (
     </option>
 )
 
-const DayOfWeekFilter = ({ filters, handleFiltersChange }: Props) => {
+const DayOfWeekFilter = ({
+    filters,
+    handleFiltersChange,
+}: FilterSubcomponentProps) => {
     const searchParams = useSearchParams()
     const router = useRouter()
 

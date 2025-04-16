@@ -3,12 +3,11 @@
 import 'react-calendar/dist/Calendar.css'
 import '../../styles/DayFilters.css'
 
+import { FIRST_DAY_OF_DATA, FilterSubcomponentProps } from './Filters'
 import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import Calendar from 'react-calendar'
-import { FIRST_DAY_OF_DATA } from './Filters'
-import { Filter } from '@/types'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import { toDay } from '@/utils/date'
@@ -20,12 +19,10 @@ dayjs.extend(utc)
 type ValuePiece = Date | null
 type Value = ValuePiece | [ValuePiece, ValuePiece]
 
-type Props = {
-    filters: Filter
-    handleFiltersChange: (diff: Filter) => void
-}
-
-const DayFilters = ({ filters, handleFiltersChange }: Props) => {
+const DayFilters = ({
+    filters,
+    handleFiltersChange,
+}: FilterSubcomponentProps) => {
     const searchParams = useSearchParams()
     const router = useRouter()
     const [value, setValue] = useState<Value>([

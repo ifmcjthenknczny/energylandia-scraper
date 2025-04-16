@@ -5,18 +5,16 @@ import 'react-clock/dist/Clock.css'
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import { Filter } from '@/types'
+import { FilterSubcomponentProps } from './Filters'
 import { Hour } from '@/utils/date'
 import React from 'react'
 import TimePicker from 'react-time-picker'
 import { useDebounced } from '@/hooks/useDebounced'
 
-type Props = {
-    filters: Filter
-    handleFiltersChange: (diff: Filter) => void
-}
-
-const TimeFilters = ({ filters, handleFiltersChange }: Props) => {
+const HourFilters = ({
+    filters,
+    handleFiltersChange,
+}: FilterSubcomponentProps) => {
     const searchParams = useSearchParams()
     const router = useRouter()
 
@@ -47,13 +45,14 @@ const TimeFilters = ({ filters, handleFiltersChange }: Props) => {
     return (
         <div className="flex flex-col">
             <span className="text-sm">Hour</span>
-            <div className="flex flex-row items-center gap-3">
+            <div className="flex flex-row items-center gap-3 mt-1">
                 <TimePicker
                     onChange={handleHourFromChange}
                     value={filters.hourFrom}
                     clearIcon={null}
-                    className="mt-1 block w-full"
+                    className="block w-min text-center text-xl"
                     disableClock={true}
+                    minTime={'00:00'}
                     maxTime={'23:59'}
                 />
                 -
@@ -61,8 +60,9 @@ const TimeFilters = ({ filters, handleFiltersChange }: Props) => {
                     onChange={handleHourToChange}
                     value={filters.hourTo}
                     clearIcon={null}
-                    className="mt-1 block w-full"
+                    className="block w-min text-center text-xl"
                     disableClock={true}
+                    minTime={'00:00'}
                     maxTime={'23:59'}
                 />
             </div>
@@ -70,4 +70,4 @@ const TimeFilters = ({ filters, handleFiltersChange }: Props) => {
     )
 }
 
-export default TimeFilters
+export default HourFilters

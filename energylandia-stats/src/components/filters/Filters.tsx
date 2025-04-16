@@ -6,13 +6,18 @@ import React, { useEffect, useState } from 'react'
 import DayFilters from './DayFilters'
 import DayOfWeekFilter from './DayOfWeekFilter'
 import { Filter } from '@/types'
+import HourFilters from './HourFilters'
 import RemoveFilterButton from './RemoveFilterButton'
-import TimeFilters from './TimeFilters'
 import VerticalLine from '../util/VerticalLine'
 import { isFalsyExceptZero } from '@/utils/bool'
 import { useSearchParams } from 'next/navigation'
 
 export const FIRST_DAY_OF_DATA = '2024-10-05'
+
+export type FilterSubcomponentProps = {
+    filters: Filter
+    handleFiltersChange: (diff: Filter) => void
+}
 
 const Filters = () => {
     const searchParams = useSearchParams()
@@ -45,7 +50,13 @@ const Filters = () => {
             <div className="flex gap-2 flex-col items-center mb-2">
                 <h1 className="text-2xl font-bold text-center">Filters</h1>
                 <RemoveFilterButton
-                    paramsToRemove={['dayFrom', 'dayTo', 'dayOfWeek']}
+                    paramsToRemove={[
+                        'dayFrom',
+                        'dayTo',
+                        'dayOfWeek',
+                        'hourFrom',
+                        'hourTo',
+                    ]}
                     className="self-center"
                 />
             </div>
@@ -59,7 +70,7 @@ const Filters = () => {
                     filters={filters}
                     handleFiltersChange={handleFiltersChange}
                 />
-                <TimeFilters
+                <HourFilters
                     filters={filters}
                     handleFiltersChange={handleFiltersChange}
                 />
