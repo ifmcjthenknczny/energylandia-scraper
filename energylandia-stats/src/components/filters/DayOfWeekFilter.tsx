@@ -2,12 +2,13 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
+import { Filter } from '@/types'
 import React from 'react'
 import { isFalsyExceptZero } from '@/utils/bool'
 
 type Props = {
-    dayOfWeek: number | null
-    onDayOfWeekChange: (dayOfWeek: number | null) => void
+    filters: Filter
+    handleFiltersChange: (diff: Filter) => void
 }
 
 const daysOfWeek = [
@@ -34,25 +35,25 @@ const WeekdayOption = ({ value, label }: OptionProps) => (
     </option>
 )
 
-const DayOfWeekFilter = ({ dayOfWeek, onDayOfWeekChange }: Props) => {
+const DayOfWeekFilter = ({ filters, handleFiltersChange }: Props) => {
     const searchParams = useSearchParams()
     const router = useRouter()
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value
         const newDayOfWeek = isFalsyExceptZero(value)
-            ? null
+            ? undefined
             : parseInt(value, 10)
 
-        onDayOfWeekChange(newDayOfWeek)
+        handleFiltersChange({ dayOfWeek: newDayOfWeek })
         updateURL(newDayOfWeek)
     }
 
-    const updateURL = (dayOfWeek: number | null) => {
+    const updateURL = (dayOfWeek: number | undefined) => {
         const current = new URLSearchParams(
             Array.from(searchParams?.entries() || []),
         )
-        if (dayOfWeek !== null) {
+        if (dayOfWeek !== undefined) {
             current.set('dayOfWeek', dayOfWeek.toString())
         } else {
             current.delete('dayOfWeek')
@@ -76,13 +77,13 @@ const DayOfWeekFilter = ({ dayOfWeek, onDayOfWeekChange }: Props) => {
             <select
                 id="dayOfWeek"
                 value={
-                    isFalsyExceptZero(dayOfWeek) ? '' : (dayOfWeek as number)
+                    isFalsyExceptZero(filters.dayOfWeek)
+                        ? ''
+                        : (filters.dayOfWeek as number)
                 }
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md shadow-sm bg-gray-light border border-white p-2"
             >
-                <WeekdayOption label="All weekdays" />
-
                 {daysOfWeek.map((day) => (
                     <WeekdayOption
                         key={day.value}
@@ -90,6 +91,7 @@ const DayOfWeekFilter = ({ dayOfWeek, onDayOfWeekChange }: Props) => {
                         label={day.label}
                     />
                 ))}
+                <WeekdayOption label="All weekdays" value={undefined} />
             </select>
         </div>
     )

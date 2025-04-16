@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import Calendar from 'react-calendar'
 import { FIRST_DAY_OF_DATA } from './Filters'
+import { Filter } from '@/types'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import { toDay } from '@/utils/date'
@@ -20,21 +21,17 @@ type ValuePiece = Date | null
 type Value = ValuePiece | [ValuePiece, ValuePiece]
 
 type Props = {
-    dayFrom: Date | null
-    dayTo: Date | null
-    onDayFromChange: (date: Date | null) => void
-    onDayToChange: (date: Date | null) => void
+    filters: Filter
+    handleFiltersChange: (diff: Filter) => void
 }
 
-const DayFilters = ({
-    dayFrom,
-    dayTo,
-    onDayFromChange,
-    onDayToChange,
-}: Props) => {
+const DayFilters = ({ filters, handleFiltersChange }: Props) => {
     const searchParams = useSearchParams()
     const router = useRouter()
-    const [value, setValue] = useState<Value>([dayFrom, dayTo])
+    const [value, setValue] = useState<Value>([
+        filters.dayFrom ? new Date(filters.dayFrom) : null,
+        filters.dayTo ? new Date(filters.dayTo) : null,
+    ])
 
     const updateURL = (date: Value | null) => {
         const current = new URLSearchParams(
@@ -61,20 +58,21 @@ const DayFilters = ({
     const handleChange = (value: Value | null) => {
         setValue(value)
         if (!value) {
-            onDayFromChange(null)
-            onDayToChange(null)
+            handleFiltersChange({ dayFrom: undefined, dayTo: undefined })
             updateURL(null)
             return
         }
         if (Array.isArray(value)) {
             const [from, to] = value
-            onDayFromChange(from)
-            onDayToChange(to)
+            handleFiltersChange({
+                dayFrom: from ? toDay(from) : undefined,
+                dayTo: to ? toDay(to) : undefined,
+            })
             updateURL([from, to])
             return
         }
-        onDayFromChange(value)
-        onDayToChange(value)
+        const dayStringValue = toDay(value)
+        handleFiltersChange({ dayFrom: dayStringValue, dayTo: dayStringValue })
         updateURL([value, new Date()])
     }
 

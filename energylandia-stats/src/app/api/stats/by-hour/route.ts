@@ -1,4 +1,4 @@
-import { dayOfWeekSchema, daySchema } from '@/utils/schema'
+import { dayOfWeekSchema, daySchema, hourSchema } from '@/utils/schema'
 
 import { Filter } from '@/types'
 import { NextResponse } from 'next/server'
@@ -12,7 +12,33 @@ const schema = z
         dayFrom: daySchema.optional(),
         dayTo: daySchema.optional(),
         dayOfWeek: dayOfWeekSchema.optional(),
+        hourFrom: hourSchema.optional(),
+        hourTo: hourSchema.optional(),
     })
+    .refine(
+        ({ dayFrom, dayTo }) => {
+            if (dayFrom && dayTo) {
+                return dayTo > dayFrom
+            }
+            return true
+        },
+        {
+            message: 'dayTo must be after dayFrom',
+            path: ['dayTo'],
+        },
+    )
+    .refine(
+        ({ hourFrom, hourTo }) => {
+            if (hourFrom && hourTo) {
+                return hourTo > hourFrom
+            }
+            return true
+        },
+        {
+            message: 'hourTo must be after hourFrom',
+            path: ['hourTo'],
+        },
+    )
     .optional()
 
 export async function GET(req: Request) {

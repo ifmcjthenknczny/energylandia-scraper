@@ -1,37 +1,43 @@
 'use client'
 
+import { Day, Hour } from '@/utils/date'
 import React, { useEffect, useState } from 'react'
 
 import DayFilters from './DayFilters'
 import DayOfWeekFilter from './DayOfWeekFilter'
+import { Filter } from '@/types'
 import RemoveFilterButton from './RemoveFilterButton'
+import TimeFilters from './TimeFilters'
 import VerticalLine from '../util/VerticalLine'
+import { isFalsyExceptZero } from '@/utils/bool'
 import { useSearchParams } from 'next/navigation'
-
-// import TimeFilters from './TimeFilters';
 
 export const FIRST_DAY_OF_DATA = '2024-10-05'
 
 const Filters = () => {
     const searchParams = useSearchParams()
-    const [dayFrom, setDayFrom] = useState<Date | null>(null)
-    const [dayTo, setDayTo] = useState<Date | null>(null)
-    const [dayOfWeek, setDayOfWeek] = useState<number | null>(null)
-    // const [hourFrom, setHourFrom] = useState<string | null>(null);
-    // const [hourTo, setHourTo] = useState<string | null>(null);
+    const [filters, setFilters] = useState<Filter>({})
+
+    const handleFiltersChange = (diff: Filter) => {
+        setFilters((prev) => ({ ...prev, ...diff }))
+    }
 
     useEffect(() => {
-        const dayFromParam = searchParams?.get('dayFrom')
-        const dayToParam = searchParams?.get('dayTo')
-        const dayOfWeekParam = searchParams?.get('dayOfWeek')
-        // const hourFromParam = searchParams.get('hourFrom');
-        // const hourToParam = searchParams.get('hourTo');
+        const dayFrom = searchParams?.get('dayFrom') as Day | undefined
+        const dayTo = searchParams?.get('dayTo') as Day | undefined
+        const dayOfWeek = searchParams?.get('dayOfWeek') as string | undefined
+        const hourFrom = searchParams?.get('hourFrom') as Hour | undefined
+        const hourTo = searchParams?.get('hourTo') as Hour | undefined
 
-        setDayFrom(dayFromParam ? new Date(dayFromParam) : null)
-        setDayTo(dayToParam ? new Date(dayToParam) : null)
-        setDayOfWeek(dayOfWeekParam ? parseInt(dayOfWeekParam, 10) : null)
-        // setHourFrom(hourFromParam);
-        // setHourTo(hourToParam);
+        handleFiltersChange({
+            dayFrom,
+            dayTo,
+            dayOfWeek: isFalsyExceptZero(dayOfWeek)
+                ? undefined
+                : parseInt(dayOfWeek as string, 10),
+            hourFrom,
+            hourTo,
+        })
     }, [searchParams])
 
     return (
@@ -46,21 +52,17 @@ const Filters = () => {
             <VerticalLine />
             <div className="w-full flex flex-col gap-3 md:items-start md:flex-row md:justify-evenly">
                 <DayOfWeekFilter
-                    dayOfWeek={dayOfWeek}
-                    onDayOfWeekChange={setDayOfWeek}
+                    filters={filters}
+                    handleFiltersChange={handleFiltersChange}
                 />
                 <DayFilters
-                    dayFrom={dayFrom}
-                    dayTo={dayTo}
-                    onDayFromChange={setDayFrom}
-                    onDayToChange={setDayTo}
+                    filters={filters}
+                    handleFiltersChange={handleFiltersChange}
                 />
-                {/* <TimeFilters
-          hourFrom={hourFrom}
-          hourTo={hourTo}
-          onHourFromChange={setHourFrom}
-          onHourToChange={setHourTo}
-        /> */}
+                <TimeFilters
+                    filters={filters}
+                    handleFiltersChange={handleFiltersChange}
+                />
             </div>
         </div>
     )

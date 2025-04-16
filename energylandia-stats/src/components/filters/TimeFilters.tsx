@@ -1,89 +1,73 @@
-// 'use client'
+'use client'
 
-// import 'react-time-picker/dist/TimePicker.css'
-// import 'react-clock/dist/Clock.css'
+import 'react-time-picker/dist/TimePicker.css'
+import 'react-clock/dist/Clock.css'
 
-// import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-// import React from 'react'
-// import RemoveFilterButton from './RemoveFilterButton'
-// import TimePicker from 'react-time-picker'
+import { Filter } from '@/types'
+import { Hour } from '@/utils/date'
+import React from 'react'
+import TimePicker from 'react-time-picker'
+import { useDebounced } from '@/hooks/useDebounced'
 
-// type Props = {
-//     hourFrom: string | null
-//     hourTo: string | null
-//     onHourFromChange: (hour: string | null) => void
-//     onHourToChange: (hour: string | null) => void
-// }
+type Props = {
+    filters: Filter
+    handleFiltersChange: (diff: Filter) => void
+}
 
-// const TimeFilters = ({
-//     hourFrom,
-//     hourTo,
-//     onHourFromChange,
-//     onHourToChange,
-// }: Props) => {
-//     const searchParams = useSearchParams()
-//     const router = useRouter()
+const TimeFilters = ({ filters, handleFiltersChange }: Props) => {
+    const searchParams = useSearchParams()
+    const router = useRouter()
 
-//     const updateURL = (param: string, value: string | null) => {
-//         const current = new URLSearchParams(Array.from(searchParams.entries()))
-//         if (value) {
-//             current.set(param, value)
-//         } else {
-//             current.delete(param)
-//         }
-//         const search = current.toString()
-//         const query = search ? `?${search}` : ''
-//         router.push(`${query}`)
-//     }
+    const updateURL = (param: string, value: string | null) => {
+        const current = new URLSearchParams(
+            Array.from(searchParams?.entries() || []),
+        )
+        if (value) {
+            current.set(param, value)
+        } else {
+            current.delete(param)
+        }
+        const search = current.toString()
+        const query = search ? `?${search}` : ''
+        router.push(`${query}`)
+    }
 
-//     const handleHourFromChange = (value: string | null) => {
-//         onHourFromChange(value)
-//         updateURL('hourFrom', value)
-//     }
+    const handleHourFromChange = useDebounced((value: string | null) => {
+        handleFiltersChange({ hourFrom: value ? (value as Hour) : undefined })
+        updateURL('hourFrom', value)
+    })
 
-//     const handleHourToChange = (value: string | null) => {
-//         onHourToChange(value)
-//         updateURL('hourTo', value)
-//     }
+    const handleHourToChange = useDebounced((value: string | null) => {
+        handleFiltersChange({ hourTo: value ? (value as Hour) : undefined })
+        updateURL('hourTo', value)
+    })
 
-//     return (
-//         <div className="flex flex-col space-y-4">
-//             <div>
-//                 <label
-//                     htmlFor="hourFrom"
-//                     className="block text-sm font-medium text-gray-700"
-//                 >
-//                     From Hour
-//                 </label>
-//                 <TimePicker
-//                     onChange={handleHourFromChange}
-//                     value={hourFrom}
-//                     clearIcon={null}
-//                     className="mt-1 block w-full"
-//                     disableClock={true}
-//                     maxTime={'23:59'}
-//                 />
-//             </div>
-//             <div>
-//                 <label
-//                     htmlFor="hourTo"
-//                     className="block text-sm font-medium text-gray-700"
-//                 >
-//                     To Hour
-//                 </label>
-//                 <TimePicker
-//                     onChange={handleHourToChange}
-//                     value={hourTo}
-//                     clearIcon={null}
-//                     className="mt-1 block w-full"
-//                     disableClock={true}
-//                     maxTime={'23:59'}
-//                 />
-//             </div>
-//             <RemoveFilterButton paramsToRemove={['hourFrom', 'hourTo']} />
-//         </div>
-//     )
-// }
+    return (
+        <div className="flex flex-col">
+            <span className="text-sm">Hour</span>
+            <div className="flex flex-row items-center gap-3">
+                <TimePicker
+                    onChange={handleHourFromChange}
+                    value={filters.hourFrom}
+                    clearIcon={null}
+                    className="mt-1 block w-full"
+                    disableClock={true}
+                    maxTime={'23:59'}
+                />
+                -
+                <TimePicker
+                    onChange={handleHourToChange}
+                    value={filters.hourTo}
+                    clearIcon={null}
+                    className="mt-1 block w-full"
+                    disableClock={true}
+                    maxTime={'23:59'}
+                />
+            </div>
+        </div>
+    )
+}
 
-// export default TimeFilters
+export default TimeFilters
