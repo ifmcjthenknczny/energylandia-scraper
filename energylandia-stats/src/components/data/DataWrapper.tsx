@@ -9,10 +9,7 @@ import { Props } from '@/pages'
 import { useRouter } from 'next/router'
 
 const DEFAULT_SELECTED_ATTRACTIONS = [
-    'Abyssus',
-    'Formuła',
     'Hyperion',
-    'Mayan',
     'Zadra',
 ]
 
