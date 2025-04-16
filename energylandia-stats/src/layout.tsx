@@ -13,7 +13,7 @@ export default function Layout({
             <Head>
                 <title>Energylandia Stats</title>
             </Head>
-            <main className="flex-grow">{children}</main>
+            <main className="flex-grow pb-8 md:pb-12">{children}</main>
             <Footer />
         </div>
     )

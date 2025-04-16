@@ -36,7 +36,13 @@ const Filters = () => {
 
     return (
         <div className="mb-8 mt-4 w-full border border-2 p-3 rounded justify-center flex flex-col items-center">
-            <h1 className="text-2xl font-bold text-center mb-2">Filters</h1>
+            <div className="flex gap-2 flex-col items-center mb-2">
+                <h1 className="text-2xl font-bold text-center">Filters</h1>
+                <RemoveFilterButton
+                    paramsToRemove={['dayFrom', 'dayTo', 'dayOfWeek']}
+                    className="self-center"
+                />
+            </div>
             <VerticalLine />
             <div className="w-full flex flex-col gap-3 md:items-start md:flex-row md:justify-evenly">
                 <DayOfWeekFilter
@@ -49,10 +55,6 @@ const Filters = () => {
                     onDayFromChange={setDayFrom}
                     onDayToChange={setDayTo}
                 />
-            <RemoveFilterButton
-                paramsToRemove={['dayFrom', 'dayTo', 'dayOfWeek']}
-                className='self-center'
-            />
                 {/* <TimeFilters
           hourFrom={hourFrom}
           hourTo={hourTo}
@@ -60,9 +62,7 @@ const Filters = () => {
           onHourToChange={setHourTo}
         /> */}
             </div>
-
         </div>
-
     )
 }
 

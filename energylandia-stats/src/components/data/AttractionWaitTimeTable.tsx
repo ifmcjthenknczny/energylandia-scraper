@@ -1,13 +1,16 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { AvgTimeResponse } from '@/types'
+import Pagination from '../util/Pagination'
 import Table from '../util/Table'
 import { chunkify } from '@/utils/array'
 
 type Props = {
     data?: AvgTimeResponse
+    handleAttractionChange: (attraction: string) => void
+    selectedAttractions: string[]
 }
 
 type SingleTableProps = {
@@ -15,9 +18,17 @@ type SingleTableProps = {
         attraction: string
         avgWaitingTime: string
     }[]
+    handleAttractionChange: (attraction: string) => void
+    selectedAttractions: string[]
 }
 
-const ONE_TABLE_WIDTH_PX = 480
+type CheckboxProps = {
+    attractionName: string
+    selectedAttractions: string[]
+    handleAttractionChange: (attraction: string) => void
+}
+
+const DATA_CHUNK_LENGTH = 10
 
 function formatWaitingTime(waitingTimeMinutes: number) {
     const hours = Math.floor(waitingTimeMinutes / 60)
@@ -35,30 +46,47 @@ function formatWaitingTime(waitingTimeMinutes: number) {
     return `${hours}h ${minutes}min ${seconds}s`
 }
 
-const SingleAttractionWaitTimeTable = ({ data }: SingleTableProps) => {
+const SelectAttractionCheckbox = ({
+    attractionName,
+    selectedAttractions,
+    handleAttractionChange,
+}: CheckboxProps) => {
     return (
-        <Table
-            header={['Attraction name', 'Average waiting time']}
-            data={data.map((dataRow) => Object.values(dataRow))}
-            className='pb-8 md:pb-12'
+        <input
+            className="mr-1"
+            type="checkbox"
+            checked={selectedAttractions.includes(attractionName)}
+            onChange={() => handleAttractionChange(attractionName)}
         />
     )
 }
 
-const AttractionWaitTimeTable = ({ data }: Props) => {
-    const [screenWidth, setScreenWidth] = useState<number>(0)
-
-    useEffect(() => {
-        if (typeof window === undefined) {
-            return
-        }
-        setScreenWidth(window.innerWidth)
-    }, [])
-
-    const tableColumnsCount = useMemo(
-        () => Math.floor(screenWidth / ONE_TABLE_WIDTH_PX),
-        [screenWidth],
+const SingleAttractionWaitTimeTable = ({
+    data,
+    selectedAttractions,
+    handleAttractionChange,
+}: SingleTableProps) => {
+    return (
+        <Table
+            header={['', 'Attraction name', 'Average waiting time']}
+            rowsData={data.map((dataRow) => [
+                <SelectAttractionCheckbox
+                    selectedAttractions={selectedAttractions}
+                    handleAttractionChange={handleAttractionChange}
+                    attractionName={dataRow.attraction}
+                />,
+                ...Object.values(dataRow),
+            ])}
+        />
     )
+}
+
+const AttractionWaitTimeTable = ({
+    data,
+    selectedAttractions,
+    handleAttractionChange,
+}: Props) => {
+    const [page, setPage] = useState(1)
 
     const dataArray = useMemo(() => {
         if (!data || !Object.keys(data).length) {
@@ -73,19 +101,26 @@ const AttractionWaitTimeTable = ({ data }: Props) => {
     }, [data])
 
     const dataChunks = useMemo(
-        () =>
-            chunkify(
-                dataArray,
-                Math.ceil(dataArray.length / tableColumnsCount),
-            ),
-        [dataArray, tableColumnsCount],
+        () => chunkify(dataArray, DATA_CHUNK_LENGTH),
+        [dataArray.length],
     )
 
+    if (!data || !Object.keys(data).length) {
+        return null
+    }
+
     return (
-        <div className="flex gap-3 flex-row py-8">
-            {dataChunks.map((chunk, index) => (
-                <SingleAttractionWaitTimeTable key={index} data={chunk} />
-            ))}
+        <div className="flex gap-3 flex-col pt-8 pb-4 md:pb-0 items-center">
+            <SingleAttractionWaitTimeTable
+                data={dataChunks[page - 1]}
+                selectedAttractions={selectedAttractions}
+                handleAttractionChange={handleAttractionChange}
+            />
+            <Pagination
+                currentPage={page}
+                totalPages={dataChunks.length}
+                onPageChange={setPage}
+            />
         </div>
     )
 }

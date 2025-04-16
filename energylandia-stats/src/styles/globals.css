@@ -25,7 +25,7 @@
 body {
     color: var(--foreground);
     background: var(--background);
-    font-family: "Noto Sans", sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     height: 100%;
     min-height: 100vh;
     padding: 16px;

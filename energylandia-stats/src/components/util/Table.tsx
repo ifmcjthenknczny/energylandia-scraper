@@ -3,13 +3,18 @@ import classNames from 'classnames'
 
 type Props = {
     header: React.ReactNode[]
-    data: React.ReactNode[][]
+    rowsData: React.ReactNode[][]
     className?: string
 }
 
-export default function Table({ header, data, className }: Props) {
+export default function Table({ header, rowsData, className }: Props) {
     return (
-        <div className={classNames("overflow-x-auto w-full flex justify-center", className)}>
+        <div
+            className={classNames(
+                'overflow-x-auto w-full flex justify-center',
+                className,
+            )}
+        >
             <table className="divide-y divide-gray-700">
                 <thead className="bg-background-light">
                     <tr>
@@ -27,7 +32,7 @@ export default function Table({ header, data, className }: Props) {
                     </tr>
                 </thead>
                 <tbody className="divide-y bg-background divide-gray-700">
-                    {data.map((row, rowIndex) => (
+                    {rowsData.map((row, rowIndex) => (
                         <tr key={rowIndex}>
                             {row.map((cell, cellIndex) => (
                                 <td

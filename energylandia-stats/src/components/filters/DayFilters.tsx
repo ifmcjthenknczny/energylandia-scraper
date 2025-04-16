@@ -79,16 +79,16 @@ const DayFilters = ({
     }
 
     useEffect(() => {
-        if (searchParams?.size === 0 ) {
+        if (searchParams?.size === 0) {
             setValue(null)
         }
     }, [searchParams])
 
     return (
         <div className="flex flex-col space-y-2">
-            <label
-                className="text-sm font-medium text-gray-300"
-            >Day range</label>
+            <label className="text-sm font-medium text-gray-300">
+                Day range
+            </label>
             <Calendar
                 locale="en"
                 onChange={handleChange}

@@ -11,22 +11,15 @@ type ChartData = Array<[string, ...(string | number)[]]>
 
 type Props = {
     data?: AvgTimeByHourResponse
+    selectedAttractions: string[]
 }
-
-const DEFAULT_SELECTED_ATTRACTIONS = [
-    'Abyssus',
-    'Formuła',
-    'Hyperion',
-    'Mayan',
-    'Zadra',
-]
 
 const MOBILE_BREAKPOINT_PX = 768
 
-const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
-    const [selectedAttractions, setSelectedAttractions] = useState<string[]>(
-        DEFAULT_SELECTED_ATTRACTIONS,
-    )
+const AttractionWaitingTimeByHourChart = ({
+    data,
+    selectedAttractions,
+}: Props) => {
     const [screenWidth, setScreenWidth] = useState<number>(0)
     const [chartData, setChartData] = useState<ChartData>([
         ['Hour', ...selectedAttractions],
@@ -64,14 +57,6 @@ const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
         setScreenWidth(window.innerWidth)
     }, [])
 
-    const handleAttractionChange = (attraction: string) => {
-        setSelectedAttractions((prev) =>
-            prev.includes(attraction)
-                ? prev.filter((name) => name !== attraction)
-                : [...prev, attraction],
-        )
-    }
-
     if (!data || !Object.keys(data).length) {
         return (
             <div className="w-full text-center h-full flex items-center justify-center">
@@ -81,90 +66,77 @@ const AttractionWaitingTimeByHourChart = ({ data }: Props) => {
     }
 
     return (
-        <div className="pb-6">
-            <div className="flex md:flex-row flex-col">
-                {!!data && Object.keys(data).length > 0 && (
-                    <div className="md:flex md:flex-col grid grid-cols-2 gap-1 max-h-[200px] md:max-h-[400px] max-h-auto overflow-y-scroll text-xs mx-2 p-2 border border-2">
-                        {Object.keys(data).map((attractionName, index) => (
-                            <label key={index}>
-                                <input
-                                    className="mr-1"
-                                    type="checkbox"
-                                    checked={selectedAttractions.includes(
-                                        attractionName,
-                                    )}
-                                    onChange={() =>
-                                        handleAttractionChange(attractionName)
-                                    }
-                                />
-                                {attractionName}
-                            </label>
-                        ))}
-                    </div>
-                )}
-                {selectedAttractions.length > 0 && (
-                    <Chart
-                        width={screenWidth < MOBILE_BREAKPOINT_PX ? '105%' : '100%'}
-                        height={'400px'}
-                        className="md:pr-2"
-                        chartType="LineChart"
-                        loader={<Loader />}
-                        data={chartData}
-                        options={{
-                            hAxis: {
-                                title: 'Hour',
-                                minValue: 0,
-                                textStyle: {
-                                    color: '#ffffff',
-                                },
-                                titleTextStyle: {
-                                    color: '#ffffff',
-                                },
+        <div className="flex md:flex-row flex-grow flex-col">
+            {selectedAttractions.length > 0 ? (
+                <Chart
+                    width={screenWidth < MOBILE_BREAKPOINT_PX ? '105%' : '100%'}
+                    height={
+                        screenWidth < MOBILE_BREAKPOINT_PX ? '400px' : '500px'
+                    }
+                    className="md:pr-2"
+                    chartType="LineChart"
+                    loader={<Loader />}
+                    data={chartData}
+                    options={{
+                        hAxis: {
+                            title: 'Hour',
+                            minValue: 0,
+                            textStyle: {
+                                color: '#ffffff',
                             },
-                            vAxis: {
-                                title: 'Waiting Time (minutes)',
-                                minValue: 0,
-                                baseline: 0,
-                                viewWindow: {
-                                    min: 0,
-                                },
-                                textStyle: {
-                                    color: '#ffffff',
-                                },
-                                titleTextStyle: {
-                                    color: '#ffffff',
-                                },
-                                gridlines: {
-                                    color: '#2f2f2f',
-                                },
-                                minorGridlines: {
-                                    count: 0,
-                                },
+                            titleTextStyle: {
+                                color: '#ffffff',
                             },
-                            series: selectedAttractions.reduce(
-                                (acc, name, index) => {
-                                    acc[index] = { curveType: 'function' }
-                                    return acc
-                                },
-                                {} as Record<number, { curveType: string }>,
-                            ),
-                            legend: {
-                                position:
-                                    screenWidth < MOBILE_BREAKPOINT_PX
-                                        ? 'bottom'
-                                        : 'right',
-                                textStyle: {
-                                    color: '#ffffff',
-                                },
+                        },
+                        vAxis: {
+                            title: 'Waiting Time (minutes)',
+                            minValue: 0,
+                            baseline: 0,
+                            viewWindow: {
+                                min: 0,
                             },
+                            textStyle: {
+                                color: '#ffffff',
+                            },
+                            titleTextStyle: {
+                                color: '#ffffff',
+                            },
+                            gridlines: {
+                                color: '#2f2f2f',
+                            },
+                            minorGridlines: {
+                                count: 0,
+                            },
+                        },
+                        series: selectedAttractions.reduce(
+                            (acc, name, index) => {
+                                acc[index] = { curveType: 'function' }
+                                return acc
+                            },
+                            {} as Record<number, { curveType: string }>,
+                        ),
+                        legend: {
+                            position:
+                                screenWidth < MOBILE_BREAKPOINT_PX
+                                    ? 'bottom'
+                                    : 'right',
+                            textStyle: {
+                                color: '#ffffff',
+                            },
+                        },
+                        backgroundColor: '#0a0a0a',
+                        chartArea: {
                             backgroundColor: '#0a0a0a',
-                            chartArea: {
-                                backgroundColor: '#0a0a0a',
-                            },
-                        }}
-                    />
-                )}
-            </div>
+                        },
+                    }}
+                />
+            ) : (
+                <div className="flex justify-center items-center w-full">
+                    <span className="text-2xl">
+                        Select attraction to show chart
+                    </span>
+                </div>
+            )}
         </div>
     )
 }
