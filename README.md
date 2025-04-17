@@ -1,5 +1,7 @@
 # Energylandia waiting time scraper
 
+> Had enough of spending your life in Energylandia’s waiting lines?
+
 <p style="text-align: left;"><a href="https://energylandia-scraper.vercel.app">Deployed site</a></p>
 <p style="text-align: right;"><a href="https://energylandia.pl/en">What is Energylandia Zator?</a></p>
 
