@@ -6,7 +6,7 @@ import { getQueryParams } from '../../../../utils/query'
 import handleRequest from '@/utils/request'
 import { validate } from '@/utils/validate'
 
-export const handler = async (req: Request) => {
+const handler = async (req: Request) => {
     const query = getQueryParams(req)
     const filters = validate<Filter | undefined>(query, filterSchema)
     const stats = await findAvailabilityByAttraction(filters)
