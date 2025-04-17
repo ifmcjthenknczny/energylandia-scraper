@@ -92,7 +92,7 @@ Database type for this project is NOSQL MongoDB. I recommend downloading MongoDB
 
 ### Deployment
 
-If you want to deploy this app on your own it will require for you to configure your AWS environment for yourself, as well as filling Github Repository Actions Secrets and variables for yourself.
+If you want to deploy this app on your own, you'll need to configure your AWS environment and set the GitHub Actions secrets and variables yourself.
 
 ### Useful commands
 
