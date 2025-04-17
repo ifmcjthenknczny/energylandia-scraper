@@ -18,15 +18,16 @@ Project started and stores data from October 5th, 2024.
 - [Project Structure](#project-structure)
 - [Main Technologies Used](#main-technologies-used)
 - [Local Setup and Development](#local-setup-and-development)
-   * [Backend (lambda-scraper)](#backend-lambda-scraper)
-   * [Database](#database)
-   * [Deployment](#deployment)
-   * [Useful commands](#useful-commands)
-   * [Environmental variables](#environmental-variables)
+  * [Frontend (energylandia-stats)](#frontend--energylandia-stats-)
+  * [Backend (lambda-scraper)](#backend--lambda-scraper-)
+  * [Database](#database)
+    + [Collections](#collections)
+    + [Migrations](#migrations)
+  * [Deployment](#deployment)
+  * [Useful commands](#useful-commands)
+  * [Environmental variables](#environmental-variables)
 - [AWS Resources](#aws-resources)
 - [Lambda Actions](#lambda-actions)
-- [Database Collections](#database-collections)
-- [Migrations](#migrations)
 - [Roadmap](#roadmap)
 - [Project Motivation](#project-motivation)
 - [License](#license)
@@ -90,6 +91,16 @@ If not, follow [instructions on offical Node site](https://nodejs.org/en/downloa
 
 Database type for this project is NOSQL MongoDB. I recommend downloading MongoDB Compass (from [here](https://www.mongodb.com/try/download/compass)) and feed it with your database `MONGO_URI` (free tier is available by signing up [here](https://www.mongodb.com/cloud/atlas/register)) to view raw data in your DB in a comfortable way.
 
+#### Collections
+
+* *EnergylandiaOpeningHours* - stores documents concerning opening and closing hour of Energylandia (one a day).
+* *EnergylandiaWaitingTime* - stores documents concerning queue time to attractions with hour it was scraped for.
+* *Migration* - stores documents concerning failed and successful migrations performed on DB.
+
+#### Migrations
+
+Migrations are implemented in a simplified manner. The migration function to be executed is assigned to the `migrationFunction` variable in `lambda-app.ts` and triggered by running the lambda locally with action: `ActionType.MIGRATION`. The function that modifies the database is wrapped in another function that records its execution in a database collection and verifies whether the migration has already been processed.
+
 ### Deployment
 
 If you want to deploy this app on your own, you'll need to configure your AWS environment and set the GitHub Actions secrets and variables yourself.
@@ -120,16 +131,6 @@ The Lambda function supports the following actions:
 - **SCRAPE_WAITING_TIMES**: Scrapes and insert into db waiting times data. Runs once every 15 minutes, timeouts in 30 seconds. Ends run if Energylandia is closed.
 - **SCRAPE_OPENING_HOURS**: Scrapes and insert into db opening hours of Energylandia Zator.
 - **MIGRATION**: Runs migration of choice and inserts data about it into database.
-
-## Database Collections
-
-* *EnergylandiaOpeningHours* - stores documents concerning opening and closing hour of Energylandia (one a day).
-* *EnergylandiaWaitingTime* - stores documents concerning queue time to attractions with hour it was scraped for.
-* *Migration* - stores documents concerning failed and successful migrations performed on DB.
-
-## Migrations
-
-Migrations are implemented in a simplified manner. The migration function to be executed is assigned to the `migrationFunction` variable in `lambda-app.ts` and triggered by running the lambda locally with action: `ActionType.MIGRATION`. The function that modifies the database is wrapped in another function that records its execution in a database collection and verifies whether the migration has already been processed.
 
 ## Roadmap
 
