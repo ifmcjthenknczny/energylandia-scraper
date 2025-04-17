@@ -57,7 +57,7 @@ function DataWrapper({ dataByHour, dataByAttraction, errorMessage }: Props) {
     }
 
     return (
-        <div className="flex flex-col-reverse md:flex-row w-full h-full pb-8 md:pb-12">
+        <div className="flex flex-col-reverse md:flex-row w-full h-full pb-14 md:pb-10">
             {isLoading ? (
                 <Loader />
             ) : (
