@@ -11,6 +11,25 @@ import React from 'react'
 import TimePicker from 'react-time-picker'
 import { useDebounced } from '@/hooks/useDebounced'
 
+type HourPickerProps = {
+    onChange: (...args: any[]) => void
+    value: Hour | undefined
+}
+
+const HourPicker = ({ value, onChange }: HourPickerProps) => {
+    return (
+        <TimePicker
+            onChange={onChange}
+            value={value}
+            clearIcon={null}
+            className="block w-min text-center text-xl bg-gray-light dark:bg-gray-dark border border-white text-font-dark"
+            disableClock={true}
+            minTime={'00:00'}
+            maxTime={'23:59'}
+        />
+    )
+}
+
 const HourFilters = ({
     filters,
     handleFiltersChange,
@@ -28,6 +47,10 @@ const HourFilters = ({
             current.delete(param)
         }
         const search = current.toString()
+        if (!search) {
+            router.push('/')
+            return
+        }
         const query = search ? `?${search}` : ''
         router.push(`${query}`)
     }
@@ -44,26 +67,18 @@ const HourFilters = ({
 
     return (
         <div className="flex flex-col">
-            <span className="text-sm">Hour</span>
+            <span className="text-sm text-font-light dark:text-font-dark">
+                Hour range
+            </span>
             <div className="flex flex-row items-center gap-3 mt-1">
-                <TimePicker
-                    onChange={handleHourFromChange}
+                <HourPicker
                     value={filters.hourFrom}
-                    clearIcon={null}
-                    className="block w-min text-center text-xl"
-                    disableClock={true}
-                    minTime={'00:00'}
-                    maxTime={'23:59'}
+                    onChange={handleHourFromChange}
                 />
                 -
-                <TimePicker
-                    onChange={handleHourToChange}
+                <HourPicker
                     value={filters.hourTo}
-                    clearIcon={null}
-                    className="block w-min text-center text-xl"
-                    disableClock={true}
-                    minTime={'00:00'}
-                    maxTime={'23:59'}
+                    onChange={handleHourToChange}
                 />
             </div>
         </div>

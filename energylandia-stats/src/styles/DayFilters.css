@@ -3,24 +3,47 @@
 .react-calendar__navigation__label,
 .react-calendar__navigation,
 .react-calendar__tile {
-    background-color: #505050;
+    background-color: #c9c9c9;
     font-size: 10px !important;
+    color: #000000;
 }
 
 .react-calendar__navigation__arrow {
-    background-color: #505050 !important;
+    background-color: #c9c9c9 !important;
 }
 
 .react-calendar__tile:disabled {
-    background-color: #303030 !important;
-}
-
-.react-calendar__tile--active {
-    background-color: gold !important;
-    color: black;
+    background-color: #808080 !important;
 }
 
 .react-calendar__navigation__prev2-button,
 .react-calendar__navigation__next2-button {
     color: transparent;
+}
+
+html.dark .react-calendar,
+html.dark .react-calendar__navigation__arrow,
+html.dark .react-calendar__navigation__label,
+html.dark .react-calendar__navigation,
+html.dark .react-calendar__tile {
+    background-color: #505050;
+    color: #e2e8f0;
+}
+
+html.dark .react-calendar__navigation__arrow {
+    background-color: #505050 !important;
+}
+
+html.dark .react-calendar__tile:disabled {
+    background-color: #303030 !important;
+}
+
+html.dark .react-calendar__navigation__prev2-button,
+html.dark .react-calendar__navigation__next2-button {
+    color: transparent;
+}
+
+.react-calendar__tile--active {
+    background-color: gold !important;
+    color: black;
 }

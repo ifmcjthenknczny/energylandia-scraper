@@ -11,15 +11,13 @@
 }
 
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
+    --background: #d5d5d5;
+    --foreground: #000000;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
-    }
+:root.dark {
+    --background: #000000;
+    --foreground: #e2e8f0;
 }
 
 body {

@@ -110,7 +110,7 @@ const AttractionWaitTimeTable = ({
     }
 
     return (
-        <div className="flex gap-3 flex-col pt-8 pb-4 md:pb-0 items-center">
+        <div className="flex gap-3 flex-col pb-4 md:pb-0 items-center">
             <SingleAttractionWaitTimeTable
                 data={dataChunks[page - 1]}
                 selectedAttractions={selectedAttractions}

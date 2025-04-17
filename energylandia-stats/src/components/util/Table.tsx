@@ -16,13 +16,13 @@ export default function Table({ header, rowsData, className }: Props) {
             )}
         >
             <table className="divide-y divide-gray-700">
-                <thead className="bg-background-light">
+                <thead className="bg-gray-light dark:bg-gray-dark">
                     <tr>
                         {header.map((headerColumn, index) => (
                             <th
                                 key={index}
                                 className={classNames(
-                                    'px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider',
+                                    'px-6 py-3 text-left text-xs font-medium text-font-dark uppercase tracking-wider',
                                     index === header.length - 1 && 'text-right',
                                 )}
                             >
@@ -31,14 +31,14 @@ export default function Table({ header, rowsData, className }: Props) {
                         ))}
                     </tr>
                 </thead>
-                <tbody className="divide-y bg-background divide-gray-700">
+                <tbody className="divide-y bg-background-light dark:bg-background-dark divide-gray-700">
                     {rowsData.map((row, rowIndex) => (
                         <tr key={rowIndex}>
                             {row.map((cell, cellIndex) => (
                                 <td
                                     key={cellIndex}
                                     className={classNames(
-                                        'px-5 py-2.5 whitespace-nowrap text-xs text-white',
+                                        'px-5 py-2.5 whitespace-nowrap text-xs text-font-light dark:text-font-dark',
                                         cellIndex === row.length - 1 &&
                                             'text-right',
                                     )}

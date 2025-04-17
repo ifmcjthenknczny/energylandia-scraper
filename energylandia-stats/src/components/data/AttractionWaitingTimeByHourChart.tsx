@@ -1,11 +1,13 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { bgColor, fontColor, gridlinesColor } from '../theme/helpers'
 
 import { AvgTimeByHourResponse } from '@/types'
 import { Chart } from 'react-google-charts'
 import { Hour } from '@/utils/date'
 import Loader from '../util/Loader'
+import { useTheme } from 'next-themes'
 
 type ChartData = Array<[string, ...(string | number)[]]>
 
@@ -20,6 +22,7 @@ const AttractionWaitingTimeByHourChart = ({
     data,
     selectedAttractions,
 }: Props) => {
+    const { theme } = useTheme()
     const [screenWidth, setScreenWidth] = useState<number>(0)
     const [chartData, setChartData] = useState<ChartData>([
         ['Hour', ...selectedAttractions],
@@ -82,10 +85,10 @@ const AttractionWaitingTimeByHourChart = ({
                             title: 'Hour',
                             minValue: 0,
                             textStyle: {
-                                color: '#ffffff',
+                                color: fontColor(theme),
                             },
                             titleTextStyle: {
-                                color: '#ffffff',
+                                color: fontColor(theme),
                             },
                         },
                         vAxis: {
@@ -96,13 +99,13 @@ const AttractionWaitingTimeByHourChart = ({
                                 min: 0,
                             },
                             textStyle: {
-                                color: '#ffffff',
+                                color: fontColor(theme),
                             },
                             titleTextStyle: {
-                                color: '#ffffff',
+                                color: fontColor(theme),
                             },
                             gridlines: {
-                                color: '#2f2f2f',
+                                color: gridlinesColor(theme),
                             },
                             minorGridlines: {
                                 count: 0,
@@ -121,12 +124,12 @@ const AttractionWaitingTimeByHourChart = ({
                                     ? 'bottom'
                                     : 'right',
                             textStyle: {
-                                color: '#ffffff',
+                                color: fontColor(theme),
                             },
                         },
-                        backgroundColor: '#0a0a0a',
+                        backgroundColor: bgColor(theme),
                         chartArea: {
-                            backgroundColor: '#0a0a0a',
+                            backgroundColor: bgColor(theme),
                         },
                     }}
                 />

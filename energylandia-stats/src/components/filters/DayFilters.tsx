@@ -48,8 +48,11 @@ const DayFilters = ({
             current.set('dayFrom', toDay(dayjs(date).tz('Europe/Warsaw')))
         }
         const search = current.toString()
-        const query = search ? `?${search}` : ''
-        router.push(`${query}`)
+        if (!search) {
+            router.push('/')
+            return
+        }
+        router.push(`?${search}`)
     }
 
     const handleChange = (value: Value | null) => {
@@ -81,7 +84,7 @@ const DayFilters = ({
 
     return (
         <div className="flex flex-col space-y-2">
-            <label className="text-sm font-medium text-gray-300">
+            <label className="text-sm font-medium text-font-light dark:text-font-dark">
                 Day range
             </label>
             <Calendar
@@ -89,7 +92,7 @@ const DayFilters = ({
                 onChange={handleChange}
                 value={value}
                 selectRange={true}
-                className="rounded-md border border-gray-300 shadow-sm"
+                className="rounded-md border border-white shadow-sm"
                 minDate={new Date(FIRST_DAY_OF_DATA)}
                 maxDate={new Date()}
             />

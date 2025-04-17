@@ -3,7 +3,7 @@
 <p style="text-align: left;"><a href="https://energylandia-scraper.vercel.app">Deployed site</a></p>
 <p style="text-align: right;"><a href="https://energylandia.pl/en">What is Energylandia Zator?</a></p>
 
-This project is a serverless AWS Lambda application designed for scraping data (Energylandia Zator waiting times and opening hours) from API sources, storing them in MongoDB and showing the statistics on frontend.
+This project is a serverless AWS Lambda application designed for scraping data (Energylandia Zator waiting times and opening hours) from API sources, storing them in MongoDB and showing the filterable statistics on frontend.
 
 The application uses AWS CDK to provision resources such as Lambda, Scheduler and CloudWatch Logs, as it is deployed to AWS using Node.js and TypeScript, while Next.js part of application is deployed to Vercel. Deployment is implemented by pushing to `main` branch, using CI/CD with Github Actions.
 
@@ -98,7 +98,7 @@ To maintain same code styling and quality, every main directory has ```yarn chec
 
 ### Environmental variables
 
-For both `lambda-scraper` and `energylandia-stats` two environmental variable are needed to be filled, which are `DATABASE_NAME` and `MONGO_URI` (which schema of how to fill is:
+For both `lambda-scraper` and `energylandia-stats` two environmental variable are needed to be filled, which are `BASE_URL` (`http://localhost:3000` for local environment), `DATABASE_NAME` and `MONGO_URI` (which schema of how to fill is:
 ```MONGO_URI=mongodb+srv://[username:password@]host[/[databaseName][?options]]```).
 
 ## AWS Resources

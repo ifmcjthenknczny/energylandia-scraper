@@ -23,7 +23,7 @@ type OptionProps = {
 
 const WeekdayOption = ({ value, label }: OptionProps) => (
     <option
-        className="text-xs text-white bg-gray-dark cursor-pointer"
+        className="text-xs dark:bg-gray-dark bg-gray-light cursor-pointer"
         value={isFalsyExceptZero(value) ? '' : value}
     >
         {label}
@@ -66,10 +66,7 @@ const DayOfWeekFilter = ({
 
     return (
         <div className="flex flex-col space-y-2">
-            <label
-                htmlFor="dayOfWeek"
-                className="text-sm font-medium text-gray-300"
-            >
+            <label htmlFor="dayOfWeek" className="text-sm font-medium">
                 Weekday
             </label>
             <select
@@ -80,7 +77,7 @@ const DayOfWeekFilter = ({
                         : (filters.dayOfWeek as number)
                 }
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md shadow-sm bg-gray-light border border-white p-2"
+                className="mt-1 block w-full rounded-md shadow-sm bg-gray-light dark:bg-gray-dark border border-white p-2 text-font-dark"
             >
                 {daysOfWeek.map((day) => (
                     <WeekdayOption
