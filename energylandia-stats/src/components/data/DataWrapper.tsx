@@ -8,10 +8,7 @@ import Loader from '../util/Loader'
 import { Props } from '@/pages'
 import { useRouter } from 'next/router'
 
-const DEFAULT_SELECTED_ATTRACTIONS = [
-    'Hyperion',
-    'Zadra',
-]
+const DEFAULT_SELECTED_ATTRACTIONS = ['Hyperion', 'Zadra']
 
 function DataWrapper({ dataByHour, dataByAttraction, errorMessage }: Props) {
     const router = useRouter()

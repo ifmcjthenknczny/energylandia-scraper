@@ -10,8 +10,10 @@ import Logo from '../components/util/Logo'
 import React from 'react'
 import { Suspense } from 'react'
 import axios from 'axios'
+import { filterSchema } from '@/utils/schema'
 import { mapToSearchParamsObject } from '../components/filters/helpers'
 import { removeUndefinedOrNull } from '../utils/object'
+import { validate } from '@/utils/validate'
 
 export type Props = {
     dataByHour?: AvgTimeByHourResponse
@@ -34,16 +36,21 @@ export function mapQueryToFilter(query: URLSearchParams): Partial<Filter> {
 export const getServerSideProps: GetServerSideProps<Props> = async (
     context,
 ) => {
-    const baseUrl =
-        process.env.NODE_ENV === 'production'
-            ? 'https://energylandia-scraper.vercel.app'
-            : 'http://localhost:3000'
     const query = new URLSearchParams(
         Object.entries(context.query).map(([key, value]) =>
             [key, Array.isArray(value) ? value[0] : value].filter(Boolean),
         ) as string[][],
     )
     const filter = mapQueryToFilter(query)
+    try {
+        validate(filter, filterSchema)
+    } catch (error: any) {
+        return {
+            props: {
+                errorMessage: error.message,
+            },
+        }
+    }
     const fetchQuery = new URLSearchParams(
         mapToSearchParamsObject(filter),
     ).toString()
@@ -51,12 +58,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     try {
         const dataByHour = (
             await axios.get<AvgTimeByHourResponse>(
-                `${baseUrl}/api/stats/by-hour?${fetchQuery}`,
+                `${process.env.BASE_URL}/api/stats/by-hour?${fetchQuery}`,
             )
         ).data
         const dataByAttraction = (
             await axios.get<AvgTimeResponse>(
-                `${baseUrl}/api/stats?${fetchQuery}`,
+                `${process.env.BASE_URL}/api/stats?${fetchQuery}`,
             )
         ).data
 
@@ -69,7 +76,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     } catch (error: any) {
         return {
             props: {
-                errorMessage: error.message,
+                errorMessage: error?.response?.data?.error || 'Unknown error',
             },
         }
     }

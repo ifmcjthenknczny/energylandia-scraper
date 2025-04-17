@@ -1,32 +1,16 @@
-import { dayOfWeekSchema, daySchema, hourSchema } from '@/utils/schema'
-
 import { Filter } from '@/types'
 import { NextResponse } from 'next/server'
+import { filterSchema } from './../../../utils/schema'
 import { findAvgWaitingTimeByAttraction } from '@/client/collections/attractionWaitingTime'
 import { getQueryParams } from '../../../utils/query'
+import handleRequest from '@/utils/request'
 import { validate } from '@/utils/validate'
-import { z } from 'zod'
 
-const schema = z
-    .object({
-        dayFrom: daySchema.optional(),
-        dayTo: daySchema.optional(),
-        hourFrom: hourSchema.optional(),
-        hourTo: hourSchema.optional(),
-        dayOfWeek: dayOfWeekSchema.optional(),
-    })
-    .optional()
-
-export async function GET(req: Request) {
-    try {
-        const query = getQueryParams(req)
-        const filters = validate<Filter | undefined>(query, schema)
-        const stats = await findAvgWaitingTimeByAttraction(filters)
-        return NextResponse.json(stats)
-    } catch (e: unknown) {
-        return NextResponse.json(
-            { error: (e as Error).message },
-            { status: 400 },
-        )
-    }
+const handler = async (req: Request) => {
+    const query = getQueryParams(req)
+    const filters = validate<Filter | undefined>(query, filterSchema)
+    const stats = await findAvgWaitingTimeByAttraction(filters)
+    return NextResponse.json(stats)
 }
+
+export const GET = handleRequest(handler)
