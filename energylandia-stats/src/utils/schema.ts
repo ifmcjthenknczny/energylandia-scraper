@@ -26,12 +26,12 @@ export const filterSchema = z
     .refine(
         ({ dayFrom, dayTo }) => {
             if (dayFrom && dayTo) {
-                return dayTo > dayFrom
+                return dayTo >= dayFrom
             }
             return true
         },
         {
-            message: 'dayTo must be after dayFrom',
+            message: 'dayTo must be equal to or after dayFrom',
             path: ['dayTo'],
         },
     )

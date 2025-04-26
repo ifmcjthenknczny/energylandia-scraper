@@ -36,6 +36,12 @@ export function mapQueryToFilter(query: URLSearchParams): Partial<Filter> {
 export const getServerSideProps: GetServerSideProps<Props> = async (
     context,
 ) => {
+    const CACHE_SECONDS = 24 * 60 * 60 // 1 day
+    context.res.setHeader(
+        'Cache-Control',
+        `public, max-age=${CACHE_SECONDS}, immutable`,
+    )
+
     const query = new URLSearchParams(
         Object.entries(context.query).map(([key, value]) =>
             [key, Array.isArray(value) ? value[0] : value].filter(Boolean),
