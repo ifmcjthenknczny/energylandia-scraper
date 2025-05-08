@@ -141,6 +141,7 @@ The Lambda function supports the following actions:
 - Monorepo
 - Staging environment
 - Fix CI/CD warnings
+- Provide tips for your trip to Energylandia
 
 ## Project Motivation
 
